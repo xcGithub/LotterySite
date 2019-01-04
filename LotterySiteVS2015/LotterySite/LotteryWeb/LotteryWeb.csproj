@@ -462,7 +462,6 @@
     <Content Include="Content\folio\fonts\FontAwesome.otf" />
     <Content Include="Content\folio\php\contact.php" />
     <None Include="db\cater.db" />
-    <Content Include="db\Lock.db" />
     <None Include="Properties\PublishProfiles\test.pubxml" />
     <Content Include="Views\Home\Hua.cshtml" />
     <Content Include="Views\Home\zhuye.cshtml" />
