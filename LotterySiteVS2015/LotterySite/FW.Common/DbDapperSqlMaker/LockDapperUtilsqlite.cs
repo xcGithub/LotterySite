@@ -24,7 +24,7 @@ namespace DapperSqlMaker.DapperExt
         { 
             if (isfirst) return null;
 
-            SQLiteConnection conn = new SQLiteConnection(DataBaseConfig.LockTestSqlLiteConnectionString);
+            SQLiteConnection conn = new SQLiteConnection(DataBaseConfig.LockSqlLiteConnectionString);
             conn.Open();
             return conn;
         }

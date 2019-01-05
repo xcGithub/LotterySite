@@ -67,6 +67,7 @@ namespace FW.Model
 					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Prompt) ); }
 			get { return _Prompt; }
 		}
+        [Key]
 		public virtual string Id { 
 			set { _Id = value; 
 					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Id) ); }

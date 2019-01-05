@@ -31,24 +31,14 @@ namespace DapperSqlMaker
 
         #region SqlLite链接配置
 
-
-        public static readonly string LockTestSqlLiteConnectionString =
-            "Data Source=" +
-             //"E:/cc/test/LotterySite/LotteryWeb/"
-             System.AppDomain.CurrentDomain.BaseDirectory.Replace("\\", "/").Replace("bin/Debug/","")
-             + "db/Lock.db";
-
-        //public static readonly string LockTestSqlLiteConnectionString =
-        //    "Data Source=" +
-        //     "G:/Sites/DapperSqlMaker.git/trunk/DapperSqlMakerVS2015/DapperSqlMaker/TestsDapperSqlMaker/db/Lock.db"
-        //     //System.AppDomain.CurrentDomain.BaseDirectory.Replace("\\", "/").Replace("/bin/Debug","") + "db/Lock.db"
-        //     ;
+        public static readonly string LockSqlLiteConnectionString =
+            "Data Source=" + System.AppDomain.CurrentDomain.BaseDirectory.Replace("\\", "/") + "db/Lock.db";
 
         public static IDbConnection GetSqliteConnection(string sqliteConnectionString = null)
         {
             if (string.IsNullOrWhiteSpace(sqliteConnectionString))
             {
-                sqliteConnectionString = LockTestSqlLiteConnectionString;
+                sqliteConnectionString = LockSqlLiteConnectionString;
             }
             SQLiteConnection conn = new SQLiteConnection(sqliteConnectionString);
             conn.Open();

@@ -1,4 +1,5 @@
-﻿using FW.Common;
+﻿using DapperSqlMaker.DapperExt;
+using FW.Common;
 using FW.Model;
 using QnCmsData.Common;
 using System;
@@ -56,6 +57,8 @@ namespace LotteryWeb.Controllers
                 p.Content = LockEncrypt.StringToMD5(p.Content);
                 p.InsertTime = DateTime.Now;
                 var efrwos = 0;
+                efrwos = LockDapperUtilsqlite.New().Execute(sql, p);
+
                 //using (IDbConnection conn = DataBaseConfig.GetSqliteConnection(DataBaseConfig.LockSqlLiteConnectionString))
                 //{
                 //    // efrwos = conn.Execute(sql, p);
@@ -66,31 +69,36 @@ namespace LotteryWeb.Controllers
             }
             else
             { // 修改
-              //var old = LockDapperUtil<LockPers>.New.Get(p.Id);
-              //if (old.Content != LockEncrypt.StringToMD5(p.ContentOld))
-              //{ // 旧内容不一致
-              //    return Content("-1");  // 旧内容不一致
-              //}
-              //old.Name = p.Name;
-              //old.Content = LockEncrypt.StringToMD5(p.Content);
-              //old.Prompt = p.Prompt;
-              //old.UpdateTime = DateTime.Now;
-              //var t = LockDapperUtil<LockPers>.New.Update(old);
 
-                //return Content(Convert.ToInt32(t).ToString());
-                return Content("");
+                Tuple<StringBuilder, Dapper.DynamicParameters> rawsp = 
+                    LockDapperUtilsqlite<LockPers>.Selec().Column().From().Where(lp => lp.Id == p.Id).RawSqlParams();
+                var old = LockDapperUtilsqlite<LockPers>.Selec().Column().From().Where(lp => lp.Id == p.Id).ExcuteSelect<LockPers>().First();
+                   // LockDapperUtil<LockPers>.New.Get(p.Id);
+                if (old.Content != LockEncrypt.StringToMD5(p.ContentOld))
+                { // 旧内容不一致
+                    return Content("-1");  // 旧内容不一致
+                }
+                old.Name = p.Name;
+                old.Content = LockEncrypt.StringToMD5(p.Content);
+                old.Prompt = p.Prompt;
+                old.UpdateTime = DateTime.Now;
+                var t = LockDapperUtilsqlite<LockPers>.Cud.Updat(old);  //LockDapperUtil<LockPers>.New.Update(old);
+
+                //Id 字段上添加Key标识或者设置为主键
+                // 数据库里需要添加 EditCount  UserId
+                return Content(Convert.ToInt32(t).ToString());
             }
             // 
         }
 
         public ActionResult Delete(string Id)
         {
-            return Content("");
-            //var old = LockDapperUtil<LockPers>.New.Get(Id);
-            //old.IsDel = true;
-            //old.DelTime = DateTime.Now;
-            //var t = LockDapperUtil<LockPers>.New.Update(old);
-            //return Content(Convert.ToInt32(t).ToString());
+            var old = LockDapperUtilsqlite<LockPers>.Selec().Column().From().Where(lp => lp.Id == Id).ExcuteSelect<LockPers>().First();
+            //LockDapperUtil<LockPers>.New.Get(Id);
+            old.IsDel = true;
+            old.DelTime = DateTime.Now;
+            var t = LockDapperUtilsqlite<LockPers>.Cud.Updat(old); //LockDapperUtil<LockPers>.New.Update(old);
+            return Content(Convert.ToInt32(t).ToString());
 
             // del
             ////string sql = string.Format(" delete from LockPers where Id = @Id ");
