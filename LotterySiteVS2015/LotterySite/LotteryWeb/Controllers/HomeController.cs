@@ -41,9 +41,9 @@ namespace LotteryWeb.Controllers
             if (LdPrizeName == null || LdPrizeName == "")
             {
                 LdPrizeName = CHOUJIANG.getJIANGPIN();
-                //CHOUJIANG.InsertLuckDraw(LdPrizeName, OpenID);
+                // del _ CHOUJIANG.InsertLuckDraw(LdPrizeName, OpenID);
 
-                DapperUtil.Insert<LuckDraw>(new LuckDraw() { LdPrizeName = LdPrizeName, LdOpenID = OpenID, ExhID = 6 });
+                // DapperUtil.Insert<LuckDraw>(new LuckDraw() { LdPrizeName = LdPrizeName, LdOpenID = OpenID, ExhID = 6 });
             }
 
             //SIBT		            得奖数   成本小计

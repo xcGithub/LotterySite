@@ -1,5 +1,4 @@
-﻿using Dapper;
-using Dapper.Contrib.Extensions;
+﻿
 using FW.Common;
 using FW.Common.DapperExt;
 using FW.Model;
@@ -15,7 +14,6 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using xxoo.Common;
-using static Dapper.SqlMapper;
 
 namespace LotteryWeb.Controllers
 {
@@ -60,40 +58,43 @@ namespace LotteryWeb.Controllers
                 p.Content = LockEncrypt.StringToMD5(p.Content);
                 p.InsertTime = DateTime.Now;
                 var efrwos = 0;
-                using (IDbConnection conn = DataBaseConfig.GetSqliteConnection(DataBaseConfig.LockSqlLiteConnectionString))
-                {
-                    efrwos = conn.Execute(sql, p);
-                }
+                //using (IDbConnection conn = DataBaseConfig.GetSqliteConnection(DataBaseConfig.LockSqlLiteConnectionString))
+                //{
+                //    // efrwos = conn.Execute(sql, p);
+                //}
 
                 return Content(efrwos.ToString());
 
             }
             else
             { // 修改
-                var old = LockDapperUtil<LockPers>.New.Get(p.Id);
-                if (old.Content != LockEncrypt.StringToMD5(p.ContentOld))
-                { // 旧内容不一致
-                    return Content("-1");  // 旧内容不一致
-                }
-                old.Name = p.Name;
-                old.Content = LockEncrypt.StringToMD5(p.Content);
-                old.Prompt = p.Prompt;
-                old.UpdateTime = DateTime.Now;
-                var t = LockDapperUtil<LockPers>.New.Update(old);
+              //var old = LockDapperUtil<LockPers>.New.Get(p.Id);
+              //if (old.Content != LockEncrypt.StringToMD5(p.ContentOld))
+              //{ // 旧内容不一致
+              //    return Content("-1");  // 旧内容不一致
+              //}
+              //old.Name = p.Name;
+              //old.Content = LockEncrypt.StringToMD5(p.Content);
+              //old.Prompt = p.Prompt;
+              //old.UpdateTime = DateTime.Now;
+              //var t = LockDapperUtil<LockPers>.New.Update(old);
 
-                return Content(Convert.ToInt32(t).ToString());
+                //return Content(Convert.ToInt32(t).ToString());
+                return Content("");
             }
             // 
         }
 
         public ActionResult Delete(string Id)
         {
-            var old = LockDapperUtil<LockPers>.New.Get(Id);
-            old.IsDel = true;
-            old.DelTime = DateTime.Now;
-            var t = LockDapperUtil<LockPers>.New.Update(old);
-            return Content(Convert.ToInt32(t).ToString());
+            return Content("");
+            //var old = LockDapperUtil<LockPers>.New.Get(Id);
+            //old.IsDel = true;
+            //old.DelTime = DateTime.Now;
+            //var t = LockDapperUtil<LockPers>.New.Update(old);
+            //return Content(Convert.ToInt32(t).ToString());
 
+            // del
             ////string sql = string.Format(" delete from LockPers where Id = @Id ");
             //string sql = string.Format(" update LockPers set IsDel = 1 where Id = @Id ");
             //var isSuccess = LockSQLitehelper.ExecuteNonQuery(sql, new SQLiteParameter("@Id", DbType.String) { Value = Id }) > 0;
@@ -113,21 +114,21 @@ namespace LotteryWeb.Controllers
             var uName = Request.QueryString["UserName"]; // "jiaojiao";
 
             //3
-            DapperSqlMaker<LockPers, Users> query = LockDapperUtilsqlite<LockPers, Users>
-            //2
-            //QueryMaker<LockPers, Users> query = new LockDapperUtilsqlite<LockPers, Users>();
-            //query
-            //1
-            //QueryMaker<LockPers, Users> query = LockDapperUtilsqlite<LockPers, Users>.New
-                .Selec()
-                .Column((lp, u) => null ) //new { lp.Id, lp.InsertTime, lp.EditCount, lp.IsDel, u.UserName }
-                .FromJoin( JoinType.Left, (lpp, uu) => uu.Id == lpp.UserId)
-                .Where((lpw, uw) => lpw.Name.Contains(Name) && lpw.IsDel == IsDel && uw.UserName == uName
-                    )  // 
-                .Order((lp, w) => new { lp.EditCount, lp.Name })
-                ; // .ExcuteSelect();
-            var resultsqlparams = query.RawSqlParams();
-            //var result = query.ExcuteSelect();
+            //DapperSqlMaker<LockPers, Users> query = LockDapperUtilsqlite<LockPers, Users>
+            ////2
+            ////QueryMaker<LockPers, Users> query = new LockDapperUtilsqlite<LockPers, Users>();
+            ////query
+            ////1
+            ////QueryMaker<LockPers, Users> query = LockDapperUtilsqlite<LockPers, Users>.New
+            //    .Selec()
+            //    .Column((lp, u) => null ) //new { lp.Id, lp.InsertTime, lp.EditCount, lp.IsDel, u.UserName }
+            //    .FromJoin( JoinType.Left, (lpp, uu) => uu.Id == lpp.UserId)
+            //    .Where((lpw, uw) => lpw.Name.Contains(Name) && lpw.IsDel == IsDel && uw.UserName == uName
+            //        )  // 
+            //    .Order((lp, w) => new { lp.EditCount, lp.Name })
+            //    ; // .ExcuteSelect();
+            //var resultsqlparams = query.RawSqlParams();
+            ////var result = query.ExcuteSelect();
 
             return Content("");
         }
@@ -256,11 +257,11 @@ namespace LotteryWeb.Controllers
             // var a = new System.Linq.Expressions.Expression();
 
 
-            Expression<Func<LockPers, bool>> expression = t => SM.In(t.Name, new string[] { "马", "码" }) 
-               && t.Name == "农码一生" && t.Prompt == "男" || t.Name.Contains("11") ;
-            StringBuilder sb = null;
-            DynamicParameters spars = null;
-            AnalysisExpression.VisitExpression(expression, ref sb, ref spars);
+            //Expression<Func<LockPers, bool>> expression = t => SM.In(t.Name, new string[] { "马", "码" }) 
+            //   && t.Name == "农码一生" && t.Prompt == "男" || t.Name.Contains("11") ;
+            //StringBuilder sb = null;
+            //DynamicParameters spars = null;
+            //AnalysisExpression.VisitExpression(expression, ref sb, ref spars);
 
 
         }

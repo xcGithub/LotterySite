@@ -4,6 +4,7 @@ using System.Text;
 
 using Dapper;
 using Dapper.Contrib.Extensions;
+using DapperSqlMaker;
 
 namespace FW.Common.DapperExt
 {
