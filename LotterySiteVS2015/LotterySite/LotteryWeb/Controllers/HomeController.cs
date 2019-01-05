@@ -1,5 +1,4 @@
-﻿using FW.Common.DapperExt;
-using FW.Model;
+﻿using FW.Model;
 using LotterySystem.lib;
 using System;
 using System.Collections.Generic;
