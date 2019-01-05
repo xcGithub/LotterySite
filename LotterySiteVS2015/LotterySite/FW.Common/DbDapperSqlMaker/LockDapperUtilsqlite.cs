@@ -9,7 +9,7 @@ namespace DapperSqlMaker.DapperExt
     /// </summary>
     public partial class LockDapperUtilsqlite : DapperSqlMaker
     {
-
+          
         private LockDapperUtilsqlite() { }
 
         private readonly static LockDapperUtilsqlite _New = new LockDapperUtilsqlite();

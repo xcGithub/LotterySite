@@ -25,8 +25,7 @@ namespace FW.Model
         //      public virtual DateTime? UpdateTime { get; set; }
          
         public LockPers() {
-
-
+            this._IsWriteFiled = false; // 默认不记录赋值字段
         }  //this._IsWriteFiled = false; }  
 
         
