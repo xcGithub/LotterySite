@@ -84,7 +84,8 @@
             word-wrap: break-word;
         }
     </style>
-    <script type="text/javascript" src="http://zeptojs.com/zepto.min.js" ></script>
+    <script src="~/Content/zepto.min.js"></script>
+    @*<script type="text/javascript" src="http://zeptojs.com/zepto.min.js" ></script>*@
 </head>
 <body>
     <header class="mui-bar mui-bar-nav">
@@ -107,7 +108,7 @@
             <ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
 
                 @if (ViewData.Model != null && ViewData.Model.Count > 0)
-            {
+            {   int i =1;
                 foreach (LockPers item in ViewData.Model)
                 {
 
@@ -122,7 +123,7 @@
                                     <div class="mui-table-cell mui-col-xs-10">
                                         <h4 class="mui-ellipsis">@item.Name </h4>
                                         @*<h5>@item.Content</h5>*@
-                                        <p class="mui-h6 mui-ellipsis">提示: @item.Prompt</p>
+                                        <p class="mui-h6 mui-ellipsis">@(i++) 提示: @item.Prompt</p>
                                     </div>
                                     <div class="mui-table-cell mui-col-xs-2 mui-text-right">
                                         <span class="mui-h5">@item.InsertTime</span>
@@ -196,11 +197,11 @@
             //var data = "?Id=" + dId + "&Content=" + my$(btnId).value;
             console.log(data);
             $.post('@Url.Action("Check", "Lock")', data, function (r) {
-                mui.toast(r == "1" ? "匹配成功" : "匹配失败"); 
+                mui.toast(r == "1" ? "匹配成功" : "匹配失败");
             });
             @*mui.get('@Url.Action("Check", "Lock")' + data, function (r) {
                 mui.toast(r == "1" ? "匹配成功" : "匹配失败");
-            });*@ 
+            });*@
         }
 
         function addLock() {
@@ -258,10 +259,17 @@
         }
         function deleteLock(dId) {
             // mui.toast("删除");
+            var btnArray = ['否', '是'];
+            mui.confirm('要扔掉这把锁么？', 'MM ^o^', btnArray, function (e) {
+                if (e.index == 1) {
+                    mui.post('@Url.Action("Delete", "Lock")', { Id: dId }, function (r) {
+                        mui.toast(r == "1" ? "删除成功" : "删除失败");
+                    }, 'json');
+                }
+            });
 
-            mui.post('@Url.Action("Delete", "Lock")', { Id: dId }, function (r) {
-                mui.toast(r == "1" ? "删除成功" : "删除失败");
-            }, 'json');
+
+
 
         }
         // mui.trigger($('.mui-bar-tab').children()[1], 'tap');  // 手动触发事件
@@ -282,7 +290,7 @@
         mui(".mui-slider-right").on('tap', '.mui-btn', function () { return false; }); // 取消编辑删除按钮冒泡事件
         @* // mui(".mui-slider-right").on('tap', '.mui-btn', function () { return false; }); // 取消编辑删除按钮冒泡事件 *@
 
-        function clearFormElements(fId) {
+        function clearFormElements(fId) { @*清空表单*@
             $.each($(fId + ' input'), function (k, v) {
                 console.log(v.type + '-' + v.id)
                 if (v.type == 'button') return;
@@ -292,14 +300,7 @@
             $.each($(fId + ' textarea'), function (k, v) {
                 console.log(v.type + '-' + v.id)
                 this.innerText = '';
-            });
-            @*  // if (v.type == 'select-one') {
-            //     $(v).val('');
-            //     return;
-            // }
-            // if (v.type == 'radio') {
-            //     $(this).prop('checked', false);
-            // }*@
+            }); 
         }
 
 

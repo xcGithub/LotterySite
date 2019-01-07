@@ -1,6 +1,8 @@
-﻿using DapperSqlMaker.DapperExt;
+﻿using Dapper;
+using DapperSqlMaker.DapperExt;
 using FW.Common;
 using FW.Model;
+using Newtonsoft.Json;
 using QnCmsData.Common;
 using System;
 using System.Collections.Generic;
@@ -40,13 +42,18 @@ namespace LotteryWeb.Controllers
         public ActionResult Check(LockPers p)
         {
             var query = LockDapperUtilsqlite<LockPers>
-                        .Selec().Column(c => new { c.Content }).From().Where(m => m.Id == p.Id);
-            var content = query.ExcuteSelect<string>().FirstOrDefault();      
+                        .Selec().Column(c => new { c.Content, c.CheckCount }).From().Where(m => m.Id == p.Id);
+            LockPers oldlp = query.ExcuteSelect<LockPers>().FirstOrDefault();
 
             //string sql = string.Format("SELECT Content FROM LockPers where Id = @Id");
             //var content = LockSQLitehelper.ExecuteScalar(sql, new SQLiteParameter("@Id", DbType.String) { Value = p.Id }) + "";
 
+            // 更新 核验次数
+            oldlp._IsWriteFiled = true;
+            oldlp.CheckCount = oldlp.CheckCount + 1;
+            var content = oldlp.Content;
             var encstr = LockEncrypt.StringToMD5(p.Content);
+            LockDapperUtilsqlite<LockPers>.Cud.Update(oldlp, w => w.Id == p.Id);
             return Content(Convert.ToInt32(content.Equals(encstr)).ToString());
         }
 
@@ -58,11 +65,13 @@ namespace LotteryWeb.Controllers
         {
             if (p.Id == "-1")
             { //添加的字段 Id,Name,Content,Prompt,InsertTime
-                p.Id = Guid.NewGuid().ToString();
-                p.Content = LockEncrypt.StringToMD5(p.Content);
-                p.InsertTime = DateTime.Now;
-                var efrwos = 0;
-
+                LockPers add = new LockPers(true);
+                add.Id = Guid.NewGuid().ToString();
+                add.Name = p.Name;
+                add.Content = LockEncrypt.StringToMD5(p.Content);
+                add.Prompt = p.Prompt;
+                add.InsertTime = DateTime.Now;
+                
                 //string sql = "insert into LockPers(Id,Name,Content,Prompt,InsertTime) values(@Id,@Name,@Content,@Prompt,@InsertTime)";
                 //efrwos = LockDapperUtilsqlite.New().Execute(sql, p);
                 //using (IDbConnection conn = DataBaseConfig.GetSqliteConnection(DataBaseConfig.LockSqlLiteConnectionString))
@@ -70,8 +79,8 @@ namespace LotteryWeb.Controllers
                 //    // efrwos = conn.Execute(sql, p);
                 //}
 
-
-                efrwos = LockDapperUtilsqlite<LockPers>.Cud.Insert(p);
+                var efrwos = 0;
+                efrwos = LockDapperUtilsqlite<LockPers>.Cud.Insert(add);
                 return Content(efrwos.ToString());
             }
             else
@@ -87,16 +96,16 @@ namespace LotteryWeb.Controllers
                 var query = LockDapperUtilsqlite<LockPers>
                             .Selec().Column(c => new { c.Content,c.EditCount }).From().Where(m => m.Id == p.Id);
                 //Tuple<StringBuilder, Dapper.DynamicParameters> ru = query.RawSqlParams();
-                var old = query.ExcuteSelect<LockPers>().FirstOrDefault();
-                if (old.Content != LockEncrypt.StringToMD5(p.ContentOld))  return Content("-1");  // 旧内容不一致
+                var edit = query.ExcuteSelect<LockPers>().FirstOrDefault();
+                if (edit.Content != LockEncrypt.StringToMD5(p.ContentOld))  return Content("-1");  // 旧内容不一致
 
-                old._IsWriteFiled = true; // 标记开始记录赋值字段 注意上面查询LockPers 要再默认构造函数里把 标识改为false 查出的数据不要记录赋值字段 
-                old.Name = p.Name;
-                old.Content = LockEncrypt.StringToMD5(p.Content);
-                old.Prompt = p.Prompt;
-                old.UpdateTime = DateTime.Now;
-                old.EditCount = old.EditCount + 1;
-                var t = LockDapperUtilsqlite<LockPers>.Cud.Update(old, w => w.Id == p.Id );  
+                edit._IsWriteFiled = true; // 标记开始记录赋值字段 注意上面查询LockPers 要再默认构造函数里把 标识改为false 查出的数据不要记录赋值字段 
+                edit.Name = p.Name;
+                edit.Content = LockEncrypt.StringToMD5(p.Content);
+                edit.Prompt = p.Prompt;
+                edit.UpdateTime = DateTime.Now;
+                edit.EditCount = edit.EditCount + 1;
+                var t = LockDapperUtilsqlite<LockPers>.Cud.Update(edit, w => w.Id == p.Id );  
                 
                 //var t = LockDapperUtil<LockPers>.New.Update(old);
                 return Content(Convert.ToInt32(t).ToString());
@@ -125,6 +134,29 @@ namespace LotteryWeb.Controllers
             //var isSuccess = LockSQLitehelper.ExecuteNonQuery(sql, new SQLiteParameter("@Id", DbType.String) { Value = Id }) > 0;
             //return Content(Convert.ToInt32(isSuccess).ToString());
         }
+
+
+        #region 19.1.5 修改为DapperSqlMaker
+        public ActionResult Load(int page, int rows ,string serh)
+        {
+
+            //string rownm = " (SELECT COUNT(*) FROM LockPers AS t2  WHERE t2.IsDel != 1 and t2.Name < a.Name ) + (SELECT COUNT(*) FROM LockPers AS t3 WHERE t3.IsDel != 1 and  t3.Name = a.Name AND t3.rowid < a.rowid  ) + 1 AS rowNum";
+            //, b = SM.Sql(rownm)  // sqlite查询生成rownum
+            serh = $"%{serh}%";
+            int records;
+            var query = LockDapperUtilsqlite<LockPers>
+                .Selec().Column(p => new { t = "datetime(a.InsertTime) as InsertTimestr", p.Id, p.Name, p.Content, p.Prompt, p.EditCount, p.CheckCount})
+                .From().Where(m => m.IsDel != true && (m.Name.Contains(serh) || m.Prompt.Contains(serh) )  ).Order(m => new { m.Name });
+            
+            //Tuple<StringBuilder, Dapper.DynamicParameters> ru = query.RawSqlParams();
+            //var list = query.ExcuteSelect<LockPers>();
+            //Tuple<StringBuilder, DynamicParameters, StringBuilder> ru = query.RawLimitSqlParams();
+            var list = query.LoadPagelt(page, rows, out records);
+            var resultjson = JsonConvert.SerializeObject(new { data = list, records = records});
+            return Content(resultjson);
+        }
+
+        #endregion
 
 
         public ActionResult GetWhere(LockPers lpmodel, Users umodel) {
@@ -159,137 +191,6 @@ namespace LotteryWeb.Controllers
         }
 
 
-        public void delinsert()
-        {
-            
-
-            // 2. Update (跟新部分字段 set和where里不能有相同字段)
-            LockPers pset = new LockPers(true);
-            pset.Name = "修改95 只修改Name字段";
-            LockPers pwhere = new LockPers(true);
-            pwhere.Content = "7fa867c5b404547797614abe57341844";
-            //var efrwostest2 = LockDapperUtil.Update<LockPers>(pset, pwhere);
-
-            // 4. Delete 
-            LockPers pdel = new LockPers(true);
-            pdel.Id = "1339a621-09f5-4d44-8653-09354013c3c0";
-            pdel.IsDel = true;
-            //var efrowsdel = LockDapperUtil.Delete(pdel);
-
-            // 6. Update
-            //var efrowsupdate2 = LockDapperUtil<LockPers>.Update(
-            //set =>
-            //{
-            //    set.Name = "修改95 修改Name和Content字段";
-            //    set.Prompt = "BMWWWWWWWWWWWWWWW";
-            //}
-            //, where => where.Content = "xxxxxxxoooooooo");
-
-            // 7. Delete
-            //var efrowsdelete = LockDapperUtil<LockPers>.Delete(where =>
-            //{
-            //    where.Id = "3e478c04-5e5b-41a8-af7a-5185cc141618";
-            //    where.IsDel = "1";
-            //});
-
-        }
-
-        public void insert()
-        {
-            // 1. Add
-            //LockPers padd = new LockPers(true);
-            //padd.Id = Guid.NewGuid().ToString();
-            //padd.InsertTime = DateTime.Now;
-            //padd.IsDel = "1";
-            //padd.Content = "xxxxxxxoooooooo";
-            //padd.Name = "913 添加数据";
-            //var efrowsadd = LockDapperUtil.Insert<LockPers>(padd);
-
-            // 3. Update Amobject  批量插入/修改/删除 ... 
-            // string sqlamobject = "update LockPers set IsDel = @IsDelN where IsDel = @IsDel ";
-            // var efrows = LockDapperUtil.Execute(sqlamobject, new { IsDelN = "0", IsDel = "False" });
-
-            // -----------------------------------------------------------------------------
-            // 5.Add
-            //var efrowsadd2 = LockDapperUtil<LockPers>.Insert(
-            //filed =>
-            //{ 
-            //    filed.Id = Guid.NewGuid().ToString();
-            //    filed.InsertTime = DateTime.Now;
-            //    filed.IsDel = "1";
-            //    filed.Content = "xxxxxxxoooooooo";
-            //    filed.Name = "913 添加数据";
-            //});
-
-            // 8. In
-            //string sql = "SELECT * FROM SomeTable WHERE id IN @ids"
-            //var results = conn.Query(sql, new { ids = new[] { 1, 2, 3, 4, 5 });
-
-            // 8. Update  条件使用表达式 Like, In, Or ??  表达式转sql  区分表达式和赋值字段
-            //var efrowsupdateex = LockDapperUtil<LockPers>.Update(
-            //set =>
-            //{
-            //    set.Name = "修改913 修改Name和Content字段 模糊匹配xxxx";
-            //    set.Prompt = "BMWWWWWWWWWWWWWWW";
-            //    set.UpdateTime = DateTime.Now;   
-            //    set.IsDel = "1";
-            //}
-            //, where => SQLMethods.DB_Like(where.Content, "%xxoo%") && where.IsDel == "1");
-
-            // 9. select 表达式 
-            //var test = LockDapperUtil<LockPers>.New.Get(w => SM.Like(w.Name, "%Steam%") && w.IsDel == true);
-
-            // 10. delete 表达式 
-            // var delresult = LockDapperUtil<LockPers>.Delete(w => SQLMethods.DB_Like(w.Content, "%xxoo%") && w.IsDel == "1");
-
-            // 11. dynamic 
-            //var test2 = LockDapperUtil.Query("SELECT * FROM LockPers where isDel != 1  order by Name ", null);
-
-            // 12. order by 排序
-
-
-
-            // --------------------------------------------------------------------------------------
-
-            //DynamicParameters mapped = new DynamicParameters();
-            //// mapped.AddParameters(cmd, identity);
-            //mapped.Add("@isDel", 1);
-            //var efrows = LockDapperUtil.Execute(sqlSelect, mapped);
-
-
-            //LockDapperUtil.Get<LockPers>("xxxxxxxoooooooo");
-
-
-            // --------------------------------------------------------------------------------------
-
-
-            // --------------------------------------------------------------------------------------
-            //var name = "xxxo";
-            //var key = new { Name = "test" };
-            //string sql = $"select * from {name} where {key.Name} = @id";
-
-            //var customers = new List<LockPers>();
-
-            //// 1
-            //IEnumerable<LockPers> customerQuery = from cust in customers
-            //                                      where cust.Content == "London"
-            //                                      select cust;
-
-            //// 2
-            //IEnumerable<LockPers> customerQuery2 = customers.Where(p => p.Content == "London");
-
-            //ExpressionType
-            // var a = new System.Linq.Expressions.Expression();
-
-
-            //Expression<Func<LockPers, bool>> expression = t => SM.In(t.Name, new string[] { "马", "码" }) 
-            //   && t.Name == "农码一生" && t.Prompt == "男" || t.Name.Contains("11") ;
-            //StringBuilder sb = null;
-            //DynamicParameters spars = null;
-            //AnalysisExpression.VisitExpression(expression, ref sb, ref spars);
-
-
-        }
         
     }
 

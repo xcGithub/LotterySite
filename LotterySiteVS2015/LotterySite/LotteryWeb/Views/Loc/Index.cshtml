@@ -1,0 +1,565 @@
+﻿@{
+    Layout = null;
+}
+@using System.Collections.Generic
+@using FW.Model
+@model List<LockPers>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>MM ^o^</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!--标准mui.css-->
+    <link href="~/Content/mui_examples/hello-mui/css/mui.min.css" rel="stylesheet" />
+    <!--App自定义的css-->
+    <link href="~/Content/mui_examples/hello-mui/css/app.css" rel="stylesheet" />
+    <style>
+        .mui-table h4, .mui-table h5, .mui-table .mui-h5, .mui-table .mui-h6, .mui-table p {
+            margin-top: 0;
+        }
+
+        .mui-table h4 {
+            line-height: 21px;
+            font-weight: 500;
+        }
+
+        .mui-table .oa-icon {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+        }
+
+        .mui-table .oa-icon-star-filled {
+            color: #f14e41;
+        }
+    </style>
+
+    <style>
+        .title {
+            margin: 20px 15px 10px;
+            color: #6d6d72;
+            font-size: 15px;
+        }
+
+        .oa-contact-cell.mui-table .mui-table-cell {
+            padding: 11px 0;
+            vertical-align: middle;
+        }
+
+        .oa-contact-cell {
+            position: relative;
+            margin: -11px 0;
+        }
+
+        .oa-contact-avatar {
+            width: 75px;
+        }
+
+            .oa-contact-avatar img {
+                border-radius: 50%;
+            }
+
+        .oa-contact-content {
+            width: 100%;
+        }
+
+        .oa-contact-name {
+            margin-right: 20px;
+        }
+
+        .oa-contact-name, oa-contact-position {
+            float: left;
+        }
+    </style>
+    <style>
+        h5 {
+            margin: 5px 7px;
+        } 
+        .wordwrap-prompt {
+            word-break: break-all;
+            word-wrap: break-word;
+        }
+
+        @* /*列表滚动修改样式 开始*/ *@ 
+        .mui-pull-loading { @* /*隐藏列表顶部刷新提示框*/ *@ 
+            /*-webkit-backface-visibility: hidden;
+                -webkit-transition-duration: 400ms;
+                transition-duration: 400ms;*/
+            margin: 0;
+        }
+        .mui-table-view-sco { @* /*列表底部被选项卡覆盖了*/ *@
+            margin-bottom:50px;
+        }
+        .mui-table-view-set {  
+			margin-top: 25px;
+        }
+        .mui-scroll-list {
+            top : 34px; 
+        }
+        .lock-btn-check { } @* 验证按钮监听时间选择器 *@ 
+        .lock-btn-edit { }  @* 修改按钮监听时间选择器 *@ 
+        .lock-btn-delte { } @* 删除按钮监听时间选择器 *@ 
+        @* 列表滚动修改样式 开始 *@ 
+        
+        .mui-btn-block { @* 验证按钮底部间距 *@
+            margin-bottom : 0px;
+        }
+
+    </style>
+    <style> /*多列表刷新滚动*/
+        html,
+        body {
+            background-color: #efeff4;
+        } 
+
+        .mui-bar ~ .mui-content .mui-fullscreen {
+            top: 44px;
+            bottom:50px;
+            height: auto;
+        }
+
+        .mui-pull-top-tips {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            margin-left: -25px;
+            width: 40px;
+            height: 40px;
+            border-radius: 100%;
+            z-index: 1;
+        }
+
+        .mui-bar ~ .mui-pull-top-tips {
+            top: 24px;
+        }
+
+        .mui-pull-top-wrapper {
+            width: 42px;
+            height: 42px;
+            display: block;
+            text-align: center;
+            background-color: #efeff4;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            background-clip: padding-box;
+            box-shadow: 0 4px 10px #bbb;
+            overflow: hidden;
+        }
+
+        .mui-pull-top-tips.mui-transitioning {
+            -webkit-transition-duration: 200ms;
+            transition-duration: 200ms;
+        }
+
+        .mui-pull-top-tips .mui-pull-loading {
+            /*-webkit-backface-visibility: hidden;
+                -webkit-transition-duration: 400ms;
+                transition-duration: 400ms;*/
+            margin: 0; 
+        } 
+
+        .mui-pull-top-wrapper .mui-icon,
+        .mui-pull-top-wrapper .mui-spinner {
+            margin-top: 7px;
+        }
+
+            .mui-pull-top-wrapper .mui-icon.mui-reverse {
+                /*-webkit-transform: rotate(180deg) translateZ(0);*/
+            }
+
+        /*.mui-pull-bottom-tips {
+            text-align: center;
+            background-color: #efeff4;
+            font-size: 15px;
+            line-height: 40px;
+            color: #777;
+        }*/
+
+        .mui-pull-top-canvas {
+            overflow: hidden;
+            background-color: #fafafa;
+            border-radius: 40px;
+            box-shadow: 0 4px 10px #bbb;
+            width: 40px;
+            height: 40px;
+            margin: 0 auto;
+        }
+
+            .mui-pull-top-canvas canvas {
+                width: 40px;
+            }
+
+        .mui-slider-indicator.mui-segmented-control {
+            background-color: #efeff4;
+        } 
+    </style>
+</head>
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-icon mui-icon-left-nav mui-pull-left" href="http://lock.yiwanbaqianli.com?mui-action-back"></a>
+        <h1 class="mui-title">MM ^o^&nbsp;&nbsp; <span id="til-rem" class="mui-h6 mui-pull-right"></span></h1> 
+    </header>
+    <nav class="mui-bar mui-bar-tab">
+        <a class="mui-tab-item mui-active" href="#tabbar-list" data-type="0">
+            <span class="mui-icon mui-icon mui-icon-locked"></span>
+            <span class="mui-tab-label">列表</span>
+        </a>
+        <a class="mui-tab-item" href="#tabbar-with-add" data-type="1">
+            <span class="mui-icon mui-icon-paperplane"></span>
+            <span class="mui-tab-label">投硬币</span>
+        </a>
+        <a class="mui-tab-item" href="#tabbar-with-contact" data-type="2">
+            <span class="mui-icon mui-icon-email"><span class="mui-badge">9</span></span>
+            <span class="mui-tab-label">biu~</span>
+        </a>
+    </nav>
+    <div class="mui-content">
+        <div id="slider" class="mui-slider mui-fullscreen">
+            <div class="mui-slider-group">
+                <div id="tabbar-list" class="mui-slider-item mui-control-content mui-active"> 
+                    <div class="mui-input-row mui-search">
+                        <input type="search" id="bserhLock" onsearch="loadData(1, 20, true); this.blur();" class="mui-input-clear" placeholder="">
+                    </div>
+                    <div  class="mui-scroll-wrapper mui-scroll-list"> 
+                        <div class="mui-scroll">
+                            <ul id="tabbar-sco-ul" class="mui-table-view mui-table-view-sco mui-table-view-striped mui-table-view-condensed">
+                                @*<li class="mui-table-view-cell"> 第1个选项卡子项-1 </li>
+                                <li class="mui-table-view-cell"> 第1个选项卡子项-2 </li>*@ 
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div id="tabbar-with-add" class="mui-slider-item mui-control-content">
+                    <div class="mui-scroll-wrapper mui-scroll-contact">
+                        <div class="mui-content mui-scroll">
+                            <form id="fmAdd">
+                                <div class="mui-content-padded" style="margin: 5px;">
+                                    <h5>标题：</h5>
+                                    <div class="mui-input-row">
+                                        <input id="tbname" type="text">
+                                    </div>
+                                    <div id="dvcontentold" style="display:none">
+                                        <h5>旧秘钥：</h5>
+                                        <div class="mui-input-row mui-password">
+                                            <input id="tbcontentold" type="password" class="mui-input-password">
+                                        </div>
+                                    </div>
+                                    <h5>秘钥：</h5>
+                                    <div class="mui-input-row mui-password">
+                                        <input id="tbcontent" type="password" class="mui-input-password">
+                                    </div>
+                                    <h5>确认秘钥：</h5>
+                                    <div class="mui-input-row mui-password">
+                                        <input id="tbcontent2" type="password" class="mui-input-password">
+                                    </div>
+                                    <h5>备注：</h5>
+                                    <div class="mui-input-row" style="margin: 10px 5px;">
+                                        <textarea id="tbprompt" rows="5"></textarea>
+                                    </div>
+                                    <div class="mui-button-row">
+                                        <button type="button" id="btnSave" class="mui-btn mui-btn-block mui-btn-primary">点击投出去</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div id="tabbar-with-contact" class="mui-slider-item mui-control-content">
+                    
+                    <div  class="mui-scroll-wrapper mui-scroll-contact"> 
+                        <div class="mui-content mui-scroll">
+                            <div class="title">仙女座星系在数亿年后将会与银河系发生碰撞。乀(ˉεˉ乀)</div>
+                            <ul class="mui-table-view mui-table-view-set">
+                                <li class="mui-table-view-cell">
+                                    <a href="#account" class="mui-navigate-right">账号与安全</a>
+                                </li>
+                            </ul>
+                            <ul class="mui-table-view mui-table-view-set">
+                                <li class="mui-table-view-cell">
+                                    <a class="mui-navigate-right">
+                                        新消息通知
+                                    </a>
+                                </li>
+                                <li class="mui-table-view-cell">
+                                    <a class="mui-navigate-right">
+                                        隐私
+                                    </a>
+                                </li>
+                                <li class="mui-table-view-cell">
+                                    <a class="mui-navigate-right">
+                                        通用
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="mui-table-view mui-table-view-set">
+                                <li class="mui-table-view-cell">
+                                    <a class="mui-navigate-right">
+                                        关于MM ^o^&nbsp;&nbsp;
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="mui-table-view mui-table-view-set">
+                                <li class="mui-table-view-cell">
+                                    <a style="text-align: center;color: #FF3B30;">
+                                        退出登录
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+
+
+    @*<script type="text/javascript" src="http://zeptojs.com/zepto.min.js"></script>*@
+    <script src="~/Content/jquery-3.3.1.min.js"></script>
+    <script src="~/Content/jsrender.min.js"></script>
+    @* 局部显示列表数据模板 *@
+    <script id="tmpl_lkpers" type="text/x-jsrender">
+        {{*}}
+        {{for #data.lkpers}}
+        @*{{:#index+1}} {{:Id}} {{:Name}} {{:Prompt}} {{:InsertTimestr}} {{:rowNum}} {{:~cdr(PTime)}}*@
+        <li class="mui-table-view-cell mui-collapse">
+            <a class="" href="#">
+                <div class="mui-slider-right mui-disabled">
+                    <a onclickx="editLockx('{{:Id}}',this)" data-name="{{:Name}}" data-prompt="{{:Prompt}}" data-id="{{:Id}}" class="mui-btn mui-btn-yellow mui-icon mui-icon-compose lock-btn-edit"></a>
+                    <a onclick="deleteLockx('{{:Id}}')" data-id="{{:Id}}" class="mui-btn mui-btn-red mui-icon mui-icon-trash lock-btn-delete"></a>
+                </div>
+                <div class="mui-table mui-slider-handle">
+                    <div class="mui-table-cell mui-col-xs-9">
+                        <h4 class="mui-ellipsis">{{:Name}} </h4>
+                        <p class="mui-h6 mui-ellipsis">{{:~root.rowNum + #index}}. 验证({{:CheckCount}}) 修改({{:EditCount}})</p>
+                    </div>
+                    <div class="mui-table-cell mui-col-xs-3 mui-text-right">
+                        <span class="mui-h5">{{:InsertTimestr}}</span>
+                    </div>
+                </div>
+            </a>
+            <div class="mui-collapse-content">
+                <div class="mui-input-row"> 
+                    <textarea class="mui-h6" rows="3" >{{:Name}}&#10;提示:{{:Prompt}}</textarea>
+                </div>
+                <form class="mui-input-group">
+                    <div class="mui-table mui-slider-handle">
+                        <div class="mui-table-cell mui-col-xs-3">
+                            <button data-id="{{:Id}}" class="mui-btn mui-btn-outlined mui-btn-block lock-btn-check" type="button">验证</button>
+                        </div>
+                        <div class="mui-table-cell mui-col-xs-9"> 
+                            <input id="btp_{{:Id}}" type="password" class="mui-input-password" placeholder="输入验证秘钥">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </li>
+        {{/for}}
+    </script>
+    <script src="~/Content/mui_examples/hello-mui/js/mui.min.js" type="text/javascript"></script>
+    <script src="~/Content/mui_examples/hello-mui/js/mui.pullToRefresh.js" type="text/javascript"></script>
+    <script src="~/Content/mui_examples/hello-mui/js/mui.pullToRefresh.material.js" type="text/javascript"></script>
+    <script>
+        mui.init();
+
+        //js 切换列表选项卡
+        //var gallery = mui('#slider');
+        //gallery.slider().gotoItem(3);
+
+        $(function () {
+
+            //下拉刷新列表初始化开始      阻尼系数
+            var deceleration = mui.os.ios ? 0.003 : 0.0009;
+            mui('.mui-scroll-wrapper').scroll({
+                bounce: true,
+                indicators: true, //是否显示滚动条
+                deceleration: deceleration
+            });
+            mui('#tabbar-sco-ul').pullToRefresh({
+                // down: { callback: function () { this.endPullDownToRefresh(true); }  }, //
+
+                up: {
+                    contentinit: "",
+                    contentdown: "",
+                    contentrefresh: "",
+                    contentnomore: "",
+                    callback: function () {
+                        var self = this;
+                        var sn = $('#til-rem').data('slidenum');
+                        if (sn != undefined && sn != 0) { self.endPullUpToRefresh(); return; }
+                        var loadendval = $('#til-rem').data('loadend');
+                        if (loadendval != undefined && loadendval == 1) {
+                            mui.toast("到底了")
+                            self.endPullUpToRefresh();
+                            return;
+                        }
+                        mui.toast("加载中...")
+                        setTimeout(function () {
+                            loadData($('#til-rem').data('page') + 1, $('#til-rem').data('rows'));
+                            self.endPullUpToRefresh();
+                        }, 1500);
+                    }
+                }
+            }); //下拉刷新列表结束
+
+
+            loadData(1, 20); @*初始化*@
+
+        })
+
+
+        @*加载数据*@
+        function loadData(p, s, reflush) {
+            if (reflush == true) $('#tabbar-sco-ul').empty();
+            var wstr = $('#bserhLock').val();
+            $.getJSON('@Url.Action("Load", "Lock")', { page: p, rows: s, serh: wstr }, function (r) {
+                if (r.data.length == 0) {
+                    $('#til-rem').data('loadend', 1);
+                    mui.toast("到底了")
+                    return;
+                };
+                var rownumIndex = (p - 1) * s + 1;
+                var lplisthtml = $("#tmpl_lkpers").render({ lkpers: r.data, rowNum: rownumIndex });
+                $('#tabbar-sco-ul').append(lplisthtml);
+                $('#tabbar-list').data('records',r.records);
+                $('#til-rem').text(r.records + "条").data('page', p).data('rows', s).data('loadend', 0);
+            });
+        }
+        @*轮播列表切换事件监听*@
+        document.querySelector('.mui-slider').addEventListener('slide', function (event) {
+            @*mui.toast("当前轮播列表序号" + event.detail.slideNumber);*@
+
+            var $tabbom = $($('.mui-bar-tab .mui-tab-item')[event.detail.slideNumber]);
+            $tabbom.addClass('mui-active');
+            $.each($tabbom.siblings(), function (index, tabbomItem) {
+                $(tabbomItem).removeClass('mui-active');
+            });
+
+            var slideNumber = event.detail.slideNumber;
+            if (slideNumber == 1) { @*切换到 添加修改页面*@
+                addFlag($('#btnSave').data('type'));
+            } else if (slideNumber == 0) { @*切换到 列表页面*@
+                $('#til-rem').text($('#tabbar-list').data('records') + "条");
+            } else { //添加修改页面
+                $('#til-rem').text(''); // MM^0^ 添加修改提示清空
+                $('#btnSave').data('type', ''); // MM^0^ 添加修改标识清空
+            }
+            $('#til-rem').data('slidenum', slideNumber)
+
+        });
+        @* 底部选项卡切换事件监听 this为当前选中的tab *@ // mui.trigger($('.mui-bar-tab').children()[1], 'tap');  // 手动触发事件
+        $('.mui-bar-tab').on('tap', '.mui-tab-item', function (e) {
+            var barn = $(this).data('type');
+            if (barn == $('#til-rem').data('slidenum')) return false;
+            $('#til-rem').data('slidenum', barn);
+            addFlag();
+        })
+        @* 轮播列表切换 和底部选项卡 切换到添加页面时 标识为新增数据, 修改只可在轮播列表中 点击切换到添加页面 且已标识为修改*@
+        function addFlag(type) {
+            $('#btnSave').attr('disabled', false);
+            if (type == 'edit') return;
+            //if (type == 'add' ) { // 默认为添加页面
+                $('#dvcontentold').css('display', 'none'); @*隐藏旧密钥框*@
+                $('#til-rem').text('新增');
+                clearFormElements('#fmAdd');
+                $('#btnSave').data('id', '-1'); @*标识为新增数据*@
+                return;
+            //}
+        }
+
+        @*核验数据 mui.toast("验证按钮" + $(this).data('id'));*@
+        $('#tabbar-sco-ul').on('tap', '.lock-btn-check', function () {
+            var dId = $(this).data('id');
+            var data = { Id: dId, Content: $('#btp_' + dId).val() };
+            console.log(data);
+            $.post('@Url.Action("Check", "Lock")', data, function (r) {
+                mui.toast(r == "1" ? "匹配成功" : "匹配失败");
+            });
+            return false; @* 取消时间冒泡 *@
+        });
+        @*修改数据*@
+        $('#tabbar-sco-ul').on('tap', '.lock-btn-edit', function () {
+            $('#tbname').val($(this).data('name'));
+            $('#tbprompt').val($(this).data('prompt'));
+            $('#dvcontentold').css('display', 'block'); @*隐藏旧密码框*@
+            $('#til-rem').text('修改');
+            $('#btnSave').data('id', $(this).data('id')).data('type','edit');  @*标识为修改数据*@
+
+            var gallery = mui('#slider');
+            gallery.slider().gotoItem(1);  @*切换到修改(第2个)轮播列表页*@
+
+            // 收回列表编辑按钮
+            $(this).css('transform', 'translate(0px, 0px)')
+                .next().css('transform', 'translate(0px, 0px)')
+                .parent().removeClass('mui-selected')
+                .next().css('transform', 'translate(0px, 0px)')
+                .parent().removeClass('mui-selected');
+
+            return false; @* 取消时间冒泡 到外面列表点击弹出验证栏 *@
+        });
+        @*删除数据*@
+        $('#tabbar-sco-ul').on('tap', '.lock-btn-delete', function () {
+            var delnode = this;
+            var dId = $(delnode).data('id');
+            var btnArray = ['否', '是'];
+            mui.confirm('要扔掉这把锁么？', 'MM ^o^', btnArray, function (e) {
+                if (e.index == 1) {
+                    mui.post('@Url.Action("Delete", "Lock")', { Id: dId }, function (r) {
+                        mui.toast(r == "1" ? "删除成功" : "删除失败");
+                        if (r == "1") $(delnode.parentNode.parentNode).remove();
+                    }, 'json');
+                }
+            });
+            return false; @* 取消时间冒泡 *@
+        });
+        $('#btnSave').on('tap', function () { @*添加数据*@
+            if ($('#tbname').val() == '') { mui.toast("名称不能为空"); return false; }
+            if ($('#tbcontent').val() == '') { mui.toast("秘钥不能为空"); return false; }
+            if ($('#tbprompt').val() == '') { mui.toast("备注不能为空"); return false; }
+            if ($('#tbcontent').val() != $('#tbcontent2').val()) {
+                mui.toast("两次输入秘钥不相同");
+                return false;
+            }
+
+            var postdate = {
+                Name: $('#tbname').val(), Content: $('#tbcontent').val(),
+                Prompt: $('#tbprompt').val(), Id: $('#btnSave').data('id')
+                , ContentOld: $('#tbcontentold').val()
+            };
+            $.post('@Url.Action("AddUpdate", "Lock")', postdate, function (r) {
+                if (r == "1") {
+                    mui.toast("保存成功")
+                    $('#btnSave').attr('disabled', true);
+                }
+                else if (r == "0") mui.toast("保存失败");
+                else if (r == "-1") mui.toast("旧内容不真确");
+            });
+        });
+
+        mui(".mui-slider-right").on('tap', '.mui-btn', function () { return false; });
+        @*取消编辑删除按钮冒泡事件*@
+          
+        function clearFormElements(fId) { @*清空表单*@
+            $.each($(fId + ' input'), function (k, v) {
+                if (v.type == 'button') return;
+                $(this).val('');
+            });
+            $.each($(fId + ' textarea'), function (k, v) {
+                $(this).val('');
+            });
+        }
+
+        function searchfunc() {
+            mui.toast("搜索方法")
+        }
+         
+
+    </script>
+</body>
+</html>
+

@@ -28,7 +28,21 @@ namespace FW.Model
             this._IsWriteFiled = false; // 默认不记录赋值字段
         }  //this._IsWriteFiled = false; }  
 
-        
+        private int _rowNum;
+        [Write(false)]
+        public virtual int rowNum
+        {
+            get { return _rowNum; }
+            set { _rowNum = value; }
+        }
+
+        private string _InsertTimestr;
+        [Write(false)]
+        public virtual string InsertTimestr
+        {
+            get { return _InsertTimestr; }
+            set { _InsertTimestr = value; }
+        }
 
         private string _ContentOld;
         [Write(false)]
