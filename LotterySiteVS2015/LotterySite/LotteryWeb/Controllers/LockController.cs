@@ -139,24 +139,26 @@ namespace LotteryWeb.Controllers
         #region 19.1.5 修改为DapperSqlMaker
         public ActionResult Load(int page, int rows ,string serh)
         {
-
-            //string rownm = " (SELECT COUNT(*) FROM LockPers AS t2  WHERE t2.IsDel != 1 and t2.Name < a.Name ) + (SELECT COUNT(*) FROM LockPers AS t3 WHERE t3.IsDel != 1 and  t3.Name = a.Name AND t3.rowid < a.rowid  ) + 1 AS rowNum";
-            //, b = SM.Sql(rownm)  // sqlite查询生成rownum
             serh = $"%{serh}%";
             int records;
+            var where = PredicateBuilder.WhereStart<LockPers>();
+            where = where.And( m => m.IsDel != true );
+            if (!string.IsNullOrWhiteSpace(serh)) {
+                where = where.And( m => (m.Name.Contains(serh) || m.Prompt.Contains(serh) ) );
+            }
             var query = LockDapperUtilsqlite<LockPers>
-                .Selec().Column(p => new { t = "datetime(a.InsertTime) as InsertTimestr", p.Id, p.Name, p.Content, p.Prompt, p.EditCount, p.CheckCount})
-                .From().Where(m => m.IsDel != true && (m.Name.Contains(serh) || m.Prompt.Contains(serh) )  ).Order(m => new { m.Name });
-            
-            //Tuple<StringBuilder, Dapper.DynamicParameters> ru = query.RawSqlParams();
-            //var list = query.ExcuteSelect<LockPers>();
-            //Tuple<StringBuilder, DynamicParameters, StringBuilder> ru = query.RawLimitSqlParams();
+                .Selec().Column(p => new { t = "datetime(a.InsertTime) as InsertTimestr"
+                    , p.Id, p.Name, p.Content, p.Prompt, p.EditCount, p.CheckCount})
+                .From().Where(where).Order(m => new { m.Name });
             var list = query.LoadPagelt(page, rows, out records);
             var resultjson = JsonConvert.SerializeObject(new { data = list, records = records});
             return Content(resultjson);
         }
-
-        #endregion
+        //Tuple<StringBuilder, Dapper.DynamicParameters> ru = query.RawSqlParams();
+        //var list = query.ExcuteSelect<LockPers>();
+        //Tuple<StringBuilder, DynamicParameters, StringBuilder> ru = query.RawLimitSqlParams();
+        
+            #endregion
 
 
         public ActionResult GetWhere(LockPers lpmodel, Users umodel) {
