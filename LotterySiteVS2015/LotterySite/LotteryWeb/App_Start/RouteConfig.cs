@@ -19,6 +19,8 @@ namespace LotteryWeb
                 //defaults: new { controller = "Home", action = "zhuye", id = UrlParameter.Optional }
                 defaults: new { controller = "Home", action = "folio", id = UrlParameter.Optional }
             );
+             
         }
+
     }
 }

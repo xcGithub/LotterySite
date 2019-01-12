@@ -44,8 +44,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DapperSqlMaker, Version=0.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DapperSqlMaker.0.1.2\lib\net40\DapperSqlMaker.dll</HintPath>
+    <Reference Include="DapperSqlMaker, Version=0.1.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DapperSqlMaker.0.1.6\lib\net40\DapperSqlMaker.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -129,6 +129,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocController.cs" />
     <Compile Include="Controllers\LockController.cs" />
+    <Compile Include="Controllers\LOLController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -435,6 +436,7 @@
     <Content Include="Views\Home\folio.cshtml" />
     <Content Include="Readme.md" />
     <Content Include="Views\Loc\Index.cshtml" />
+    <Content Include="Views\LOL\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

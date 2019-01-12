@@ -1,0 +1,109 @@
+﻿ 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>LOL坑逼榜</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="~/Content/mui_examples/hello-mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <!-- <link rel="stylesheet" type="text/css" href="../css/app.css" /> -->
+    <style>
+        h5 {
+            margin: 5px 7px;
+        }
+    </style>
+</head>
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">LOL坑逼榜</h1>
+    </header>
+    <div class="mui-content">
+        <div class="mui-content-padded" style="margin: 5px;">
+            <div class="mui-input-row mui-search">
+                <input id="txtserv" type="text" class="mui-input-clear" placeholder="服务器默认为 扭曲丛林">
+            </div>
+        </div>
+
+        <div class='mui-content-padded' style="margin: 5px;">
+            <div class="mui-button-row">
+                <button type="button" onclick="searchData()" id="btnSave" class="mui-btn mui-btn-block mui-btn-primary">搜索坑逼</button>
+            </div>
+            <div class="mui-input-row" style="margin: 10px 5px;">
+                <textarea id="txtserh" class="mui-h6" rows="5" placeholder="拷贝聊天对话框内容进来&#10;5568yang加入了队伍聊天&#10;裤头00000加入了队伍聊天&#10;"></textarea>
+            </div>
+            
+        </div>
+
+        <div class="mui-content-padded" style="margin: 5px;">
+            <ul id="tabbar-sco-ul" class="mui-table-view mui-table-view-striped mui-table-view-condensed"></ul>
+        </div>
+    </div>
+
+    <div class='mui-content-padded @ViewBag.impthid' style="margin: 5px;">
+        <div class="mui-button-row">
+            <button type="button" onclick="importData()" id="btnSave" class="mui-btn mui-btn-block mui-btn-primary">标记坑逼</button>
+        </div>
+        <div class="mui-input-row" style="margin: 10px 5px;">
+            <textarea id="txtimpt" class="mui-h6" rows="5" placeholder="ID 空格 英雄 空格 描述 空格 换行下一个&#10;SORRY蛋蛋&nbsp;&nbsp;卡牌&#10;wesewdws&nbsp;&nbsp;狗头&nbsp;&nbsp;演&#10;赤发鬼2013&nbsp;&nbsp;轮子妈&nbsp;&nbsp;一页全红&#10;"></textarea>
+        </div>
+
+    </div>
+    <script src="~/Content/mui_examples/hello-mui/js/mui.min.js"></script>
+    <script src="~/Content/jquery-3.3.1.min.js"></script>
+    <script src="~/Content/jsrender.min.js"></script>
+    @* 局部显示列表数据模板 *@
+    <script id="tmpl_lkpers" type="text/x-jsrender">
+        {{*}}
+        {{for #data.serh}}
+        @*{{:#index+1}} {{:Id}} {{:~cdr(PTime)}}*@
+        <li class="mui-table-view-cell mui-collapse">
+            <a class="" href="#"> 
+                <div class="mui-table mui-slider-handle">
+                    <div class="mui-table-cell mui-col-xs-9">
+                        <h4 class="mui-ellipsis">{{:Name}} </h4>
+                        <span class="mui-h4">{{:Hero}} 💣 {{:Remake}}</span>
+                    </div>
+                    <div class="mui-table-cell mui-col-xs-3 mui-text-right">
+                        <span class="mui-h4">{{:Server}}</span>
+                    </div>
+                </div>
+            </a> 
+        </li>
+        {{/for}}
+    </script>
+    <script type="text/javascript">
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			}); 
+			function searchData() {
+			    var txtimptvar = $('#txtserh').val();
+			    $.post('@Url.Action("search", "lol")', { serh: txtimptvar }, function (r) {
+			        if (r.state != 1) {
+			            mui.toast("翻遍坑逼百科没有以上召唤师");
+			            return;
+			        }
+			        var lplisthtml = $("#tmpl_lkpers").render({ serh: r.data});
+			        $('#tabbar-sco-ul').empty().append(lplisthtml);
+
+			    }, 'json');
+
+			}
+
+			function importData() { 
+
+			    var txtimptvar = $('#txtimpt').val();
+			    var txtservar = $('#txtserv').val();
+			    $.post('@Url.Action("import", "lol")', { impt: txtimptvar, serv: txtservar }, function (r) {
+			        $('#txtserh').val(r.msg);
+			        if (r.state == 1) mui.toast("导入成功")
+			    }, 'json');
+                 
+			}
+    </script>
+</body>
+</html>
