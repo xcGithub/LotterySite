@@ -97,36 +97,36 @@ namespace LotteryWeb.Controllers
         }
 
 
-        public ActionResult Reader()
-        {
-            var msg = "";
-            try
-            {
-                SQLiteConnection conn = new SQLiteConnection("Data Source=f:/usr/LocalUser/bxw2713720271/db/cater.db;");
-                SQLiteCommand cmd = new SQLiteCommand("SELECT count(LdPrizeName) FROM LuckDraw", conn);
-                conn.Open();
-                var r = cmd.ExecuteScalar();
-                msg = r.ToString();
-            }
-            catch (Exception ex)
-            {
-                msg = ex.Message;
-            }
+        //public ActionResult Reader()
+        //{
+        //    var msg = "";
+        //    try
+        //    {
+        //        SQLiteConnection conn = new SQLiteConnection("Data Source=f:/usr/LocalUser/bxw2713720271/db/cater.db;");
+        //        SQLiteCommand cmd = new SQLiteCommand("SELECT count(LdPrizeName) FROM LuckDraw", conn);
+        //        conn.Open();
+        //        var r = cmd.ExecuteScalar();
+        //        msg = r.ToString();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        msg = ex.Message;
+        //    }
 
-            //var a = System.IO.File.ReadAllText(System.AppDomain.CurrentDomain.BaseDirectory + "/Views/Home/Index.cshtml");
+        //    //var a = System.IO.File.ReadAllText(System.AppDomain.CurrentDomain.BaseDirectory + "/Views/Home/Index.cshtml");
 
-            return Content(msg);
-        }
+        //    return Content(msg);
+        //}
 
-        public ActionResult LockReader()
-        {
+        //public ActionResult LockReader()
+        //{
 
-            string sql = string.Format("SELECT * FROM LockPers");
-            DataTable dt = LockSQLitehelper.ExecuteTable(sql);
-            var str =  Newtonsoft.Json.JsonConvert.SerializeObject(dt);
+        //    string sql = string.Format("SELECT * FROM LockPers");
+        //    DataTable dt = LockSQLitehelper.ExecuteTable(sql);
+        //    var str =  Newtonsoft.Json.JsonConvert.SerializeObject(dt);
 
-            return Content(str);
-        }
+        //    return Content(str);
+        //}
          
     }
 }
