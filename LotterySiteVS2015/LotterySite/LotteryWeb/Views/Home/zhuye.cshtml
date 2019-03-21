@@ -128,13 +128,60 @@ document.onmousemove = function(e){
 window.onload = function(){
 	ym = ny+50;
 	mooz.oigres();
+
+    // song 
+	setTimeout(function () {
+	    var songinfo = songinfoarr[0];
+	    window.songinfo = songinfoarr;
+	    window.songN = 0;
+	    document.getElementById('audiospan').innerText = songinfo.name;
+	    document.getElementById('audio').src = songinfo.url;
+	    playbox.init('playbox').play();
+	}, 1000);
+}
+
+function sup() {
+    var i = window.songN - 1;
+    if (i < 0) i = window.songinfo.length - 1;
+    window.songN = i;
+    document.getElementById('audiospan').innerText = window.songinfo[i].name;
+    playbox.init('playbox').src = window.songinfo[i].url;
+    if (playbox.init('playbox').on) {
+        playbox.init('playbox').play();
+        playbox.init('playbox').play();
+    } else {
+        playbox.init('playbox').play();
+    }
+
+}
+function sdown() {
+    var i = window.songN + 1;
+    if (i >= window.songinfo.length) i = 0;
+    window.songN = i;
+    document.getElementById('audiospan').innerText = window.songinfo[i].name;
+    playbox.init('playbox').src = window.songinfo[i].url;
+    if (playbox.init('playbox').on) {
+        playbox.init('playbox').play();
+        playbox.init('playbox').play();
+    } else {
+        playbox.init('playbox').play();
+    }
+
 }
 
 </script>
 </head>
 
 <body>
-<div style="color:#fffefe;font-size:12px;">京&nbsp;ICP&nbsp;证&nbsp;17049329&nbsp;号</div>
+<div style="color:#fffefe;font-size:12px;">京&nbsp;ICP&nbsp;证&nbsp;17049329&nbsp;号<br />
+    <span onclick="sup()">I◀◀</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span id="playbox" class="btn_music" onclick="playbox.init('playbox').play()">
+        ▶<audio src="" loop="" id="audio">
+    </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span onclick="sdown()">▶▶I</span><br><!--喜马拉雅外链-->
+    ---------------------<br>
+    <span id="audiospan"></span><br/>
+
+</div>
 <div style="position:absolute;left:50%;top:50%">
 	<div style="position:absolute;width:720px;height:560px;left:-360px;top:-280px;background:#fff"></div>
 	<div style="position:absolute;left:-40px;top:-6px;color:#000;font-family:arial;font-size:0.9em">Loading...</div>
@@ -142,12 +189,13 @@ window.onload = function(){
 </div>
 
 <div id="images" style="visibility:hidden">
-	<img title="cicada"   src="~/Content/2/pil.jpg">
-	<img title="summer"   src="~/Content/2/cit.jpg">
-	<img title="earth"    src="~/Content/2/earth.jpg">
-	<img title="dream"    src="~/Content/2/draps.jpg">
-	<img title="flowers"  src="~/Content/2/flo.jpg">
+	<img title="cosmonaut"    src="~/Content/2/1.jpg">
+    <img title="boss" src="~/Content/2/2.jpg">
+	<img title="summer"   src="~/Content/2/4.jpg">
+	<img title="cicada"  src="~/Content/2/5.jpg">
+    <img title="prier" src="~/Content/2/3.jpg">
+    <script src="~/Content/songinfo.js"></script>
+    <script src="~/Content/audio.js"></script>
 </div>
-     
 </body>
 </html>

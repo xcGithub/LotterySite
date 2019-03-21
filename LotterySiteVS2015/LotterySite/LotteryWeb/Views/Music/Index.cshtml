@@ -1,0 +1,258 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>背景音乐配置</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="~/Content/mui_examples/hello-mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <!-- <link rel="stylesheet" type="text/css" href="../css/app.css" /> -->
+    <style>
+        h5 {
+            margin: 5px 7px;
+        }
+    </style>
+</head>
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">背景音乐配置</h1>
+    </header>
+    <div class="mui-content">
+        <div class="mui-content-padded" style="margin: 5px;">
+            <div class="mui-input-row mui-search">
+                <input id="txtserv" type="text" class="mui-input-clear" placeholder="音乐名称" value="Take Me To Infinity">
+            </div>
+        </div>
+        <div id="j-type" class="am-form-group am-text-center music-type">
+            <label class="am-radio-inline">
+                <input type="radio" name="music_type" value="netease" checked>
+                网易
+            </label>
+            <label class="am-radio-inline">
+                <input type="radio" name="music_type" value="qq">
+                ＱＱ
+            </label>
+            <label class="am-radio-inline">
+                <input type="radio" name="music_type" value="kugou">
+                酷狗
+            </label>
+            <label class="am-radio-inline">
+                <input type="radio" name="music_type" value="kuwo">
+                酷我
+            </label>
+            <label class="am-radio-inline">
+                <input type="radio" name="music_type" value="xiami">
+                虾米
+            </label>
+            <label class="am-radio-inline">
+                <input type="radio" name="music_type" value="baidu">
+                百度
+            </label>
+            <label class="am-radio-inline">
+                <input type="radio" name="music_type" value="1ting">
+                一听
+            </label>
+            <label class="am-radio-inline">
+                <input type="radio" name="music_type" value="migu">
+                咪咕
+            </label>
+            <br />                                                    <label class="am-radio-inline">
+                <input type="radio" name="music_type" value="lizhi">
+                荔枝
+            </label>
+            <label class="am-radio-inline">
+                <input type="radio" name="music_type" value="qingting">
+                蜻蜓
+            </label>
+            <label class="am-radio-inline" style="color:deepskyblue">
+                <input type="radio" name="music_type" value="ximalaya">
+                喜马拉雅
+            </label>
+            <label class="am-radio-inline">
+                <input type="radio" name="music_type" value="kg">
+                全民K歌
+            </label>
+            <label class="am-radio-inline">
+                <input type="radio" name="music_type" value="5singyc">
+                5sing原创
+            </label>
+            <label class="am-radio-inline">
+                <input type="radio" name="music_type" value="5singfc">
+                5sing翻唱
+            </label>
+        </div>
+
+        <div class='mui-content-padded mui-table-view-cell mui-table' style="margin: 5px;">
+            <div class="mui-input-row">
+                <textarea id="txtserh" class="mui-h6" rows="3" placeholder=""></textarea>
+            </div>
+        </div>
+
+        <div class="mui-table mui-slider-handle">
+            <div class="mui-table-cell mui-col-xs-4">
+                <button type="button" onclick="searchData()" class="mui-btn mui-btn-block mui-btn-primary ">搜索</button>
+
+            </div>
+            <div class="mui-table-cell mui-col-xs-4 mui-text-right">
+                <button type="button" onclick="setsongjs()" class="mui-btn mui-btn-block mui-btn-warning">管理</button>
+            </div>
+            <div class="mui-table-cell mui-col-xs-4 mui-text-right">
+                <button type="button" onclick="subsongjs()" data-songarr="" id="btnSub" class="mui-btn mui-btn-block mui-btn-danger">提交</button>
+            </div>
+        </div>
+
+        <div class="mui-content-padded" style="margin: 5px;">
+            <audio id="auto" src="" preload="auto"></audio>
+            <div id="auto-details" class="track-details"> </div>
+            <ul id="tabbar-sco-ul" class="mui-table-view mui-table-view-striped mui-table-view-condensed"></ul>
+        </div>
+
+    </div>
+
+    <script src="~/Content/mui_examples/hello-mui/js/mui.min.js"></script>
+    <script src="~/Content/jquery-3.3.1.min.js"></script>
+    <script src="~/Content/jsrender.min.js"></script>
+    <script src="~/Content/audiojs/audio.min.js"></script>
+    <script src="~/Content/songinfo.js"></script>
+    @* 局部显示列表数据模板 *@
+    <script id="tmpl_lkpers" type="text/x-jsrender">
+        {{*}}
+        {{for #data.serh}}
+        @*{{:#index+1}} {{:title}} *@
+        <li class="mui-table-view-cell mui-collapse">
+            <a class="" href="#">
+                <div class="mui-table mui-slider-handle">
+                    <div class="mui-table-cell mui-col-xs-9" onclick="selectinfo(this)">
+                        <h4 class="mui-ellipsis">{{:#index+1}}. {{:title}} </h4>
+
+                    </div>
+                    <div class="mui-table-cell mui-col-xs-3 mui-text-right">
+                        <span class="mui-h4" onclick="addbacksong(this)" data-type="{{:type}}" data-name="{{:title}}" data-url="{{:url}}" data-link="{{:link}}"> 💣 </span>
+                        <span class="mui-h6"> {{:type}}  {{:songid}} </span>
+                    </div>
+                </div>
+            </a>
+            <div class="mui-table-cell mui-col-xs-12 mui-text-left">
+                <span class="mui-h6" onclick="openlink(this)">{{:url}}</span><br />
+                <span class="mui-h6" onclick="openlink(this)">{{:link}}</span>
+            </div>
+
+        </li>
+        {{/for}}
+    </script>
+
+    <script id="tmpl_songjs" type="text/x-jsrender">
+        {{*}}
+        {{for #data.serh}}
+        @*{{:#index+1}} {{:title}} *@
+        <li class="mui-table-view-cell mui-collapse">
+            <a class="" href="#">
+                <div class="mui-table mui-slider-handle">
+                    <div class="mui-table-cell mui-col-xs-9" onclick="selectinfo(this)">
+                        <h4 class="mui-ellipsis">{{:#index+1}}. {{:name}} </h4>
+
+                    </div>
+                    <div class="mui-table-cell mui-col-xs-3 mui-text-right">
+                        {{:type}}-{{:datetime}} <span class="mui-h4" onclick="deletebacksong(this)" data-name="{{:name}}" data-type="{{:type}}" data-url="{{:url}}" data-link=""> 💣 </span>
+                    </div>
+                </div>
+            </a>
+
+        </li>
+        {{/for}}
+    </script>
+    <script type="text/javascript">
+        //mui.init({
+        //    swipeBack: true //启用右滑关闭功能
+        //});
+        
+        //$(function () {
+        //    audiojs.create($('#auto')[0]);
+        //    setTimeout(function () {
+        //        audiojs.instances.audiojs0.wrapper.classList.remove('error');
+        //    }, 1000);
+        //});
+
+        $('#auto').attr('src', songinfoarr[0].url);
+        $('#auto-details').text(songinfoarr[0].name);
+        audiojs.create($('#auto')[0]);
+
+        //audiojs.instances.audiojs0.source.src = songinfoarr[2].url;
+        //$('#auto-details').text(songinfoarr[2].name);
+        //audiojs.instances.audiojs0.play();
+        // audiojs.instances.audiojs0.playPause() // 切换
+        // audiojs.instances.audiojs0.trackEnded() // 重置进度条
+        
+
+        function searchData() {
+            var txtimptvar = $('#txtserv').val();
+            if (txtimptvar.length < 1) return;
+            var mtype = $('input[name=music_type]:checked').val();
+            $.post('@Url.Action("search", "Music")', { name: txtimptvar, type: mtype }, function (r) {
+                var lplisthtml = $("#tmpl_lkpers").render({ serh: r.data });
+                $('#tabbar-sco-ul').empty().append(lplisthtml);
+
+            }, 'json');
+
+        }
+
+        function addbacksong(e) {
+            $.post('@Url.Action("set", "Music")', { name: $(e).data('name'), url: $(e).data('url'), type: $(e).data('type') }, function (r) {
+                $('#txtserh').val(r.msg);
+                if (r == "1") mui.toast("设置成功")
+            }, 'json');
+
+        }
+
+        function openlink(e){
+             window.open( $(e).text(), '_blank');
+        }
+
+        function selectinfo(e) {
+            var span = $(e).next().children()[0];
+            $('#txtserh').text($(span).data('name') + '\r\n' + $(span).data('url') + '\r\n' + $(span).data('link'))
+
+            $('#txtserv').val($(span).data('name'));
+            $(':radio').each(function (k, v) {
+                $(v).prop('checked', v.value == $(span).data('type') ? true : false);
+            })
+
+            // 更新播放器
+            audiojs.instances.audiojs0.source.src = $(span).data('url');
+            $('#auto-details').text($(span).data('name'));
+            audiojs.instances.audiojs0.wrapper.classList.remove('error'); //, 'playing', 'audiojs'); // ,
+            audiojs.instances.audiojs0.trackEnded() // 重置进度条
+            audiojs.instances.audiojs0.wrapper.classList.add('audiojs','playing');
+            audiojs.instances.audiojs0.play();
+            // audiojs.instances.audiojs0.playPause() // 切换
+        }
+
+        function setsongjs() {
+            $.getScript("/Content/songinfo.js", function () {
+                var lplisthtml = $("#tmpl_songjs").render({ serh: songinfoarr });
+                $('#tabbar-sco-ul').empty().append(lplisthtml);
+                $('#btnSub').data('songarr', '');
+            });
+        }
+
+        function deletebacksong(e) {
+            $('#btnSub').data('songarr', $('#btnSub').data('songarr') + $(e).data('name') + $(e).data('type') + ",");
+            $(e).parent().parent().parent().remove();
+        }
+
+        function subsongjs() {
+            $.post('@Url.Action("sub", "Music")', { songarr: $('#btnSub').data('songarr') }, function (r) {
+                if (r == "1") mui.toast("成功移除")
+            }, 'json');
+
+        }
+
+
+    </script>
+</body>
+</html>

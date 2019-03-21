@@ -130,11 +130,13 @@
     <Compile Include="Controllers\LocController.cs" />
     <Compile Include="Controllers\LockController.cs" />
     <Compile Include="Controllers\LOLController.cs" />
+    <Compile Include="Controllers\MusicController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebCommon\CHOUJIANG.cs" />
+    <Compile Include="WebCommon\HttpHelper.cs" />
     <Compile Include="WebCommon\PrizeQuota.cs" />
     <Compile Include="WebCommon\StringExtension.cs" />
     <Compile Include="WebCommon\ToolMethods.cs" />
@@ -143,13 +145,17 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Content Include="Content\2\cit.jpg" />
-    <Content Include="Content\2\draps.jpg" />
-    <Content Include="Content\2\earth.jpg" />
-    <Content Include="Content\2\flo.jpg" />
+    <Content Include="Content\2\5.jpg" />
+    <Content Include="Content\2\3.jpg" />
+    <Content Include="Content\2\4.jpg" />
+    <Content Include="Content\2\1.jpg" />
     <Content Include="Content\2\index.html" />
-    <Content Include="Content\2\pil.jpg" />
+    <Content Include="Content\2\2.jpg" />
     <Content Include="Content\ajax.js" />
+    <Content Include="Content\audio.js" />
+    <Content Include="Content\audiojs\audio.min.js" />
+    <Content Include="Content\audiojs\audiojs.swf" />
+    <Content Include="Content\audiojs\player-graphics.gif" />
     <Content Include="Content\folio\css\bootstrap.min.css" />
     <Content Include="Content\folio\css\font-awesome.min.css" />
     <Content Include="Content\folio\css\jquery-ui-1.8.16.custom.css" />
@@ -361,6 +367,7 @@
     <Content Include="Content\mui_examples\nativeTab\js\mui.js" />
     <Content Include="Content\mui_examples\nativeTab\js\mui.min.js" />
     <Content Include="Content\mui_examples\nativeTab\js\util.js" />
+    <Content Include="Content\songinfo.js" />
     <Content Include="Content\zepto.min.js" />
     <Content Include="Global.asax" />
     <Content Include="PrizeQuota.xml" />
@@ -437,6 +444,7 @@
     <Content Include="Readme.md" />
     <Content Include="Views\Loc\Index.cshtml" />
     <Content Include="Views\LOL\Index.cshtml" />
+    <Content Include="Views\Music\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -57,16 +57,17 @@
                                         </div>
                                         <div class="navbar-collapse collapse">
                                             <ul class="nav navbar-nav">
-                                                <li class="menuItem active"><a href="#wrapper">Home</a></li>
+                                                <li class="menuItem"><a href="https://music.163.com/#/playlist?id=80999570" target="_blank">网易云</a></li>
+                                                <li class="menuItem"><a href="/Home/zhuye" target="_blank">Photo</a></li>
+                                                <li class="menuItem"><a href="https://github.com/mumumutou/DapperSqlMaker" target="_blank">github</a></li>
+                                                <li class="menuItem"><a href="http://www.cnblogs.com/cl-blogs/" target="_blank">cnblogs</a></li>
+                                                <li class="menuItem"><a href="http://download.csdn.net/user/qq_21533697" target="_blank">csdn</a></li>
                                                 <li class="menuItem"><a href="#aboutus">About Me</a></li>
                                                 <li class="menuItem"><a href="#skillset">Skills</a></li>
                                                 <li class="menuItem"><a href="#experience">Experience</a></li>
                                                 <li class="menuItem"><a href="#education">Education</a></li>
                                                 <li class="menuItem"><a href="#ourwork">Portfolio</a></li>
                                                 <li class="menuItem"><a href="#contact">Contact</a></li>
-                                                <li class="menuItem"><a href="/Home/zhuye" target="_blank">Photo</a></li>
-                                                <li class="menuItem"><a href="http://www.cnblogs.com/cl-blogs/" target="_blank">cnblogs</a></li>
-                                                <li class="menuItem"><a href="http://download.csdn.net/user/qq_21533697" target="_blank">csdn</a></li>
                                                 <li class="menuItem"><a href="http://assets.dwstatic.com/amkit/p/tank/play.html" target="_blank">坦克大战</a></li>
                                             </ul>
                                         </div>
@@ -84,6 +85,13 @@
                 <div class="bannerText">
                     <h1>I'm <a href="/Loc/Index" style="color:white;text-decoration:none">C</a>hang Lin</h1>
                     <h3>Design &amp; Build Beautiful Crafted Web Experiences</h3>
+                    <span id="audiospan"></span><br />
+                    -------------------------<br>
+                    <span onclick="sup()">I◀◀</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span id="playbox" class="btn_music" onclick="playbox.init('playbox').play()">
+                        ▶<audio src="" loop="" id="audio">
+                    </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span onclick="sdown()">▶▶I</span>
+
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 noPadd slides-container" style="height:100%">
                     <!--background slide show start-->
@@ -427,7 +435,12 @@ $(document).ready( function() {
 		  3: 'experience',
 		  4: 'education',
 		  5: 'ourwork',
-		  6: 'contact'
+		  6: 'contact',
+		  7: 'wrapper',
+		  8: 'wrapper',
+		  9: 'wrapper',
+		  10: 'wrapper',
+		  11: 'wrapper'
 		},
 		itemClass: 'menuItem',
 		itemHover: 'active',
@@ -455,14 +468,53 @@ $(document).ready( function() {
     <!--contact form js-->
     <script type="text/javascript" src="~/Content/folio/js/jquery.contact.js"></script>
 
-
-    <script src="~/Content/folio/js/jquery.easing.js"></script>
+    @*<script src="~/Content/folio/js/jquery.easing.js"></script>
     <script src="~/Content/folio/js/jquery.mousewheel.js"></script>
-    <script defer src="~/Content/folio/js/slideroption.js"></script>
+    <script defer src="~/Content/folio/js/slideroption.js"></script>*@
 
     <!--for theme custom jquery-->
-    <script src="~/Content/folio/js/custom.js"></script>
+    <script src="~/Content/folio/js/custom.js"></script> 
+    <script type="text/javascript">
+        $.getScript("/Content/songinfo.js", function () {
+            var songinfo = songinfoarr[0];
+            window.songinfo = songinfoarr;
+            window.songN = 0;
+            // playbox.init('playbox').play();
+            $('#audiospan').text(songinfo.name);
+            $('#audio').attr('src', songinfo.url);
+        });
+        $.getScript("/Content/audio.js", function () {
+            // playbox.init('playbox').play();
+        });
+        function sup() {
+            var i = window.songN - 1;
+            if (i < 0) i = window.songinfo.length - 1;
+            window.songN = i;
+            $('#audiospan').text(window.songinfo[i].name);
+            playbox.init('playbox').src = window.songinfo[i].url;
+            if (playbox.init('playbox').on) {
+                playbox.init('playbox').play();
+                playbox.init('playbox').play();
+            } else {
+                playbox.init('playbox').play();
+            }
 
+        }
+        function sdown() {
+            var i = window.songN + 1;
+            if (i >= window.songinfo.length) i = 0;
+            window.songN = i;
+            $('#audiospan').text(window.songinfo[i].name);
+            playbox.init('playbox').src = window.songinfo[i].url;
+            if (playbox.init('playbox').on) {
+                playbox.init('playbox').play();
+                playbox.init('playbox').play();
+            } else {
+                playbox.init('playbox').play();
+            }
+
+        }
+    </script>
 </body>
 </html>
 
