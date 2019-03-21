@@ -127,7 +127,7 @@
         <li class="mui-table-view-cell mui-collapse">
             <a class="" href="#">
                 <div class="mui-table mui-slider-handle">
-                    <div class="mui-table-cell mui-col-xs-9" onclick="selectinfo(this)">
+                    <div class="mui-table-cell mui-col-xs-9 selinfo" onclickx="selectinfo(this)">
                         <h4 class="mui-ellipsis">{{:#index+1}}. {{:title}} </h4>
 
                     </div>
@@ -153,7 +153,7 @@
         <li class="mui-table-view-cell mui-collapse">
             <a class="" href="#">
                 <div class="mui-table mui-slider-handle">
-                    <div class="mui-table-cell mui-col-xs-9" onclick="selectinfo(this)">
+                    <div class="mui-table-cell mui-col-xs-9 selinfo" onclickx="selectinfo(this)">
                         <h4 class="mui-ellipsis">{{:#index+1}}. {{:name}} </h4>
 
                     </div>
@@ -170,13 +170,6 @@
         //mui.init({
         //    swipeBack: true //启用右滑关闭功能
         //});
-        
-        //$(function () {
-        //    audiojs.create($('#auto')[0]);
-        //    setTimeout(function () {
-        //        audiojs.instances.audiojs0.wrapper.classList.remove('error');
-        //    }, 1000);
-        //});
 
         $('#auto').attr('src', songinfoarr[0].url);
         $('#auto-details').text(songinfoarr[0].name);
@@ -187,7 +180,26 @@
         //audiojs.instances.audiojs0.play();
         // audiojs.instances.audiojs0.playPause() // 切换
         // audiojs.instances.audiojs0.trackEnded() // 重置进度条
-        
+
+        $('#tabbar-sco-ul').on('tap', '.selinfo', function () {
+            var span = $(this).next().children()[0];
+            $('#txtserh').text($(span).data('name') + '\r\n' + $(span).data('url') + '\r\n' + $(span).data('link'))
+
+            $('#txtserv').val($(span).data('name'));
+            $(':radio').each(function (k, v) {
+                $(v).prop('checked', v.value == $(span).data('type') ? true : false);
+            })
+
+            // 更新播放器
+            audiojs.instances.audiojs0.source.src = $(span).data('url');
+            $('#auto-details').text($(span).data('name'));
+            audiojs.instances.audiojs0.wrapper.classList.remove('error'); //, 'playing', 'audiojs'); // ,
+            audiojs.instances.audiojs0.trackEnded() // 重置进度条
+            audiojs.instances.audiojs0.wrapper.classList.add('audiojs', 'playing');
+            audiojs.instances.audiojs0.play();
+            // audiojs.instances.audiojs0.playPause() // 切换
+        });
+
 
         function searchData() {
             var txtimptvar = $('#txtserv').val();
@@ -213,24 +225,10 @@
              window.open( $(e).text(), '_blank');
         }
 
-        function selectinfo(e) {
-            var span = $(e).next().children()[0];
-            $('#txtserh').text($(span).data('name') + '\r\n' + $(span).data('url') + '\r\n' + $(span).data('link'))
 
-            $('#txtserv').val($(span).data('name'));
-            $(':radio').each(function (k, v) {
-                $(v).prop('checked', v.value == $(span).data('type') ? true : false);
-            })
+        //function selectinfo(e) {
 
-            // 更新播放器
-            audiojs.instances.audiojs0.source.src = $(span).data('url');
-            $('#auto-details').text($(span).data('name'));
-            audiojs.instances.audiojs0.wrapper.classList.remove('error'); //, 'playing', 'audiojs'); // ,
-            audiojs.instances.audiojs0.trackEnded() // 重置进度条
-            audiojs.instances.audiojs0.wrapper.classList.add('audiojs','playing');
-            audiojs.instances.audiojs0.play();
-            // audiojs.instances.audiojs0.playPause() // 切换
-        }
+        //}
 
         function setsongjs() {
             $.getScript("/Content/songinfo.js", function () {
