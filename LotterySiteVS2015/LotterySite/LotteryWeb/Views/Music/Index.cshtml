@@ -107,8 +107,8 @@
         </div>
 
         <div class="mui-content-padded" style="margin: 5px;">
-            <audio id="auto" src="" preload="auto"></audio>
-            <div id="auto-details" class="track-details"> </div>
+            <audio id="auto" src="http://fdfs.xmcdn.com/group43/M00/9C/09/wKgKjVsvLhizbsJeABlc7rqvwsU325.mp3" preload="auto"></audio>
+            <div id="auto-details" class="track-details">Take Me to Infinity</div>
             <ul id="tabbar-sco-ul" class="mui-table-view mui-table-view-striped mui-table-view-condensed"></ul>
         </div>
 
@@ -118,7 +118,7 @@
     <script src="~/Content/jquery-3.3.1.min.js"></script>
     <script src="~/Content/jsrender.min.js"></script>
     <script src="~/Content/audiojs/audio.min.js"></script>
-    <script src="~/Content/songinfo.js"></script>
+    <script src="@Url.Content("~/Content/songinfo.js?" + DateTime.Now.ToString("HHmmss.fff"))"></script>
     @* 局部显示列表数据模板 *@
     <script id="tmpl_lkpers" type="text/x-jsrender">
         {{*}}
@@ -167,12 +167,7 @@
         {{/for}}
     </script>
     <script type="text/javascript">
-        //mui.init({
-        //    swipeBack: true //启用右滑关闭功能
-        //});
 
-        $('#auto').attr('src', songinfoarr[0].url);
-        $('#auto-details').text(songinfoarr[0].name);
         audiojs.create($('#auto')[0]);
 
         //audiojs.instances.audiojs0.source.src = songinfoarr[2].url;
@@ -231,7 +226,7 @@
         //}
 
         function setsongjs() {
-            $.getScript("/Content/songinfo.js", function () {
+            $.getScript("/Content/songinfo.js?" + Math.random().toString().substr(10), function () {
                 var lplisthtml = $("#tmpl_songjs").render({ serh: songinfoarr });
                 $('#tabbar-sco-ul').empty().append(lplisthtml);
                 $('#btnSub').data('songarr', '');

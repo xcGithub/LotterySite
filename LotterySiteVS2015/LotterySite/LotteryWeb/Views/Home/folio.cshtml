@@ -85,13 +85,15 @@
                 <div class="bannerText">
                     <h1>I'm <a href="/Loc/Index" style="color:white;text-decoration:none">C</a>hang Lin</h1>
                     <h3>Design &amp; Build Beautiful Crafted Web Experiences</h3>
-                    <span id="audiospan"></span><br />
+                    
+                    <div style="cursor:pointer"><span id="audiospan"></span><br />
                     -------------------------<br>
-                    <span onclick="sup()">I◀◀</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span id="playbox" class="btn_music" onclick="playbox.init('playbox').play()">
-                        ▶<audio src="" loop="" id="audio">
-                    </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span onclick="sdown()">▶▶I</span>
-
+                        <span onclick="sup()"><a>I◀◀</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span id="playbox" class="btn_music" onclick="playOrPause(); return false;">
+                            <a>▶</a><audio src="" id="audio">
+                        </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span onclick="sdown()"><a>▶▶I</a></span><br><!--喜马拉雅外链-->
+                    </div>
+                    
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 noPadd slides-container" style="height:100%">
                     <!--background slide show start-->
@@ -475,44 +477,44 @@ $(document).ready( function() {
     <!--for theme custom jquery-->
     <script src="~/Content/folio/js/custom.js"></script> 
     <script type="text/javascript">
-        $.getScript("/Content/songinfo.js", function () {
+        $.getScript("/Content/audio.js", function () {
+            // playbox.init('playbox').play();
+        });
+        $.getScript("/Content/songinfo.js?" + Math.random().toString().substr(10), function () {
             var songinfo = songinfoarr[0];
             window.songinfo = songinfoarr;
             window.songN = 0;
             // playbox.init('playbox').play();
             $('#audiospan').text(songinfo.name);
             $('#audio').attr('src', songinfo.url);
-        });
-        $.getScript("/Content/audio.js", function () {
-            // playbox.init('playbox').play();
+            playbox.init('playbox');
+            playbox.player.onended = sdown; // 播放结束调用下一曲函数
         });
         function sup() {
             var i = window.songN - 1;
             if (i < 0) i = window.songinfo.length - 1;
             window.songN = i;
-            $('#audiospan').text(window.songinfo[i].name);
-            playbox.init('playbox').src = window.songinfo[i].url;
-            if (playbox.init('playbox').on) {
-                playbox.init('playbox').play();
-                playbox.init('playbox').play();
-            } else {
-                playbox.init('playbox').play();
-            }
-
+            document.getElementById('audiospan').innerText = window.songinfo[i].name;
+            playbox.player.src = window.songinfo[i].url;
+            playbox.player.play();
         }
         function sdown() {
             var i = window.songN + 1;
             if (i >= window.songinfo.length) i = 0;
             window.songN = i;
-            $('#audiospan').text(window.songinfo[i].name);
-            playbox.init('playbox').src = window.songinfo[i].url;
-            if (playbox.init('playbox').on) {
-                playbox.init('playbox').play();
-                playbox.init('playbox').play();
-            } else {
-                playbox.init('playbox').play();
+            document.getElementById('audiospan').innerText = window.songinfo[i].name;
+            playbox.player.src = window.songinfo[i].url;
+            playbox.player.play();
+        }
+        function playOrPause() {
+            if (playbox.player.paused) {
+                playbox.player.play();
+                playbox.box.firstElementChild.innerText = "‖";
             }
-
+            else {
+                playbox.player.pause();
+                playbox.box.firstElementChild.innerText = "▶";
+            }
         }
     </script>
 </body>

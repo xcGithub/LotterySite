@@ -39,9 +39,9 @@ var playbox = (function(){
                 this.play_fn.call(this);
             }
         },
-        handleEvent: function(evt){
-            this.play();
-        },
+        //handleEvent: function(evt){ // 
+        //    this.play();
+        //},
         autoPlayEvt: function(important){
             if(important || this.autoPlayFix.on){
                 document.body.addEventListener(this.autoPlayFix.evtName, this, false);
