@@ -155,6 +155,7 @@ function sup() {
     document.getElementById('audiospan').innerText = window.songinfo[i].name;
     playbox.player.src = window.songinfo[i].url;
     playbox.player.play();
+    playbox.box.firstElementChild.innerText = "‖";
 }
 function sdown() {
     var i = window.songN + 1;
@@ -162,7 +163,8 @@ function sdown() {
     window.songN = i;
     document.getElementById('audiospan').innerText = window.songinfo[i].name;
     playbox.player.src = window.songinfo[i].url;
-    playbox.player.play(); 
+    playbox.player.play();
+    playbox.box.firstElementChild.innerText = "‖";
 }
 function playOrPause() {
     if (playbox.player.paused) {
