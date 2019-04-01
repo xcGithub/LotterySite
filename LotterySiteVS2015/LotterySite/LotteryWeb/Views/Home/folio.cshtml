@@ -86,14 +86,24 @@
                     <h1>I'm <a href="/Loc/Index" style="color:white;text-decoration:none">C</a>hang Lin</h1>
                     <h3>Design &amp; Build Beautiful Crafted Web Experiences</h3>
                     
-                    <div style="cursor:pointer"><span id="audiospan"></span><br />
-                    -------------------------<br>
-                        <span onclick="sup()"><a>I◀◀</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span id="playbox" class="btn_music" onclick="playOrPause(); return false;">
+                     
+                    <div style="cursor:pointer">
+                    @*━━━━●──────── <span id="atimespan"></span> <br>*@
+                        <span id="audiospan"></span><br />
+                        <span class="play-box">
+                            <span class="tsize center-block">
+                                <span class="timenow">00:00</span>
+                                <span class="timesize">00:00</span>
+                            </span>
+                            <span class="left center-block">
+                                <p class="timeline center-block"><span style=""></span></p>
+                            </span>
+                        </span><br />
+                        <span class="audiospan"><a>⇆</a></span><span onclick="sup()" class="audiospan"><a>I◀</a></span>
+                        <span id="playbox" class="audiospan" onclick="playOrPause(); return false;">
                             <a>▶</a><audio src="" id="audio">
-                        </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span onclick="sdown()"><a>▶▶I</a></span><br><!--喜马拉雅外链-->
-                    </div>
-                    
+                        </span><span onclick="sdown()" class="audiospan"><a>▶I</a></span><span><a>↻</a></span><br><!--喜马拉雅外链-->
+                    </div> 
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 noPadd slides-container" style="height:100%">
                     <!--background slide show start-->
@@ -489,7 +499,29 @@ $(document).ready( function() {
             $('#audio').attr('src', songinfo.url);
             playbox.init('playbox');
             playbox.player.onended = sdown; // 播放结束调用下一曲函数
+            playbox.player.ontimeupdate = timespanchange;
+            playbox.player.onloadeddata = timespanf;
+            });
+        // 进度条控制
+        $(document).on('click', '.timeline', function (e) {
+            var x = e.originalEvent.clientX - this.offsetLeft;
+            var X = x < 0 ? 0 : x;
+            var W = $(this).width();
+            var place = X > W ? W : X;
+            playbox.player.currentTime = (place / W).toFixed(2) * playbox.player.duration
+            $(this).children().css({
+                width: (place / W).toFixed(2) * 100 + "%"
+            })
         });
+        function timespanchange() { 
+            $('.play-box .timenow').text(s_to_hs(playbox.player.currentTime));
+            $('.timeline').children().css({
+                width: (playbox.player.currentTime / playbox.player.duration).toFixed(4) * 100 + "%"
+            })
+        }
+        function timespanf() {
+            $(".play-box .timesize").text(s_to_hs(playbox.player.duration));
+        }
         function sup() {
             var i = window.songN - 1;
             if (i < 0) i = window.songinfo.length - 1;
@@ -497,7 +529,7 @@ $(document).ready( function() {
             document.getElementById('audiospan').innerText = window.songinfo[i].name;
             playbox.player.src = window.songinfo[i].url;
             playbox.player.play();
-            playbox.box.firstElementChild.innerText = "‖";
+            playbox.box.firstElementChild.innerText = "❚❚";
         }
         function sdown() {
             var i = window.songN + 1;
@@ -506,17 +538,26 @@ $(document).ready( function() {
             document.getElementById('audiospan').innerText = window.songinfo[i].name;
             playbox.player.src = window.songinfo[i].url;
             playbox.player.play();
-            playbox.box.firstElementChild.innerText = "‖";
+            playbox.box.firstElementChild.innerText = "❚❚";
         }
         function playOrPause() {
             if (playbox.player.paused) {
                 playbox.player.play();
-                playbox.box.firstElementChild.innerText = "‖";
+                playbox.box.firstElementChild.innerText = "❚❚";
             }
             else {
                 playbox.player.pause();
                 playbox.box.firstElementChild.innerText = "▶";
             }
+        }
+        function s_to_hs(s) {
+            var h;
+            h = Math.floor(s / 60);
+            s = Math.floor(s % 60);
+            h += '';
+            s += '';
+            s = (s.length == 1) ? '0' + s : s;
+            return h + ':' + s;
         }
     </script>
 </body>

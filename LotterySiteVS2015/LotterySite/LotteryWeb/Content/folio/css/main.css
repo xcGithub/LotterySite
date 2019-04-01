@@ -1413,3 +1413,59 @@ ul.portfolioContainer li:hover span.hoverBox .linKed{
 		
 	}
 }
+/*²¥·ÅÆ÷*/
+.audiospan { margin-right:40px; }
+.play-box .left {
+width: 140px;  
+}.play-box .tsize {
+width: 240px; 
+}		
+.play-box .left p.timeline {
+    width: 140px;
+    height: 4px;
+    background-color: rgba(256, 256, 256, 0.6);
+    border-radius: 5px;
+    margin-top: 1.2rem;
+    z-index: 2; 
+}
+.play-box .left p.timeline {
+    padding-bottom: 1px;
+}
+.play-box .left p.timeline span {
+    position: relative;
+    width: 0px;
+    height: 4px;
+    background-color:#7b7b7b;
+    border-radius: 5px;
+    display: block;
+    -webkit-transition: width ease-out 0.3s;
+    -o-transition: width ease-out 0.3s;
+    transition: width ease-out 0.3s;
+}
+
+.play-box .left p.timeline span:after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    right: -8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    background-color: #7b7b7b;
+}
+.play-box .left div.info {
+    height: 26px;
+    font-size: 0.8rem;
+    color: #ffffff;
+    position: relative;
+    top: -0.65rem;
+    z-index: 1;
+}
+.play-box  .timenow {
+    float: left;
+    display: block;
+}
+.play-box  .timesize {
+    float: right;
+    display: block;
+}

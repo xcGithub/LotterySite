@@ -48,6 +48,63 @@
 	}
 	.bgmdv{ color:#fffefe;font-size:12px;cursor:pointer }
 	.bgmdv a{ color:#fffefe; }
+    /*播放器*/
+.audiospan { margin-right:20px; }
+.play-box .left {
+width: 140px;  
+}.play-box .tsize {
+width: 240px; 
+}		
+.play-box .left p.timeline {
+    width: 140px;
+    height: 4px;
+    background-color: rgba(256, 256, 256, 0.6);
+    border-radius: 5px;
+    margin-top: 1.2rem;
+    z-index: 2; 
+}
+.play-box .left p.timeline {
+    padding-bottom: 1px;
+}
+.play-box .left p.timeline span {
+    position: relative;
+    width: 0px;
+    height: 4px;
+    background-color:#7b7b7b;
+    border-radius: 5px;
+    display: block;
+    -webkit-transition: width ease-out 0.3s;
+    -o-transition: width ease-out 0.3s;
+    transition: width ease-out 0.3s;
+}
+
+.play-box .left p.timeline span:after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    right: -8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    background-color: #7b7b7b;
+}
+.play-box .left div.info {
+    height: 26px;
+    font-size: 0.8rem;
+    color: #ffffff;
+    position: relative;
+    top: -0.65rem;
+    z-index: 1;
+}
+.play-box  .timenow {
+    float: left;
+    display: block;
+}
+.play-box  .timesize {
+    margin-left:90px;
+    float: left;
+    display: block;
+}
 </style>
 
 <script type="text/javascript">
@@ -140,7 +197,9 @@ window.onload = function(){
 	    document.getElementById('audio').src = songinfo.url
         playbox.init('playbox');
 	    //playbox.player.src = songinfo.url;
-	    playbox.player.onended = sdown; // 播放结束调用下一曲函数
+        playbox.player.onended = sdown; // 播放结束调用下一曲函数
+        playbox.player.ontimeupdate = timespanchange;
+        playbox.player.onloadeddata = timespanf;
 	    playOrPause();
 	    //playbox.player.loop // 循环 可audio上直接标签添加loop=""
 	    //playbox.player.duration // 音乐长度
@@ -148,8 +207,28 @@ window.onload = function(){
 	    //playbox.player.paused  //是否暂停
 	    //playbox.player.load(); //重新加载  //.play() 播放 //.pause() 暂停
 	}, 1000);
+
+    // 进度条控制
+	document.getElementsByClassName('timeline')[0].onclick = function (e) {
+	    var x = e.pageX - this.offsetLeft;
+	    var X = x < 0 ? 0 : x;
+	    var W = this.clientWidth;
+	    var place = X > W ? W : X;
+	    playbox.player.currentTime = (place / W).toFixed(2) * playbox.player.duration
+	    this.children[0].style.width =
+             (place / W).toFixed(2) * 100 + "%";
+	}
 }
 
+function timespanchange() {
+    document.getElementsByClassName('timenow')[0].innerText = s_to_hs(playbox.player.currentTime);
+    document.getElementsByClassName('timeline')[0].children[0].style.width =
+         (playbox.player.currentTime / playbox.player.duration).toFixed(4) * 100 + "%";
+    
+}
+function timespanf() {
+    document.getElementsByClassName('timesize')[0].innerText = s_to_hs(playbox.player.duration);
+}
 function sup() {
     var i = window.songN - 1;
     if (i < 0) i = window.songinfo.length - 1;
@@ -157,7 +236,7 @@ function sup() {
     document.getElementById('audiospan').innerText = window.songinfo[i].name;
     playbox.player.src = window.songinfo[i].url;
     playbox.player.play();
-    playbox.box.firstElementChild.innerText = "‖";
+    playbox.box.firstElementChild.innerText = "❚❚";
 }
 function sdown() {
     var i = window.songN + 1;
@@ -166,15 +245,24 @@ function sdown() {
     document.getElementById('audiospan').innerText = window.songinfo[i].name;
     playbox.player.src = window.songinfo[i].url;
     playbox.player.play();
-    playbox.box.firstElementChild.innerText = "‖";
+    playbox.box.firstElementChild.innerText = "❚❚";
 }
 function playOrPause() {
     if (playbox.player.paused) {
         playbox.player.play();
-    playbox.box.firstElementChild.innerText = "‖"; }
+    playbox.box.firstElementChild.innerText = "❚❚"; }
     else {
         playbox.player.pause();
     playbox.box.firstElementChild.innerText = "▶"; }
+}
+function s_to_hs(s) {
+    var h;
+    h = Math.floor(s / 60);
+    s = Math.floor(s % 60);
+    h += '';
+    s += '';
+    s = (s.length == 1) ? '0' + s : s;
+    return h + ':' + s;
 }
 
 </script>
@@ -182,10 +270,20 @@ function playOrPause() {
 
 <body>
 <div class="bgmdv" >京&nbsp;ICP&nbsp;证&nbsp;17049329&nbsp;号 <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1276849887'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s96.cnzz.com/z_stat.php%3Fid%3D1276849887%26online%3D2' type='text/javascript'%3E%3C/script%3E"));</script><br />
-    <span onclick="sup()"><a >I◀◀</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <span id="playbox" class="btn_music" onclick="playOrPause();"><a>▶</a><audio src="" id="audio">
-     </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span onclick="sdown()"><a>▶▶I</a></span><br><!--喜马拉雅外链-->
-    ---------------------<br>
+    <span class="audiospan"><a>⇆</a></span><span onclick="sup()" class="audiospan"><a>I◀</a></span>
+    <span id="playbox" class="audiospan" onclick="playOrPause(); return false;">
+        <a>▶</a><audio src="" id="audio">
+    </span><span onclick="sdown()" class="audiospan"><a>▶I</a></span><span><a>↻</a></span><br><!--喜马拉雅外链-->
+    <span id="audiospan"></span><br />
+    <span class="play-box">
+        <span class="tsize center-block">
+            <span class="timenow">00:00</span>
+            <span class="timesize">00:00</span>
+        </span>
+        <span class="left center-block">
+            <p class="timeline center-block"><span style=""></span></p>
+        </span>
+    </span><br>
     <span id="audiospan"></span><br/>
 
 </div>
