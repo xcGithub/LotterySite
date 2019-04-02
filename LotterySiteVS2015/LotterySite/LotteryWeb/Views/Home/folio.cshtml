@@ -99,10 +99,10 @@
                                 <p class="timeline center-block"><span style=""></span></p>
                             </span>
                         </span><br />
-                        <span class="audiospan"><a>⇆</a></span><span onclick="sup()" class="audiospan"><a>I◀</a></span>
+                        <span id="loopspan" class="audiospan" data-loops="0" onclick="loops(this)"><a>「A」</a></span><span onclick="sup()" class="audiospan"><a>I◀</a></span>
                         <span id="playbox" class="audiospan" onclick="playOrPause(); return false;">
                             <a>▶</a><audio src="" id="audio">
-                        </span><span onclick="sdown()" class="audiospan"><a>▶I</a></span><span><a>↻</a></span><br><!--喜马拉雅外链-->
+                        </span><span onclick="sdown()" class="audiospan"><a>▶I</a></span><span onclick="playbox.player.currentTime=0;"><a>↻</a></span><br><!--喜马拉雅外链-->
                     </div> 
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 noPadd slides-container" style="height:100%">
@@ -522,9 +522,18 @@ $(document).ready( function() {
         function timespanf() {
             $(".play-box .timesize").text(s_to_hs(playbox.player.duration));
         }
+        function loops(e) {
+            var ln = $(e).data('loops');
+            if (ln == 0) { $(e).data('loops', 1); e.firstElementChild.innerText = "「1」"; }
+            else if (ln == 1) { $(e).data('loops', 2); e.firstElementChild.innerText = " ↓↑ "; }
+            else if (ln == 2) { $(e).data('loops', 0); e.firstElementChild.innerText = "「A」"; }
+        }
         function sup() {
             var i = window.songN - 1;
             if (i < 0) i = window.songinfo.length - 1;
+            var ln = $('#loopspan').data('loops');
+            if (ln == 1) i = window.songN;
+            if (ln == 2) i = Math.floor(Math.random() * 10000) % window.songinfo.length
             window.songN = i;
             document.getElementById('audiospan').innerText = window.songinfo[i].name;
             playbox.player.src = window.songinfo[i].url;
@@ -532,8 +541,11 @@ $(document).ready( function() {
             playbox.box.firstElementChild.innerText = "❚❚";
         }
         function sdown() {
-            var i = window.songN + 1;
+            var i = window.songN + 1; 
             if (i >= window.songinfo.length) i = 0;
+            var ln = $('#loopspan').data('loops');
+            if (ln == 1) i = window.songN;
+            if (ln == 2) i = Math.floor(Math.random() * 10000) % window.songinfo.length
             window.songN = i;
             document.getElementById('audiospan').innerText = window.songinfo[i].name;
             playbox.player.src = window.songinfo[i].url;
