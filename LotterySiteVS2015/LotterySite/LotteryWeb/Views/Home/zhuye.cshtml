@@ -193,6 +193,7 @@ window.onload = function(){
 	    var songinfo = songinfoarr[7];
 	    window.songinfo = songinfoarr;
 	    window.songN = 7;
+	    window.songNsup = window.songN;
 	    document.getElementById('audiospan').innerText = songinfo.name;
 	    document.getElementById('audio').src = songinfo.url
         playbox.init('playbox');
@@ -240,7 +241,7 @@ function sup() {
     if (i < 0) i = window.songinfo.length - 1;
     var ln = document.getElementById('loopspan').getAttribute('data-loops');
     if (ln == 1) i = window.songN;
-    if (ln == 2) i = Math.floor(Math.random() * 10000) % window.songinfo.length
+    if (ln == 2) i = window.songNsup;
     window.songN = i;
     document.getElementById('audiospan').innerText = window.songinfo[i].name;
     playbox.player.src = window.songinfo[i].url;
@@ -253,6 +254,7 @@ function sdown() {
     var ln = document.getElementById('loopspan').getAttribute('data-loops');
     if (ln == 1) i = window.songN;
     if (ln == 2) i = Math.floor(Math.random() * 10000) % window.songinfo.length
+    window.songNsup = window.songN;
     window.songN = i;
     document.getElementById('audiospan').innerText = window.songinfo[i].name;
     playbox.player.src = window.songinfo[i].url;

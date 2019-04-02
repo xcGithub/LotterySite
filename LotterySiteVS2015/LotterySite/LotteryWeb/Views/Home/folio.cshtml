@@ -494,6 +494,7 @@ $(document).ready( function() {
             var songinfo = songinfoarr[0];
             window.songinfo = songinfoarr;
             window.songN = 0;
+            window.songNsup = window.songN;
             // playbox.init('playbox').play();
             $('#audiospan').text(songinfo.name);
             $('#audio').attr('src', songinfo.url);
@@ -533,7 +534,7 @@ $(document).ready( function() {
             if (i < 0) i = window.songinfo.length - 1;
             var ln = $('#loopspan').data('loops');
             if (ln == 1) i = window.songN;
-            if (ln == 2) i = Math.floor(Math.random() * 10000) % window.songinfo.length
+            if (ln == 2) i = window.songNsup;
             window.songN = i;
             document.getElementById('audiospan').innerText = window.songinfo[i].name;
             playbox.player.src = window.songinfo[i].url;
@@ -546,6 +547,7 @@ $(document).ready( function() {
             var ln = $('#loopspan').data('loops');
             if (ln == 1) i = window.songN;
             if (ln == 2) i = Math.floor(Math.random() * 10000) % window.songinfo.length
+            window.songNsup = window.songN;
             window.songN = i;
             document.getElementById('audiospan').innerText = window.songinfo[i].name;
             playbox.player.src = window.songinfo[i].url;
