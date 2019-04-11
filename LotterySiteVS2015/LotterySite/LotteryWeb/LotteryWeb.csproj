@@ -170,6 +170,8 @@
     <Content Include="Content\folio\images\cursor.png" />
     <Content Include="Content\folio\images\header-image\image01.png" />
     <Content Include="Content\folio\images\header-image\image02.jpg" />
+    <Content Include="Content\folio\images\header-image\jike_1_pic.gif" />
+    <Content Include="Content\folio\images\header-image\jike_2_pic.gif" />
     <Content Include="Content\folio\images\jhon-img.gif" />
     <Content Include="Content\folio\images\left-arrow.png" />
     <Content Include="Content\folio\images\loading.gif" />
