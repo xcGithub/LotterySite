@@ -1423,7 +1423,7 @@ width: 240px;
 .play-box .left p.timeline {
     width: 140px;
     height: 4px;
-    background-color: rgba(256, 256, 256, 0.6);
+    background-color: #6a686f;
     border-radius: 5px;
     margin-top: 1.2rem;
     z-index: 2; 
@@ -1435,7 +1435,7 @@ width: 240px;
     position: relative;
     width: 0px;
     height: 4px;
-    background-color:#7b7b7b;
+    background-color:rgba(256, 256, 256, 0.6);
     border-radius: 5px;
     display: block;
     -webkit-transition: width ease-out 0.3s;
@@ -1451,7 +1451,7 @@ width: 240px;
     width: 10px;
     height: 10px;
     border-radius: 10px;
-    background-color: #7b7b7b;
+    background-color: rgba(256, 256, 256, 0.6);
 }
 .play-box .left div.info {
     height: 26px;
