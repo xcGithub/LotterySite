@@ -24,9 +24,9 @@ namespace FW.Model
         //public virtual DateTime? DelTime { get; set; }
         //      public virtual DateTime? UpdateTime { get; set; }
          
-        public LockPers() {
-            this._IsWriteFiled = false; // 默认不记录赋值字段
-        }  //this._IsWriteFiled = false; }  
+        //public LockPers() {
+        //    this._IsWriteFiled = false; // 默认不记录赋值字段
+        //}  //this._IsWriteFiled = false; }  
 
         private int _rowNum;
         [Write(false)]

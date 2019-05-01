@@ -7,7 +7,7 @@ namespace FW.Model
 {
     public partial class LOLkengbi
     {
-        public LOLkengbi() { this._IsWriteFiled = false; }
+        //public LOLkengbi() { this._IsWriteFiled = false; }
 
     }
 }

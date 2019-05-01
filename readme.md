@@ -15,3 +15,13 @@ sqlite 库
       同一个字段多次赋值会添加多次到 _WriteFiled = Count = 12
 > 11. 删除点否 收回当前行 
 
+> 12. ExecuteScalar(sql,entity) 有bug 不需要传入sql,entity参数的
+    var first = LockDapperUtilsqlite<Users, Skin>.Selec().Column((a, b) => new { Value = b.Value }).FromJoin(JoinType.Inner, (a, b) => a.SkinId == b.Id).Where( (a,b) => a.Id ==1 && a.UserName == "cc").ExecuteScalar(sql,entity)
+  13. LockDapperUtilsqlite<Skin>.Cud.Inser(additem,true);   bug  
+      未实现该方法=操作  SQLiteAdapter.Insert
+
+  14. 未将对象引用到新实列
+       int UserIds = 1;
+                bool isSuccess = LockDapperUtilsqlite<Skin>.Cud.Update(s => {
+                    s._IsWriteFiled = true; s.IsDel = 1;  },  w => w.Id == Id && w.UserId == UserIds);
+					DapperSqlMaker.DapperExt.AnalysisExpression.GetMemberValue(System.Linq.Expressions.MemberExpression, System.String)

@@ -1,6 +1,8 @@
 ﻿@{
     Layout = null;
 }
+@model FW.Model.Users
+
 
 <!DOCTYPE html>
 <html>
@@ -18,7 +20,7 @@
     <meta http-equiv="refresh" content="0;ie.html" />
     <![endif]--> 
 </head>
-<body class="fixed-sidebar full-height-layout transparent-bg" style="overflow:hidden;background-image:url(@ViewBag.url);background-repeat:no-repeat;background-size:cover">
+<body class="fixed-sidebar full-height-layout transparent-bg" style="overflow:hidden;background-image:url( @Model.bgurl );background-repeat:no-repeat;background-size:cover">
     <div id="wrapper">
         <!--左侧导航开始-->
         <nav class="navbar-default navbar-static-side transparent-bg" role="navigation">
@@ -29,11 +31,11 @@
                 <ul class="nav" id="side-menu">
                     <li class="nav-header">
                         <div class="dropdown profile-element">
-                            <span><img alt="image" class="img-circle" width="64" src="https://imagev2.xmcdn.com/group59/M08/2A/C7/wKgLeFzHNRaAxbgwAABZ_y5klt8122.jpg!strip=1&quality=7&magick=jpg&op_type=5&upload_type=album&name=mobile_large&device_type=ios" /></span>
+                            <span><img alt="image" id="imguser" class="img-circle" width="64" src="@Model.img" /></span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
-                                    <span class="block m-t-xs"><strong class="font-bold">木木-木头</strong></span>
-                                    <span class="text-muted text-xs block">超级管理员<b class="caret"></b></span>
+                                    <span class="block m-t-xs"><strong class="font-bold">@Model.UserName</strong></span>
+                                    <span class="text-muted text-xs block">@Model.RoleName<b class="caret"></b></span>
                                 </span>
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
@@ -98,6 +100,13 @@
                                 <a class="J_menuItem" href="https://www.qhftdx.cn/origin/template/hplus/mail_compose.html">写信</a>
                             </li>
                         </ul>
+                    </li>
+
+                    <li>
+                        <a class="J_menuItem" href="http://www.zi-han.net/theme/hplus/pin_board.html"><i class="fa fa-columns"></i><span class="nav-label">标签墙</span></a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="http://www.zi-han.net/theme/hplus/agile_board.html"><i class="fa fa-columns"></i><span class="nav-label">任务清单</span></a>
                     </li>
 
                     <li>

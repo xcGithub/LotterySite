@@ -18,15 +18,15 @@
                     <span class="label {{if #index == 0}} label-primary {{/if}}  ">{{:#index+1}}</span>
                 </td>
                 <td class="project-title">
-                    <a href="#">{{:name}}</a>
+                    <a href="#">{{:Name}}</a>
                     <br />
-                    <small>创建于 {{:datetime}} - {{:type}}</small>
+                    <small>创建于 {{:InsertDate}} - {{:Type}}</small>
                 </td>
                 <td class="project-skin">
-                    <a href="#"><img alt="image"  class="img-rounded" src="{{:url}}"></a>
+                    <a href="#"><img alt="image"  class="img-rounded" src="{{:Value}}"></a>
                 </td>
                 <td class="project-actions"> 
-                    <input type="hidden" data-name="{{:name}}" data-datetime="{{:datetime}}" data-url="{{:url}}"/> 
+                    <input type="hidden" data-id="{{:Id}}" data-name="{{:Name}}" data-datetime="{{:InsertDate}}" data-url="{{:Value}}"/> 
                     <button onclick="removeskin(this)" class="btn btn-white btn-sm"><i class="fa fa-remove"></i> 移除 </button>
                     <button onclick="setskin(this)" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> 设置 </button>
                 </td>
@@ -37,8 +37,8 @@
 
     <script type="text/javascript">
         function getskinjs() {
-            $.getScript("/Content/skininfo.js?" + Math.random().toString().substr(10), function () {
-                var lplisthtml = $("#tmpl_skinjs").render({ serh: skininfoarr });
+            $.getJSON("@Url.Action("getskin", "home", new { area = "admin" })", { }, function (r) {
+                var lplisthtml = $("#tmpl_skinjs").render({ serh: r });
                 $('#dvbgset').empty().append(lplisthtml);
             });
         }
@@ -64,7 +64,8 @@
         function removeskin(e) {
             var $hid = $(e).prev();
              (function ($hid) {
-                 $.post('@Url.Action("removeskin", "home", new { area="admin" })', { name: $hid.data('name'), datetime: $hid.data('datetime'), url: $hid.data('url') }, function (r) {
+                 $.post('@Url.Action("removeskin", "home", new { area="admin" })'
+                     , { Id: $hid.data('id') }, function (r) {
                      if (r != "1") { layer.msg('删除失败', { time: 1000, icon: 0 }); return; }
 
                      getskinjs();
@@ -78,7 +79,8 @@
         function setskin(e) {
             var $hid = $(e).prev().prev();
             (function ($hid) {
-                $.post('@Url.Action("setskin", "home", new { area="admin" })', { name: $hid.data('name'), datetime: $hid.data('datetime'), url: $hid.data('url') }, function (r) {
+                $.post('@Url.Action("setskin", "home", new { area="admin" })'
+                    , { Id: $hid.data('id') }, function (r) {
                     if (r != "1") { layer.msg('设置失败', { time: 1000, icon: 0 }); return; }
                     // 选中当前列到top1
                     //var curlab = $hid[0].parentElement.parentElement.children[0].children[0];
@@ -97,7 +99,20 @@
             })($hid)
         }
 
+        function setuserimg() {
+            $.post('@Url.Action("setuserimg", "home", new { area="admin" })'
+                    , { img: $('#txtuserimg').val() }, function (r) {
+                        if (r != "1") { layer.msg('设置失败', { time: 1000, icon: 0 }); return; }
+                         
+                        window.parent.document.getElementById('imguser').src = $('#txtuserimg').val();
+                        $('#imguser').prop('src', $('#txtuserimg').val())
+                        layer.msg('设置成功', { time: 1000, icon: 1 });
+                    }, 'json');
+        }
+
         getskinjs();
+
+
     </script>
 
     
@@ -126,7 +141,25 @@
 
                                     <div class="vertical-timeline-content">
                                         <h2>头像</h2>
-                                        <p>喝咖啡啦，啦啦啦~~</p>
+                                        <div class="hr-line-dashed"></div>
+                                        <form id="fmbgser">
+                                            <div class="row m-b-sm m-t-sm">
+                                                <div class="col-md-4">
+                                                    <div class="  text-center">
+                                                            <a href="#"><img alt="image" height="100" id="imguser" class="img-circle" src="@ViewBag.img"></a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-8">
+                                                    <div class="input-group">
+                                                        <input type="text" id="txtuserimg" name="img" placeholder="图片外链" class="input-sm form-control"> <span class="input-group-btn">
+                                                            <button type="button" onclick="setuserimg()" class="btn btn-sm btn-primary"> 导入</button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+
                                         <a href="#" class="btn btn-sm btn-info">更多</a>
                                         <span class="vertical-date"> 昨天 <br><small>2月2日</small></span>
                                     </div>
@@ -137,9 +170,9 @@
                                         <i class="fa fa-file-image-o"></i>
                                     </div>
 
-                                    <div class="vertical-timeline-content">
-                                        <h2>背景 Top1设置为当前使用</h2>
-
+                                    <div class="vertical-timeline-content ">
+                                        <h2>背景 </h2>
+                                        <div class="hr-line-dashed"></div>
                                         <form id="fmbgser"> <div class="row m-b-sm m-t-sm">
                                             <div class="col-md-4">
                                                 <div class="form-group">

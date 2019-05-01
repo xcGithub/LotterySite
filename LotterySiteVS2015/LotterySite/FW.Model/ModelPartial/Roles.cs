@@ -7,12 +7,12 @@ namespace FW.Model
 {
 
     /// <summary>
-    /// A class which represents the SynNote table.
+    /// A class which represents the Roles table.
     /// </summary>
-	[Table("SynNote")]
-	public partial class SynNote
+	[Table("Roles")]
+	public partial class Roles
 	{  
-	   /*  Id  Content  NoteDate  Name  UserId  IsDel  */ 
+	   /*  Id  Name  Remake  IsDel  MenusID  */ 
 
 	    
         #region 待写入字段集合 可抽象出来
@@ -22,29 +22,27 @@ namespace FW.Model
 						= new System.Collections.Generic.List<System.Reflection.PropertyInfo>();
 		#endregion
 		 
-        public SynNote() {
+        public Roles() {
             this._IsWriteFiled = false;
         }
-        public SynNote(bool isWrite) {
+        public Roles(bool isWrite) {
             this._IsWriteFiled = isWrite;
         }
 
         #region FieldName
 		public static readonly string  Field_Id = "Id"; 
-		public static readonly string  Field_Content = "Content"; 
-		public static readonly string  Field_NoteDate = "NoteDate"; 
 		public static readonly string  Field_Name = "Name"; 
-		public static readonly string  Field_UserId = "UserId"; 
+		public static readonly string  Field_Remake = "Remake"; 
 		public static readonly string  Field_IsDel = "IsDel"; 
+		public static readonly string  Field_MenusID = "MenusID"; 
 		#endregion
 
         #region Field
 		private int _Id ; 
-		private string _Content ; 
-		private DateTime? _NoteDate ; 
 		private string _Name ; 
-		private int _UserId ; 
+		private string _Remake ; 
 		private bool _IsDel ; 
+		private int _MenusID ; 
         #endregion
 
 		[Key]
@@ -53,51 +51,45 @@ namespace FW.Model
 					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Id) ); }
 			get { return _Id; }
 		}
-		public virtual string Content { 
-			set { _Content = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Content) ); }
-			get { return _Content; }
-		}
-		public virtual DateTime? NoteDate { 
-			set { _NoteDate = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_NoteDate) ); }
-			get { return _NoteDate; }
-		}
 		public virtual string Name { 
 			set { _Name = value; 
 					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Name) ); }
 			get { return _Name; }
 		}
-		public virtual int UserId { 
-			set { _UserId = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_UserId) ); }
-			get { return _UserId; }
+		public virtual string Remake { 
+			set { _Remake = value; 
+					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Remake) ); }
+			get { return _Remake; }
 		}
 		public virtual bool IsDel { 
 			set { _IsDel = value; 
 					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_IsDel) ); }
 			get { return _IsDel; }
 		}
+		public virtual int MenusID { 
+			set { _MenusID = value; 
+					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_MenusID) ); }
+			get { return _MenusID; }
+		}
 
 	}
 
 //	################
     /// <summary>
-    /// 查询用 只存数据的实体  SynNote_ table.
+    /// 查询用 只存数据的实体  Roles_ table.
     /// </summary>
-	[Table("SynNote")]
-	public partial class SynNote_
+	[Table("Roles")]
+	public partial class Roles_
 	{  
-	   /*  Id  Content  NoteDate  Name  UserId  IsDel  */ 
+	   /*  Id  Name  Remake  IsDel  MenusID  */ 
 
 	      
         #region Field
 		private int _Id ;
-		private string _Content ;
-		private DateTime? _NoteDate ;
 		private string _Name ;
-		private int _UserId ;
+		private string _Remake ;
 		private bool _IsDel ;
+		private int _MenusID ;
         #endregion
 
 		[Key]
@@ -105,25 +97,21 @@ namespace FW.Model
 			set { _Id = value; }
 			get { return _Id; }
 		}
-		public virtual string Content { 
-			set { _Content = value; }
-			get { return _Content; }
-		}
-		public virtual DateTime? NoteDate { 
-			set { _NoteDate = value; }
-			get { return _NoteDate; }
-		}
 		public virtual string Name { 
 			set { _Name = value; }
 			get { return _Name; }
 		}
-		public virtual int UserId { 
-			set { _UserId = value; }
-			get { return _UserId; }
+		public virtual string Remake { 
+			set { _Remake = value; }
+			get { return _Remake; }
 		}
 		public virtual bool IsDel { 
 			set { _IsDel = value; }
 			get { return _IsDel; }
+		}
+		public virtual int MenusID { 
+			set { _MenusID = value; }
+			get { return _MenusID; }
 		}
 
 	}

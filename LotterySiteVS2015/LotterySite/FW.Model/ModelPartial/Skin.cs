@@ -7,12 +7,12 @@ namespace FW.Model
 {
 
     /// <summary>
-    /// A class which represents the LOLkengbi table.
+    /// A class which represents the Skin table.
     /// </summary>
-	[Table("LOLkengbi")]
-	public partial class LOLkengbi
+	[Table("Skin")]
+	public partial class Skin
 	{  
-	   /*  Id  Name  Hero  Server  IsDel  Remake  UserId  */ 
+	   /*  Id  Name  Value  Type  IsDel  Remake  UserId  InsertDate  */ 
 
 	    
         #region 待写入字段集合 可抽象出来
@@ -22,31 +22,33 @@ namespace FW.Model
 						= new System.Collections.Generic.List<System.Reflection.PropertyInfo>();
 		#endregion
 		 
-        public LOLkengbi() {
+        public Skin() {
             this._IsWriteFiled = false;
         }
-        public LOLkengbi(bool isWrite) {
+        public Skin(bool isWrite) {
             this._IsWriteFiled = isWrite;
         }
 
         #region FieldName
 		public static readonly string  Field_Id = "Id"; 
 		public static readonly string  Field_Name = "Name"; 
-		public static readonly string  Field_Hero = "Hero"; 
-		public static readonly string  Field_Server = "Server"; 
+		public static readonly string  Field_Value = "Value"; 
+		public static readonly string  Field_Type = "Type"; 
 		public static readonly string  Field_IsDel = "IsDel"; 
 		public static readonly string  Field_Remake = "Remake"; 
 		public static readonly string  Field_UserId = "UserId"; 
+		public static readonly string  Field_InsertDate = "InsertDate"; 
 		#endregion
 
         #region Field
 		private int _Id ; 
 		private string _Name ; 
-		private string _Hero ; 
-		private string _Server ; 
+		private string _Value ; 
+		private string _Type ; 
 		private int _IsDel ; 
 		private string _Remake ; 
 		private int _UserId ; 
+		private string _InsertDate ; 
         #endregion
 
 		[Key]
@@ -60,15 +62,15 @@ namespace FW.Model
 					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Name) ); }
 			get { return _Name; }
 		}
-		public virtual string Hero { 
-			set { _Hero = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Hero) ); }
-			get { return _Hero; }
+		public virtual string Value { 
+			set { _Value = value; 
+					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Value) ); }
+			get { return _Value; }
 		}
-		public virtual string Server { 
-			set { _Server = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Server) ); }
-			get { return _Server; }
+		public virtual string Type { 
+			set { _Type = value; 
+					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Type) ); }
+			get { return _Type; }
 		}
 		public virtual int IsDel { 
 			set { _IsDel = value; 
@@ -85,27 +87,33 @@ namespace FW.Model
 					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_UserId) ); }
 			get { return _UserId; }
 		}
+		public virtual string InsertDate { 
+			set { _InsertDate = value; 
+					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_InsertDate) ); }
+			get { return _InsertDate; }
+		}
 
 	}
 
 //	################
     /// <summary>
-    /// 查询用 只存数据的实体  LOLkengbi_ table.
+    /// 查询用 只存数据的实体  Skin_ table.
     /// </summary>
-	[Table("LOLkengbi")]
-	public partial class LOLkengbi_
+	[Table("Skin")]
+	public partial class Skin_
 	{  
-	   /*  Id  Name  Hero  Server  IsDel  Remake  UserId  */ 
+	   /*  Id  Name  Value  Type  IsDel  Remake  UserId  InsertDate  */ 
 
 	      
         #region Field
 		private int _Id ;
 		private string _Name ;
-		private string _Hero ;
-		private string _Server ;
+		private string _Value ;
+		private string _Type ;
 		private int _IsDel ;
 		private string _Remake ;
 		private int _UserId ;
+		private string _InsertDate ;
         #endregion
 
 		[Key]
@@ -117,13 +125,13 @@ namespace FW.Model
 			set { _Name = value; }
 			get { return _Name; }
 		}
-		public virtual string Hero { 
-			set { _Hero = value; }
-			get { return _Hero; }
+		public virtual string Value { 
+			set { _Value = value; }
+			get { return _Value; }
 		}
-		public virtual string Server { 
-			set { _Server = value; }
-			get { return _Server; }
+		public virtual string Type { 
+			set { _Type = value; }
+			get { return _Type; }
 		}
 		public virtual int IsDel { 
 			set { _IsDel = value; }
@@ -137,8 +145,16 @@ namespace FW.Model
 			set { _UserId = value; }
 			get { return _UserId; }
 		}
+		public virtual string InsertDate { 
+			set { _InsertDate = value; }
+			get { return _InsertDate; }
+		}
 
 	}
+
+
+
+
 
 
 } // namespace

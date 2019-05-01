@@ -22,6 +22,9 @@ namespace FW.Model
 						= new System.Collections.Generic.List<System.Reflection.PropertyInfo>();
 		#endregion
 		 
+        public LockPers() {
+            this._IsWriteFiled = false;
+        }
         public LockPers(bool isWrite) {
             this._IsWriteFiled = isWrite;
         }

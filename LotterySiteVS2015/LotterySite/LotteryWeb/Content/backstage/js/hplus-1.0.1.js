@@ -169,6 +169,7 @@ $(function () {
         if ($('#collapsemenu').is(':checked')) {
             $("body").addClass('mini-navbar');
             SmoothlyMenu();
+            $('.navbar-minimalize i').addClass('fa-chevron-left').removeClass('fa-chevron-right');
 
             if (localStorageSupport) {
                 localStorage.setItem("collapse_menu", 'on');
@@ -177,6 +178,7 @@ $(function () {
         } else {
             $("body").removeClass('mini-navbar');
             SmoothlyMenu();
+            $('.navbar-minimalize i').addClass('fa-chevron-right').removeClass('fa-chevron-left');
 
             if (localStorageSupport) {
                 localStorage.setItem("collapse_menu", 'off');
