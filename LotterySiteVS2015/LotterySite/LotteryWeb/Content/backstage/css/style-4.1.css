@@ -3407,7 +3407,7 @@ body.boxed-layout {
 }
 
 body.boxed-layout #wrapper {
-    background-color: #2f4050;
+    /*background-color: #2f4050;*/
     max-width: 1200px;
     margin: 0 auto;
 }

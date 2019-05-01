@@ -4,11 +4,13 @@
 @using System.Collections.Generic
 
 @section css{  
-    @Styles.Render("~/HPluscss", "~/bootstrapcss", "~/HPlusjqGridcss", "~/datepickercss")
+    <link href="@Url.Content("~/Content/layer-v2.4/layer/skin/layer.css")" rel="stylesheet" />
+    @Styles.Render( "~/HPlusjqGridcss", "~/datepickercss")
+
 }
 
 @section scripts{
-    @Scripts.Render("~/HPlusPublicjs", "~/HPlusjqGridjs", "~/bootstrapjs", "~/layerjs", "~/jshelper", "~/datepickerjs")
+    @Scripts.Render( "~/HPlusjqGridjs", "~/layerjs", "~/jshelper", "~/datepickerjs")
 
     <script type="text/javascript">
 

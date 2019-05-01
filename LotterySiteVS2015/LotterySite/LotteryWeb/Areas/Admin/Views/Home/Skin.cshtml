@@ -4,11 +4,10 @@
 }
 
 @section css{ 
-    @Styles.Render("~/HPluscss", "~/bootstrapcss", "~/HPlusjqGridcss", "~/datepickercss")
-
+    <link href="@Url.Content("~/Content/layer-v2.4/layer/skin/layer.css")" rel="stylesheet" />
     }
 @section scripts{
-    @Scripts.Render("~/HPlusPublicjs", "~/HPlusjqGridjs", "~/bootstrapjs", "~/layerjs", "~/jshelper", "~/datepickerjs", "~/jsrenderjs")
+    @Scripts.Render("~/layerjs", "~/jsrenderjs", "~/jshelper", "~/datepickerjs")
     
     <script id="tmpl_skinjs" type="text/x-jsrender">
     {{*}}
@@ -21,7 +20,7 @@
                 <td class="project-title">
                     <a href="#">{{:name}}</a>
                     <br />
-                    <small>创建于 {{:datetime}}</small>
+                    <small>创建于 {{:datetime}} - {{:type}}</small>
                 </td>
                 <td class="project-skin">
                     <a href="#"><img alt="image"  class="img-rounded" src="{{:url}}"></a>

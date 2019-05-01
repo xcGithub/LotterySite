@@ -32,13 +32,7 @@ namespace LotteryWeb
             // jshelper
             bundles.Add(new ScriptBundle("~/jshelper").Include(
                         "~/Content/jshelper-{version}.js"
-                        ));
-
-            // layer 弹窗
-            bundles.Add(new ScriptBundle("~/layerjs").Include(
-                        "~/Content/layer-v2.4/layer/layer.js"
-                        ));
-
+                        )); 
 
             // home 页面
             bundles.Add(new ScriptBundle("~/HPlusHomejs").Include(
@@ -50,7 +44,17 @@ namespace LotteryWeb
                         //,"~/Content/backstage/js/plugins/pace/pacess.js"
                         ));
 
-            // ====== 插件 =======
+            // ====== 插件 ======= 
+
+            // ####################################################  
+            // #######  发布后layer.css必须在页面直接引入  ########
+            // ####################################################  
+            // layer 弹窗  
+            bundles.Add(new ScriptBundle("~/layerjs").Include(
+                        "~/Content/layer-v2.4/layer/layer.js"
+                        ));
+
+
             // bootstrapcss
             bundles.Add(new StyleBundle("~/bootstrapcss").Include(
                 "~/Content/backstage/css/bootstrap.css"

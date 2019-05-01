@@ -6,12 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
     <title>@ViewBag.Title</title>
+    @Styles.Render("~/HPluscss", "~/bootstrapcss")
     @RenderSection("css", required: false)
 </head>
 <body class="fixed-sidebar full-height-layout transparent-bg">
     <!-- style="overflow:hidden" -->
     @RenderBody()
 
+
+    @Scripts.Render("~/HPlusPublicjs",  "~/bootstrapjs")
     @RenderSection("scripts", required: false)
      
 </body>

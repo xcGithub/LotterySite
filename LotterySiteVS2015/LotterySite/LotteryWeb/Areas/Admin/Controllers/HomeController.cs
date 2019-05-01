@@ -85,6 +85,12 @@ namespace LotteryWeb.Areas.Admin.Controllers
             list[selIndex] = list[0];
             list[0] = temp;
              
+            for (int i = 0; i < list.Count; i++)
+            {
+                list[i].type = "bg";
+            }
+
+
             //
             try
             {
@@ -104,5 +110,9 @@ namespace LotteryWeb.Areas.Admin.Controllers
         public string name { get; set; }
         public string url { get; set; }
         public string datetime { get; set; }
+        /// <summary>
+        /// hd/bg
+        /// </summary>
+        public string type { get; set; }
     }
 }
