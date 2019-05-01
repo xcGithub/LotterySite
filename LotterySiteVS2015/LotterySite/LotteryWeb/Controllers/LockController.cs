@@ -151,7 +151,8 @@ namespace LotteryWeb.Controllers
                     , p.Id, p.Name, p.Content, p.Prompt, p.EditCount, p.CheckCount})
                 .From().Where(where).Order(m => new { m.Name });
             var list = query.LoadPagelt(page, rows, out records);
-            var resultjson = JsonConvert.SerializeObject(new { data = list, records = records});
+            int total = (int)Math.Ceiling(records * 1.0 / rows); // 总页数
+            var resultjson = JsonConvert.SerializeObject(new { data = list, rows = list, total= total, records = records});
             return Content(resultjson);
         }
         //Tuple<StringBuilder, Dapper.DynamicParameters> ru = query.RawSqlParams();

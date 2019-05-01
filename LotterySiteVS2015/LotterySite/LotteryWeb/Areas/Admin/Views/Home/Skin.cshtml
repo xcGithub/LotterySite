@@ -1,0 +1,227 @@
+﻿@{
+    ViewBag.Title = "主题";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section css{ 
+    @Styles.Render("~/HPluscss", "~/bootstrapcss", "~/HPlusjqGridcss", "~/datepickercss")
+
+    }
+@section scripts{
+    @Scripts.Render("~/HPlusPublicjs", "~/HPlusjqGridjs", "~/bootstrapjs", "~/layerjs", "~/jshelper", "~/datepickerjs", "~/jsrenderjs")
+    
+    <script id="tmpl_skinjs" type="text/x-jsrender">
+    {{*}}
+            {{for #data.serh}}
+            @*{{:#index+1}} *@
+            <tr>
+                <td class="project-status">
+                    <span class="label {{if #index == 0}} label-primary {{/if}}  ">{{:#index+1}}</span>
+                </td>
+                <td class="project-title">
+                    <a href="#">{{:name}}</a>
+                    <br />
+                    <small>创建于 {{:datetime}}</small>
+                </td>
+                <td class="project-skin">
+                    <a href="#"><img alt="image"  class="img-rounded" src="{{:url}}"></a>
+                </td>
+                <td class="project-actions"> 
+                    <input type="hidden" data-name="{{:name}}" data-datetime="{{:datetime}}" data-url="{{:url}}"/> 
+                    <button onclick="removeskin(this)" class="btn btn-white btn-sm"><i class="fa fa-remove"></i> 移除 </button>
+                    <button onclick="setskin(this)" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> 设置 </button>
+                </td>
+            </tr>
+
+            {{/for}}
+</script>
+
+    <script type="text/javascript">
+        function getskinjs() {
+            $.getScript("/Content/skininfo.js?" + Math.random().toString().substr(10), function () {
+                var lplisthtml = $("#tmpl_skinjs").render({ serh: skininfoarr });
+                $('#dvbgset').empty().append(lplisthtml);
+            });
+        }
+
+        function addskin() {
+            
+            var data = getJsonObjectByForm("#fmbgser");
+            $.post('@Url.Action("addskin", "home", new { area="admin" })', data , function (r) {
+                if (r == "0") {
+                    layer.msg('添加失败', { time: 1000, icon: 0 });
+                    return;
+                }
+                //data.datetime = r.datetime;
+                //var lplisthtml = $("#tmpl_skinjs").render({ serh: data });
+                //$('#dvbgset').append(lplisthtml);
+
+                getskinjs();
+                layer.msg('添加成功', { time: 1000, icon: 1 });
+
+            },'json');
+
+        }
+        function removeskin(e) {
+            var $hid = $(e).prev();
+             (function ($hid) {
+                 $.post('@Url.Action("removeskin", "home", new { area="admin" })', { name: $hid.data('name'), datetime: $hid.data('datetime'), url: $hid.data('url') }, function (r) {
+                     if (r != "1") { layer.msg('删除失败', { time: 1000, icon: 0 }); return; }
+
+                     getskinjs();
+                     layer.msg('删除成功', { time: 1000, icon: 1 });
+                 }, 'json');
+
+             })($hid)
+
+        }
+
+        function setskin(e) {
+            var $hid = $(e).prev().prev();
+            (function ($hid) {
+                $.post('@Url.Action("setskin", "home", new { area="admin" })', { name: $hid.data('name'), datetime: $hid.data('datetime'), url: $hid.data('url') }, function (r) {
+                    if (r != "1") { layer.msg('设置失败', { time: 1000, icon: 0 }); return; }
+                    // 选中当前列到top1
+                    //var curlab = $hid[0].parentElement.parentElement.children[0].children[0];
+                    //var firstlab = $hid[0].parentElement.parentElement.parentElement.children[0].children[0].children[0];
+                    //var curtxt = curlab.textContent;
+                    //curlab.textContent = 1;
+                    //firstlab.textContent = curtxt;
+                    //$(curlab).addClass('label-primary');
+                    //$(firstlab).removeClass('label-primary');
+                    //$hid.parent().parent().parent().prepend($hid.parent().parent().remove());
+                    getskinjs();
+                    window.parent.document.body.style.backgroundImage = 'url('+ $hid.data('url') +')';
+                    layer.msg('设置成功', { time: 1000, icon: 1 });
+            },'json');
+
+            })($hid)
+        }
+
+        getskinjs();
+    </script>
+
+    
+
+    }
+ 
+
+
+<div class="row gray-bg">
+    <div class="col-sm-12">
+        <div class="wrapper wrapper-content">
+            <div class="row animated fadeInRight">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="text-center float-e-margins p-md">
+                            <span>主题设置：</span> 
+                        </div>
+                        <div class="" id="ibox-content">
+
+                            <div id="vertical-timeline" class="vertical-container light-timeline">
+
+                                <div class="vertical-timeline-block">
+                                    <div class="vertical-timeline-icon lazur-bg">
+                                        <i class="fa fa-user-md"></i>
+                                    </div>
+
+                                    <div class="vertical-timeline-content">
+                                        <h2>头像</h2>
+                                        <p>喝咖啡啦，啦啦啦~~</p>
+                                        <a href="#" class="btn btn-sm btn-info">更多</a>
+                                        <span class="vertical-date"> 昨天 <br><small>2月2日</small></span>
+                                    </div>
+                                </div>
+
+                                <div class="vertical-timeline-block">
+                                    <div class="vertical-timeline-icon navy-bg">
+                                        <i class="fa fa-file-image-o"></i>
+                                    </div>
+
+                                    <div class="vertical-timeline-content">
+                                        <h2>背景 Top1设置为当前使用</h2>
+
+                                        <form id="fmbgser"> <div class="row m-b-sm m-t-sm">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <input type="text" name="name" class="input-sm form-control" placeholder="图标名称" >
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="input-group">
+                                                    <input type="text" name="url" placeholder="图片外链" class="input-sm form-control"> <span class="input-group-btn">
+                                                        <button type="button" onclick="addskin()" class="btn btn-sm btn-primary"> 导入</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div></form>
+                                       
+
+                                        <div  class="project-list">
+
+                                            <table id="dvbgset" class="table table-hover">
+                                                <tbody>
+                                                    @*<table class="table table-hover"> 列表 </table>*@
+
+                                                </tbody>
+                                            </table>
+                                        </div> 
+
+                                        <a href="#" class="btn btn-sm btn-primary"> 更多信息</a>
+                                        <span class="vertical-date">
+                                            今天 <br>
+                                            <small>2月3日</small>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="vertical-timeline-block">
+                                    <div class="vertical-timeline-icon blue-bg">
+                                        <i class="fa fa-file-text"></i>
+                                    </div>
+
+                                    <div class="vertical-timeline-content">
+                                        <h2>字体</h2>
+                                        <p>发送上年度《销售业绩报告》</p>
+                                        <a href="#" class="btn btn-sm btn-success"> 下载文档 </a>
+                                        <span class="vertical-date">
+                                            今天 <br>
+                                            <small>2月3日</small>
+                                        </span>
+                                    </div>
+                                </div> 
+
+                                <div class="vertical-timeline-block">
+                                    <div class="vertical-timeline-icon yellow-bg">
+                                        <i class="fa fa-phone"></i>
+                                    </div>
+
+                                    <div class="vertical-timeline-content">
+                                        <h2>背景音乐</h2>
+                                        <p>给李四打电话分配本月工作任务</p>
+                                        <span class="vertical-date">昨天 <br><small>2月2日</small></span>
+                                    </div>
+                                </div>
+
+                                <div class="vertical-timeline-block">
+                                    <div class="vertical-timeline-icon lazur-bg">
+                                        <i class="fa fa-user-md"></i>
+                                    </div>
+
+                                    <div class="vertical-timeline-content">
+                                        <h2>备注</h2>
+                                        <p>啦啦啦~~</p>
+                                        <span class="vertical-date">前天 <br><small>2月1日</small></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
