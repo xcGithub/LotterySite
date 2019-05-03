@@ -48,3 +48,10 @@ namespace DapperSqlMaker
         #endregion
     }
 }
+
+//namespace DapperSqlMaker.DapperExt {
+//    public partial class DapperFuncs {
+
+
+//    }
+//}

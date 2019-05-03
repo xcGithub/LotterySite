@@ -37,7 +37,7 @@ namespace LotteryWeb.Controllers
             where = where.And(p => SM.In(p.Name, names));
             var query = LockDapperUtilsqlite<LOLkengbi>.Selec().Column().From().Where(where);
             Tuple<StringBuilder, DynamicParameters> rawsqlparas = query.RawSqlParams();
-            var list = query.ExcuteSelect<LOLkengbi>();
+            var list = query.ExecuteQuery<LOLkengbi>();
             var result = JsonConvert.SerializeObject(new { data = list, state = list.Count() > 0 ? 1 : 0 });
             return Content(result);
         }
@@ -74,13 +74,13 @@ namespace LotteryWeb.Controllers
                 }
                 var query = LockDapperUtilsqlite<LOLkengbi>.Selec()
                     .Column(p => new { a = SM.Sql(" count(1) as counts ") }).From().Where(where);
-                var lcounts = query.ExcuteSelect<int>().FirstOrDefault();
+                var lcounts = query.ExecuteQuery<int>().FirstOrDefault();
                 if (lcounts > 0)
                 {
                     sb.AppendLine($"{item.Name}  {item.Hero}  {item.Server} x");
                     continue;
                 }
-                var efrw = LockDapperUtilsqlite<LOLkengbi>.Cud.Inser(item, false);
+                var efrw = DapperFuncs .Inser<LOLkengbi>(item, false);
                 if (efrw > 0)
                 {
                     sb.AppendLine($"{item.Name}  {item.Hero}  {item.Server} √");

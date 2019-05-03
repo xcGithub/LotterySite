@@ -25,3 +25,5 @@ sqlite 库
                 bool isSuccess = LockDapperUtilsqlite<Skin>.Cud.Update(s => {
                     s._IsWriteFiled = true; s.IsDel = 1;  },  w => w.Id == Id && w.UserId == UserIds);
 					DapperSqlMaker.DapperExt.AnalysisExpression.GetMemberValue(System.Linq.Expressions.MemberExpression, System.String)
+
+  15. Users Roles Skin 表 IsDel改为int类型

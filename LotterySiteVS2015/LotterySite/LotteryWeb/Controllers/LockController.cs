@@ -26,10 +26,11 @@ namespace LotteryWeb.Controllers
 
         public ActionResult Index()
         {
+            
             var query = LockDapperUtilsqlite<LockPers>
                 .Selec().Column().From().Where(m => m.IsDel != true).Order(m => new { m.Name });
             //Tuple<StringBuilder, Dapper.DynamicParameters> ru = query.RawSqlParams();
-            var list =  query.ExcuteSelect<LockPers>(); 
+            var list =  query.ExecuteQuery<LockPers>(); 
             ViewData.Model = list;
 
             //string sql = string.Format("SELECT * FROM LockPers where isDel != 1  order by Name ");
@@ -43,7 +44,7 @@ namespace LotteryWeb.Controllers
         {
             var query = LockDapperUtilsqlite<LockPers>
                         .Selec().Column(c => new { c.Content, c.CheckCount }).From().Where(m => m.Id == p.Id);
-            LockPers oldlp = query.ExcuteSelect<LockPers>().FirstOrDefault();
+            LockPers oldlp = query.ExecuteQuery<LockPers>().FirstOrDefault();
 
             //string sql = string.Format("SELECT Content FROM LockPers where Id = @Id");
             //var content = LockSQLitehelper.ExecuteScalar(sql, new SQLiteParameter("@Id", DbType.String) { Value = p.Id }) + "";
@@ -53,7 +54,7 @@ namespace LotteryWeb.Controllers
             oldlp.CheckCount = oldlp.CheckCount + 1;
             var content = oldlp.Content;
             var encstr = LockEncrypt.StringToMD5(p.Content);
-            LockDapperUtilsqlite<LockPers>.Cud.Update(oldlp, w => w.Id == p.Id);
+            DapperFuncs .Update<LockPers>(oldlp, w => w.Id == p.Id);
             return Content(Convert.ToInt32(content.Equals(encstr)).ToString());
         }
 
@@ -80,14 +81,14 @@ namespace LotteryWeb.Controllers
                 //}
 
                 var efrwos = 0;
-                efrwos = LockDapperUtilsqlite<LockPers>.Cud.Insert(add);
+                efrwos = DapperFuncs .Insert<LockPers>(add);
                 return Content(efrwos.ToString());
             }
             else
             { // 修改
                 //var old =  LockDapperUtil<LockPers>.New.Get(p.Id);
                 //var query = LockDapperUtilsqlite<LockPers>.Selec().Column().From().Where(lp => lp.Id == p.Id);
-                //var old = query.ExcuteSelect<LockPers>().FirstOrDefault();
+                //var old = query.ExecuteQuery<LockPers>().FirstOrDefault();
                 //if (old.Content != LockEncrypt.StringToMD5(p.ContentOld))
                 //{ // 旧内容不一致
                 //    return Content("-1");  // 旧内容不一致
@@ -96,7 +97,7 @@ namespace LotteryWeb.Controllers
                 var query = LockDapperUtilsqlite<LockPers>
                             .Selec().Column(c => new { c.Content,c.EditCount }).From().Where(m => m.Id == p.Id);
                 //Tuple<StringBuilder, Dapper.DynamicParameters> ru = query.RawSqlParams();
-                var edit = query.ExcuteSelect<LockPers>().FirstOrDefault();
+                var edit = query.ExecuteQuery<LockPers>().FirstOrDefault();
                 if (edit.Content != LockEncrypt.StringToMD5(p.ContentOld))  return Content("-1");  // 旧内容不一致
 
                 edit._IsWriteFiled = true; // 标记开始记录赋值字段 注意上面查询LockPers 要再默认构造函数里把 标识改为false 查出的数据不要记录赋值字段 
@@ -105,7 +106,7 @@ namespace LotteryWeb.Controllers
                 edit.Prompt = p.Prompt;
                 edit.UpdateTime = DateTime.Now;
                 edit.EditCount = edit.EditCount + 1;
-                var t = LockDapperUtilsqlite<LockPers>.Cud.Update(edit, w => w.Id == p.Id );  
+                var t = DapperFuncs .Update<LockPers>(edit, w => w.Id == p.Id );  
                 
                 //var t = LockDapperUtil<LockPers>.New.Update(old);
                 return Content(Convert.ToInt32(t).ToString());
@@ -115,12 +116,12 @@ namespace LotteryWeb.Controllers
 
         public ActionResult Delete(string Id)
         {
-            //var old = LockDapperUtilsqlite<LockPers>.Selec().Column().From().Where(lp => lp.Id == Id).ExcuteSelect<LockPers>().FirstOrDefault();
+            //var old = LockDapperUtilsqlite<LockPers>.Selec().Column().From().Where(lp => lp.Id == Id).ExecuteQuery<LockPers>().FirstOrDefault();
             //LockDapperUtil<LockPers>.New.Get(Id);
             //old.IsDel = true;
             //old.DelTime = DateTime.Now;
 
-            var t = LockDapperUtilsqlite<LockPers>.Cud.Update(
+            var t = DapperFuncs .Update<LockPers>(
                 del => {
                     del._IsWriteFiled = true; // 开启标记字段
                     del.IsDel = true;
@@ -156,7 +157,7 @@ namespace LotteryWeb.Controllers
             return Content(resultjson);
         }
         //Tuple<StringBuilder, Dapper.DynamicParameters> ru = query.RawSqlParams();
-        //var list = query.ExcuteSelect<LockPers>();
+        //var list = query.ExecuteQuery<LockPers>();
         //Tuple<StringBuilder, DynamicParameters, StringBuilder> ru = query.RawLimitSqlParams();
         
             #endregion
@@ -186,9 +187,9 @@ namespace LotteryWeb.Controllers
             //    .Where((lpw, uw) => lpw.Name.Contains(Name) && lpw.IsDel == IsDel && uw.UserName == uName
             //        )  // 
             //    .Order((lp, w) => new { lp.EditCount, lp.Name })
-            //    ; // .ExcuteSelect();
+            //    ; // .ExecuteQuery();
             //var resultsqlparams = query.RawSqlParams();
-            ////var result = query.ExcuteSelect();
+            ////var result = query.ExecuteQuery();
 
             return Content("");
         }

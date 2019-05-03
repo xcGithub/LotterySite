@@ -21,11 +21,11 @@ namespace LotteryWeb.Areas.Admin.Controllers
             //List<skinfo> list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<skinfo>>(skininfoarr);
 
 
-            //var first = LockDapperUtilsqlite<Users, Skin>.Selec().Column((a, b) => new { Value = b.Value,img = a.img }).FromJoin(JoinType.Inner, (a, b) => a.SkinId == b.Id).Where( (a,b) => a.Id ==1 && a.UserName == "cc").ExcuteSelect<Users>().FirstOrDefault();
+            //var first = LockDapperUtilsqlite<Users, Skin>.Selec().Column((a, b) => new { Value = b.Value,img = a.img }).FromJoin(JoinType.Inner, (a, b) => a.SkinId == b.Id).Where( (a,b) => a.Id ==1 && a.UserName == "cc").ExecuteQuery<Users>().FirstOrDefault();
 
             //ViewData.Model = first;
 
-            //var first = LockDapperUtilsqlite<Skin>.Selec().Column().From().Where(p => p.IsDel != 1 && p.IsEnabled == 1 && p.Type == "bg").ExcuteSelect<Skin>().FirstOrDefault();
+            //var first = LockDapperUtilsqlite<Skin>.Selec().Column().From().Where(p => p.IsDel != 1 && p.IsEnabled == 1 && p.Type == "bg").ExecuteQuery<Skin>().FirstOrDefault();
 
             //if (first == null)
             //    ViewBag.url = "/Content/folio/images/header-image/jike_1_pic.gif";
@@ -37,7 +37,7 @@ namespace LotteryWeb.Areas.Admin.Controllers
                 .FromJoin(JoinType.Inner, (a,b,c) => a.RolesId == b.Id, JoinType.Inner, (a,b,c)=> a.SkinId == c.Id)
                 .Where((p, b, c) => p.UserName == "cc" && p.Id == 1);
             Tuple<StringBuilder, DynamicParameters>  rawsql = query.RawSqlParams();
-            var user = query.ExcuteSelect<Users>().FirstOrDefault();
+            var user = query.ExecuteQuery<Users>().FirstOrDefault();
             ViewData.Model = user;
             return View();
         }
@@ -51,14 +51,14 @@ namespace LotteryWeb.Areas.Admin.Controllers
         public ActionResult Skin()
         {
             int UserId = 1;
-            var user = LockDapperUtilsqlite<Users>.Selec().Column().From().Where(p => p.Id == UserId).ExcuteSelect<Users>().FirstOrDefault();
+            var user = LockDapperUtilsqlite<Users>.Selec().Column().From().Where(p => p.Id == UserId).ExecuteQuery<Users>().FirstOrDefault();
             ViewBag.img = user.img;
             return View();
         }
 
         public ActionResult GetSkin() {
             int UserId = 1;
-           var list = LockDapperUtilsqlite<Skin>.Selec().Column().From().Where(p=> p.IsDel != 1 && p.Type == "bg" && p.UserId == UserId).ExcuteSelect<Skin>();
+           var list = LockDapperUtilsqlite<Skin>.Selec().Column().From().Where(p=> p.IsDel != 1 && p.Type == "bg" && p.UserId == UserId).ExecuteQuery<Skin>();
            return Content(Newtonsoft.Json.JsonConvert.SerializeObject(list));
         }
 
@@ -74,7 +74,7 @@ namespace LotteryWeb.Areas.Admin.Controllers
             //
             try
             {
-                int efrows = LockDapperUtilsqlite<Skin>.Cud.Insert(additem);
+                int efrows = DapperFuncs .Insert<Skin>(additem);
                 //System.IO.File.WriteAllText(Request.MapPath("/Content/skininfo.js"), "var skininfoarr = " + Newtonsoft.Json.JsonConvert.SerializeObject(list));
                 return Content(efrows > 0 ? "1" : "0");
             }
@@ -100,8 +100,10 @@ namespace LotteryWeb.Areas.Admin.Controllers
             {
                 //System.IO.File.WriteAllText(Request.MapPath("/Content/skininfo.js"), "var skininfoarr = " + Newtonsoft.Json.JsonConvert.SerializeObject(list));
                 int UserIds = 1;
-                bool isSuccess = LockDapperUtilsqlite<Skin>.Cud.Update(s => {
-                    s._IsWriteFiled = true; s.IsDel = 1;  },  w => w.Id == Id && w.UserId == 1);
+                //int Id = int.Parse( Request.Form["Id"]);
+                int Id_ = Id;
+                bool isSuccess = DapperFuncs .Update<Skin>(s => {
+                    s._IsWriteFiled = true; s.IsDel = 1;  },  w => w.Id == Id_ && w.UserId == UserIds);
 
                 return Content(isSuccess ?"1": "0");
             }
@@ -140,10 +142,10 @@ namespace LotteryWeb.Areas.Admin.Controllers
             //
             try
             {
-                bool isSuccess = LockDapperUtilsqlite<Users>.Cud.Update(s => {
+                bool isSuccess = DapperFuncs .Update<Users>(s => {
                     s._IsWriteFiled = true; s.SkinId = Id;  }, w => w.Id == 1 && w.UserName == "cc" );
 
-                //   var setobj = LockDapperUtilsqlite<Skin>.Selec().Column().From().Where(p => p.Id == Id).ExcuteSelect<Skin>().FirstOrDefault();
+                //   var setobj = LockDapperUtilsqlite<Skin>.Selec().Column().From().Where(p => p.Id == Id).ExecuteQuery<Skin>().FirstOrDefault();
                 //  setobj.IsEnabled = 1;
                 //bool isSuccess = LockDapperUtilsqlite<Skin>.Cud.Updat(setobj);
                 //System.IO.File.WriteAllText(Request.MapPath("/Content/skininfo.js"), "var skininfoarr = " + Newtonsoft.Json.JsonConvert.SerializeObject(list));
@@ -159,7 +161,7 @@ namespace LotteryWeb.Areas.Admin.Controllers
         public ActionResult setuserimg(string img) {
             try
             {
-                bool isSuccess = LockDapperUtilsqlite<Users>.Cud.Update(s => {
+                bool isSuccess = DapperFuncs .Update<Users>(s => {
                     s._IsWriteFiled = true; s.img = img;
                 }, w => w.Id == 1 && w.UserName == "cc");
                 return Content(isSuccess ? "1" : "0");
