@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Lock 锁";
+    ViewBag.Title = "Lock ^_^";
 }
 @using System.Collections.Generic
 
@@ -33,7 +33,6 @@
             colModel: [
  				    { label: '名称', name: 'Name', width: 180, height: 300 },
  				    { label: '备注', name: 'Prompt', width: 300 },
- 				    { label: '密文', name: 'Content', width: 300 },
  				    { label: '添加时间', name: 'InsertTimestr', width: 180 },
  				    { label: '核验次数', name: 'CheckCount', width: 80 },
  				    { label: '修改次数', name: 'EditCount', width: 80 },
@@ -65,6 +64,14 @@
     $(function () {
 
     });
+    // 验证密文
+    function checkContent() {
+        var row = getSelRow();
+        var data = { Id: row.Id, Content: $('#txtCkContent').val() };
+            $.post('@Url.Action("Check", "Lock", new { area = "" })', data, function (r) {
+                layer.msg(r == "1" ? "匹配成功" : "匹配失败", { time: 1000, icon: parseInt(r) });
+            }); 
+        }
 
     // 绑定 时间框
     $("#data_gctime.input-daterange").datepicker({
@@ -301,50 +308,72 @@
 
             </div> 
             <div class="ibox-title ibox-title-bottom">
-                <h5>   </h5>
-                <div class="pull-left">
-                     <a class="btn btn-info" onclick="searchclear()">
-                        <span>清空</span>
-                        <i class="fa fa-wrench"></i>
-                    </a> 
-                    <a class="btn btn-info" onclick="searchdata()">
-                        <span>查询</span>
-                        <i class="fa fa-wrench"></i>
-                    </a> 
-                    <a class="btn btn-info" onclick="editdata(1)">
-                        <span>添加</span>
-                        <i class="fa fa-wrench"></i>
-                    </a> 
-                    <a class="btn btn-info" onclick="editdata(2)">
-                        <span>修改</span>
-                        <i class="fa fa-wrench"></i>
-                    </a> 
-                    <a class="btn btn-info" onclick="editdata(2)">
-                        <span>验证</span>
-                        <i class="fa fa-wrench"></i>
-                    </a> 
-                    <a class="btn btn-info" onclick="deletedata()">
-                        <span>删除</span>
-                        <i class="fa fa-wrench"></i>
-                    </a> 
-                    <a class="btn btn-info" onclick="approveone(1)">
-                        <span>审核通过</span>
-                        <i class="fa fa-wrench"></i>
-                    </a> 
-                    <a class="btn btn-info" onclick="approveone(2)">
-                        <span>审核不通过</span>
-                        <i class="fa fa-wrench"></i>
-                    </a>
-                </div>
-                <div class="ibox-tools">
+                <div class="row ">
+                    <div class="col-md-3">
 
-                    <a class="collapse-link">
-                        <i class="fa fa-chevron-up"></i>
-                    </a> 
-                    <a class="close-link">
-                        <i class="fa fa-times"></i>
-                    </a>
+                        <div class="input-group">
+                            <input id="txtCkContent" type="password" name="url" placeholder="输入想不起来的密文" class="input-sm form-control"> <span class="input-group-btn">
+                                <button type="button" onclick="checkContent()" class="btn btn-sm btn-primary"> 验证</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="form-group">
+                            <a class="btn btn-info" onclick="editdata(2)">
+                                <span>验证</span>
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="btn btn-info" onclick="searchclear()">
+                                <span>清空</span>
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="btn btn-info" onclick="searchdata()">
+                                <span>查询</span>
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="btn btn-info" onclick="editdata(1)">
+                                <span>添加</span>
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="btn btn-info" onclick="editdata(2)">
+                                <span>修改</span>
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="btn btn-info" onclick="deletedata()">
+                                <span>删除</span>
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="btn btn-info" onclick="approveone(1)">
+                                <span>审核通过</span>
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="btn btn-info" onclick="approveone(2)">
+                                <span>审核不通过</span>
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                             
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+
+                        <div class="ibox-tools">
+
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+
+                    </div>
                 </div>
+
+                @*<div class="pull-left">
+                    <div class="">
+                    </div>
+                </div>*@
+
             </div>
         </div>
     </div>

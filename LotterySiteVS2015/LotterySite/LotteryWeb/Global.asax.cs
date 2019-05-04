@@ -22,10 +22,7 @@ namespace LotteryWeb
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-
-            DapperSqlMaker.DapperExt.DapperFuncs.CurtConn = DapperSqlMaker.DapperExt.LockDapperUtilsqlite.New().GetConn();
-            DapperSqlMaker.DapperExt.DapperFuncs.CurtConn.Close();
+             
 
         }
     }

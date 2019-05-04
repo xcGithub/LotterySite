@@ -1,19 +1,32 @@
 ﻿
+using System;
 using System.Data;
 using System.Data.SQLite;
 
 namespace DapperSqlMaker.DapperExt
 {
+    public partial class DapperFuncs : DapperFuncsBase
+    {
+        private DapperFuncs() { }
+
+        public readonly static DapperFuncs New = new DapperFuncs();
+        public override IDbConnection GetConn()
+        {
+            SQLiteConnection conn = new SQLiteConnection(DataBaseConfig.LockSqlLiteConnectionString);
+            conn.Open();
+            return conn;
+        }
+    }
     /// <summary>
     /// Sqlite库1
     /// </summary>
-    public partial class LockDapperUtilsqlite : DapperSqlMaker
+    public partial class LockSqlite : DapperSqlMaker
     {
 
-        private LockDapperUtilsqlite() { }
+        private LockSqlite() { }
 
-        private readonly static LockDapperUtilsqlite _New = new LockDapperUtilsqlite();
-        public static LockDapperUtilsqlite New()
+        private readonly static LockSqlite _New = new LockSqlite();
+        public static LockSqlite New()
         {
             return _New;
         }
@@ -30,102 +43,102 @@ namespace DapperSqlMaker.DapperExt
 
     }
 
-    public partial class LockDapperUtilsqlite<T> : DapperSqlMaker<T>
+    public partial class LockSqlite<T> : DapperSqlMaker<T>
                                          where T : class, new()
     {
         public override IDbConnection GetConn()
         {
-            return LockDapperUtilsqlite.New().GetConn();
+            return LockSqlite.New().GetConn();
         }
 
         public static DapperSqlMaker<T> Selec()
         {
-            return new LockDapperUtilsqlite<T>().Select();
+            return new LockSqlite<T>().Select();
         }
         public static DapperSqlMaker<T> Inser()
         {
-            return new LockDapperUtilsqlite<T>().Insert();
+            return new LockSqlite<T>().Insert();
         }
         public static DapperSqlMaker<T> Updat()
         {
-            return new LockDapperUtilsqlite<T>().Update();
+            return new LockSqlite<T>().Update();
         }
         public static DapperSqlMaker<T> Delet()
         {
-            return new LockDapperUtilsqlite<T>().Delete();
+            return new LockSqlite<T>().Delete();
         }
 
         /// <summary>
         /// 增删改
         /// </summary>
-        public readonly static DapperSqlMaker<T> Cud = new LockDapperUtilsqlite<T>();
+        public readonly static DapperSqlMaker<T> Cud = new LockSqlite<T>();
 
     }
-    public partial class LockDapperUtilsqlite<T, Y> : DapperSqlMaker<T, Y>
+    public partial class LockSqlite<T, Y> : DapperSqlMaker<T, Y>
     {
         public override IDbConnection GetConn()
         {
-            return LockDapperUtilsqlite.New().GetConn();
+            return LockSqlite.New().GetConn();
         }
 
         // 不能用单例 单例后面的表别名字典会冲突
         public static DapperSqlMaker<T, Y> Selec()
         {
-            return new LockDapperUtilsqlite<T, Y>().Select();
+            return new LockSqlite<T, Y>().Select();
         }
     }
 
-    public partial class LockDapperUtilsqlite<T, Y, Z> : DapperSqlMaker<T, Y, Z>
+    public partial class LockSqlite<T, Y, Z> : DapperSqlMaker<T, Y, Z>
     {
         public override IDbConnection GetConn()
         {
-            return LockDapperUtilsqlite.New().GetConn();
+            return LockSqlite.New().GetConn();
         }
         // 不能用单例 单例后面的表别名字典会冲突
 
         public static DapperSqlMaker<T, Y, Z> Selec()
         {
-            return new LockDapperUtilsqlite<T, Y, Z>().Select();
+            return new LockSqlite<T, Y, Z>().Select();
         }
 
     }
-    public partial class LockDapperUtilsqlite<T, Y, Z, O> : DapperSqlMaker<T, Y, Z, O>
+    public partial class LockSqlite<T, Y, Z, O> : DapperSqlMaker<T, Y, Z, O>
     {
         public override IDbConnection GetConn()
         {
-            return LockDapperUtilsqlite.New().GetConn();
+            return LockSqlite.New().GetConn();
         }
         // 不能用单例 单例后面的表别名字典会冲突
 
         public static DapperSqlMaker<T, Y, Z, O> Selec()
         {
-            return new LockDapperUtilsqlite<T, Y, Z, O>().Select();
+            return new LockSqlite<T, Y, Z, O>().Select();
         }
     }
-    public partial class LockDapperUtilsqlite<T, Y, Z, O, P> : DapperSqlMaker<T, Y, Z, O, P>
+    public partial class LockSqlite<T, Y, Z, O, P> : DapperSqlMaker<T, Y, Z, O, P>
     {
         public override IDbConnection GetConn()
         {
-            return LockDapperUtilsqlite.New().GetConn();
+            return LockSqlite.New().GetConn();
         }
         // 不能用单例 单例后面的表别名字典会冲突
 
         public static DapperSqlMaker<T, Y, Z, O, P> Selec()
         {
-            return new LockDapperUtilsqlite<T, Y, Z, O, P>().Select();
+            return new LockSqlite<T, Y, Z, O, P>().Select();
         }
     }
-    public partial class LockDapperUtilsqlite<T, Y, Z, O, P, Q> : DapperSqlMaker<T, Y, Z, O, P, Q>
+    public partial class LockSqlite<T, Y, Z, O, P, Q> : DapperSqlMaker<T, Y, Z, O, P, Q>
     {
         public override IDbConnection GetConn()
         {
-            return LockDapperUtilsqlite.New().GetConn();
+            return LockSqlite.New().GetConn();
         }
         // 不能用单例 单例后面的表别名字典会冲突
 
         public static DapperSqlMaker<T, Y, Z, O, P, Q> Selec()
         {
-            return new LockDapperUtilsqlite<T, Y, Z, O, P, Q>().Select();
+            return new LockSqlite<T, Y, Z, O, P, Q>().Select();
         }
     }
 
