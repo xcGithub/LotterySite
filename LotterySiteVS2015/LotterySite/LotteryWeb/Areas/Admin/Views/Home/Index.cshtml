@@ -28,6 +28,11 @@
                 <i class="fa fa-times-circle"></i>
             </div>
             <div class="sidebar-collapse transparent-bg">
+                
+                <div class="row">
+                    <a class="btn btn-navhd full-width navbar-minimalize">
+                        <i class="fa fa-chevron-left"></i>
+                    </a></div>
                 <ul class="nav" id="side-menu">
                     <li class="nav-header">
                         <div class="dropdown profile-element">
@@ -40,7 +45,8 @@
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li>
-                                    <a class="J_menuItem" href="https://www.qhftdx.cn/origin/template/hplus/form_avatar.html">修改头像</a>
+                                    <a class="J_menuItem"
+                                        href='@Url.Action("Skin", "Home",new {area = "admin"})'>修改头像</a>
                                 </li>
                                 <li>
                                     <a class="J_menuItem" href="https://www.qhftdx.cn/origin/template/hplus/profile.html">个人资料</a>
@@ -61,7 +67,7 @@
                             </ul>
                         </div>
                         <div class="logo-element">
-                            ^0^
+                            ^0^  
                         </div>
                     </li>
 
@@ -74,18 +80,15 @@
                         </a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a class="J_menuItem" href="@Url.Action("Lock", "Home", new { area = "admin"})" data-index="0">Lock ^_^</a>
+                                <a class="J_menuItem" href="@Url.Action("Lock", "Home", new { area = "admin"})" data-index="0"><i class="fa fa-lock"></i>Lock ^o^</a>
                             </li>
 
                             <li>
-                                <a class="J_menuItem" href="@Url.Action("Skin", "Home", new { area = "admin"})"> 主题设置 </a>
+                                <a class="J_menuItem" href="@Url.Action("Skin", "Home", new { area = "admin"})"> <i class="fa fa-file-image-o"></i>主题设置 </a>
                             </li>
                         </ul>
 
                     </li>
-
-
-
 
                     <li>
                         <a href="https://www.qhftdx.cn/origin/template/hplus/mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">信箱 </span><span class="label label-warning pull-right">16</span></a>
@@ -101,24 +104,18 @@
                             </li>
                         </ul>
                     </li>
-
                     <li>
-                        <a class="J_menuItem" href="http://www.zi-han.net/theme/hplus/pin_board.html"><i class="fa fa-columns"></i><span class="nav-label">标签墙</span></a>
+                        <a class="J_menuItem" href='@Url.Action("Index", "Note",new { area = "" })'><i class="fa fa-columns"></i><span class="nav-label">标签墙</span></a>
                     </li>
                     <li>
                         <a class="J_menuItem" href="http://www.zi-han.net/theme/hplus/agile_board.html"><i class="fa fa-columns"></i><span class="nav-label">任务清单</span></a>
                     </li>
-
                     <li>
-                        <a class="J_menuItem" href="/Content/folio/images/header-image/jike_2_pic.gif"><i class="fa fa-columns"></i><span class="nav-label">工具</span></a>
+                        <a class="J_menuItem" href="https://www.qhftdx.cn/origin/template/hplus/fontawesome.html"><i class="fa fa-columns"></i><span class="nav-label">工具</span></a>
                     </li>
-
                     <li>
                         <a class="J_menuItem" href="/Content/folio/images/header-image/jike_1_pic.gif"><i class="fa fa-columns"></i><span class="nav-label">日志</span></a>
                     </li>
-                     
-
-
 
                 </ul>
             </div>
@@ -230,9 +227,8 @@
             </div>
             <div class="row content-tabs transparent-bg">
                 @*<a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-chevron-left"></i> </a>*@
-                
-                <a class="navbar-minimalize  roll-nav-mune roll-left2 J_tabLeft ">
-                    <i class="fa fa-chevron-left"></i>
+                <a class="reftab-nav roll-nav-mune roll-left2">
+                    <i class="fa fa-spin fa-circle-o-notch"></i>
                 </a>
                 <button class="roll-nav roll-left J_tabLeft">
                     <i class="fa fa-backward"></i>
@@ -308,6 +304,20 @@
                                     <div class="onoffswitch">
                                         <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="collapsemenu">
                                         <label class="onoffswitch-label" for="collapsemenu">
+                                            <span class="onoffswitch-inner"></span>
+                                            <span class="onoffswitch-switch"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="setings-item">
+                                <span>
+                                    隐藏左侧菜单
+                                </span>
+                                <div class="switch">
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" name="hiddenmenu" class="onoffswitch-checkbox" id="hiddenmenu">
+                                        <label class="onoffswitch-label" for="hiddenmenu">
                                             <span class="onoffswitch-inner"></span>
                                             <span class="onoffswitch-switch"></span>
                                         </label>
@@ -688,6 +698,5 @@
     <!-- 第三方插件 -->
     <script src="js/plugins/pace/pace.min.js"></script>*@
 </body>
-<
 @Scripts.Render("~/HPlusPublicjs", "~/bootstrapjs", "~/HPlusHomejs")
 </html>

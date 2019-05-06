@@ -1,4 +1,5 @@
-﻿using FW.Model;
+﻿using DapperSqlMaker.DapperExt;
+using FW.Model;
 using LotterySystem.lib;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,28 @@ namespace LotteryWeb.Controllers
 
         public ActionResult folio()
         {
+            int UserId = 1;
+            // head
+            var user = LockSqlite<Users>.Selec().Column().From().Where(p => p.Id == UserId).ExecuteQuery<Users>().FirstOrDefault();
+            if (user == null)
+            {
+                ViewBag.img = "/Content/folio/images/jhon-img.gif";
+            }
+            else {
+                ViewBag.img = user.img;
+            }
+
+            // slides
+            var where = PredicateBuilder.WhereStart<Skin>();
+            where = where.And(p => p.IsDel != 1 && p.UserId == UserId && p.Type == "fobg");
+            var list = LockSqlite<Skin>.Selec().Column().From().Where(where).ExecuteQuery<Skin>();
+            if (list.Count() == 0)
+            {
+                ViewBag.slides = new string[] { "/Content/folio/images/header-image/jike_1_pic.gif", "/Content/folio/images/header-image/jike_2_pic.gif" };
+            }
+            else {
+                ViewBag.slides = list.Select(p => p.Value).ToList();
+            }
 
             return View();
         }

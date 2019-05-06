@@ -41,10 +41,10 @@ namespace FW.Model
         #region Field
 		private int _Id ; 
 		private string _Content ; 
-		private DateTime? _NoteDate ; 
+		private string _NoteDate ; 
 		private string _Name ; 
 		private int _UserId ; 
-		private bool _IsDel ; 
+		private int _IsDel ; 
         #endregion
 
 		[Key]
@@ -58,7 +58,7 @@ namespace FW.Model
 					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Content) ); }
 			get { return _Content; }
 		}
-		public virtual DateTime? NoteDate { 
+		public virtual string NoteDate { 
 			set { _NoteDate = value; 
 					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_NoteDate) ); }
 			get { return _NoteDate; }
@@ -73,7 +73,7 @@ namespace FW.Model
 					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_UserId) ); }
 			get { return _UserId; }
 		}
-		public virtual bool IsDel { 
+		public virtual int IsDel { 
 			set { _IsDel = value; 
 					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_IsDel) ); }
 			get { return _IsDel; }
@@ -94,10 +94,10 @@ namespace FW.Model
         #region Field
 		private int _Id ;
 		private string _Content ;
-		private DateTime? _NoteDate ;
+		private string _NoteDate ;
 		private string _Name ;
 		private int _UserId ;
-		private bool _IsDel ;
+		private int _IsDel ;
         #endregion
 
 		[Key]
@@ -109,7 +109,7 @@ namespace FW.Model
 			set { _Content = value; }
 			get { return _Content; }
 		}
-		public virtual DateTime? NoteDate { 
+		public virtual string NoteDate { 
 			set { _NoteDate = value; }
 			get { return _NoteDate; }
 		}
@@ -121,12 +121,16 @@ namespace FW.Model
 			set { _UserId = value; }
 			get { return _UserId; }
 		}
-		public virtual bool IsDel { 
+		public virtual int IsDel { 
 			set { _IsDel = value; }
 			get { return _IsDel; }
 		}
 
 	}
+
+
+
+
 
 
 } // namespace

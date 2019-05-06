@@ -371,7 +371,7 @@ body.mini-navbar .navbar-default .nav > li > .nav-second-level li a {
     text-align: center;
     font-size: 18px;
     font-weight: 600;
-    color: white;
+    color: #a7b1c2;
     display: none;
     padding: 18px 0;
 }
@@ -442,7 +442,7 @@ body.canvas-menu .logo-element {
 
 body.mini-navbar .nav-header {
     padding: 0;
-    background-color: #1ab394;
+    background-color: #1ab39469;
 }
 
 body.canvas-menu .nav-header {
@@ -844,6 +844,12 @@ fieldset[disabled] .btn-info.active {
     border-color: #26d7d9;
 }
 /*xxxxx*/
+.btn-navhd {
+    color:#a7b1c2;
+    background-color: #1ab39469;
+    border: 0 solid transparent;
+    padding:0;
+} 
 .btn-lable {
     background-color: #c2c2c2;
     border-color: #c2c2c2;
@@ -882,7 +888,7 @@ fieldset[disabled] .btn-lable.active {
     background-color: #c2c2c2;
     border-color: #c2c2c2;
     color: #FFFFFF;
-}  /*xxxxx*/
+}  /*xxxxx
 
 .btn-default {
     background-color: #c2c2c2;
@@ -3118,7 +3124,7 @@ a.forum-item-title:hover {
     margin-left: 60px;
     background: white;
     border-radius: 0.25em;
-    padding: 1em;
+    padding: 1.5em;
 }
 
 .vertical-timeline-content:after {
@@ -4089,6 +4095,9 @@ code {
 .ibox-title .btn {
 padding:3px 6px;
 } 
+.ibox-title .btn-gp {
+padding:5px 6px;
+} 
 /* xxxxxxx */
 
 .ibox-content {
@@ -4170,6 +4179,7 @@ table.table-mail tr td {
     margin-top: 0;
     position: relative;
     padding: 0;
+    margin-right: 10px
 }
 
 .ibox-tools a {
@@ -4423,7 +4433,7 @@ a.close-canvas-menu:hover {
 /* FULL HEIGHT */
 
 .full-height {
-    height: 100%;
+    height: 100% !important;
 }
 
 .fh-breadcrumb {
@@ -5011,9 +5021,15 @@ ul.notes li div small {
     font-size: 10px;
 }
 
-ul.notes li div a {
+ul.notes li div .del {
     position: absolute;
     right: 10px;
+    bottom: 10px;
+    color: inherit;
+}
+ul.notes li div .save {
+    position: absolute;
+    right: 30px;
     bottom: 10px;
     color: inherit;
 }
@@ -5085,11 +5101,33 @@ ul.notes li div {
     color: #000;
     background: #ffc;
     display: block;
-    height: 210px;
-    width: 210px;
+    height: 280px;
+    width: 280px;
     padding: 1em;
+    margin:20px;
     box-shadow: 5px 5px 7px rgba(33, 33, 33, 0.7);
     -webkit-transition: -webkit-transform 0.15s linear;
+}
+
+ul.notes li .txname { 
+    margin-top:5px;
+    width:100%;
+    border:solid 0;
+    font-size: large;
+    font-weight: 600;
+    border-bottom:1px solid gray;
+}
+ul.notes li .txname:focus { 
+    outline:none;
+}
+ul.notes li .txcontent { 
+    resize:none;
+    width:100%;
+    border:solid 0;
+    height:calc(100% - 40px) !important;
+}
+ul.notes li .txcontent:focus { 
+    outline:none;
 }
 
 

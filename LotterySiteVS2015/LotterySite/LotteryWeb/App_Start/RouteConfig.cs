@@ -14,6 +14,13 @@ namespace LotteryWeb
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+             routes.MapRoute(
+                name: "Note",
+                url: "note/{action}",
+                //defaults: new { controller = "Home", action = "zhuye", id = UrlParameter.Optional }
+                defaults: new { controller = "Note", action = "Index" }
+                ,namespaces: new string[] { "LotteryWeb.Controllers" }
+            );
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
@@ -21,7 +28,6 @@ namespace LotteryWeb
                 defaults: new { controller = "Home", action = "folio", id = UrlParameter.Optional }
                 ,namespaces: new string[] { "LotteryWeb.Controllers" }
             );
-             
         }
 
     }

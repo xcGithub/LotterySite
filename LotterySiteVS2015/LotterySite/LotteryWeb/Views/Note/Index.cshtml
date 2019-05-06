@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "标签墙";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section css{
+    <link href="@Url.Content("~/Content/layer-v2.4/layer/skin/layer.css")" rel="stylesheet" />
+}
+@section scripts{
+    @Scripts.Render("~/layerjs", "~/jsrenderjs")
+
+    <script id="tmpl_notejs" type="text/x-jsrender">
+        {{*}}
+        {{for #data.serh}}
+        @*{{:#index+1}} *@ 
+        <li>
+            <div>
+                <small>{{:NoteDate}}</small>
+                <input class="transparent-bg txname" type="text" placeholder="标题" name="name" value="{{:Name}}"/>
+                <textarea  name="111" class="transparent-bg full-height txcontent"> {{:Content}} </textarea>
+                <a class="save" data-id="{{:Id}}" href="#"><i class="fa fa-save"></i></a>
+                <a class="del" data-id="{{:Id}}" href="#"><i class="fa fa-trash-o "></i></a>
+            </div>
+        </li>
+        {{/for}}
+    </script>
+
+    <script type="text/javascript">
+        function getnotes() {
+            $.getJSON("@Url.Action("getnotes", "note")", { type: $('#slbgtype').val() }, function (r) {
+                var lplisthtml = $("#tmpl_notejs").render({ serh: r });
+                $('.notes').empty().append(lplisthtml);
+            });
+        }
+        getnotes();
+
+        $('.notes').on('click', '.save', function (e) {
+            var data = {};
+            data['name'] = $(this).prev().prev()[0].value;
+            data['content'] = $(this).prev()[0].value;
+            data['id'] = $(this).data('id');
+            $.post('@Url.Action("AddNote","note")', data, function (r) {
+                if (r == "0") {
+                    layer.msg('保存失败', { time: 1000, icon: 0 });
+                    return;
+                }
+                layer.msg('保存成功', { time: 1000, icon: 1 });
+            })
+        });
+        $('.notes').on('click', '.del', function (e) {
+            if ($(this).data('id') == '-1') {
+                $(this).parent().parent().remove();
+                return;
+            }
+            (function (obj) {
+                $.post('@Url.Action("RemoveNote","note")', { id: $(obj).data('id') }, function (r) {
+                    if (r == "0") {
+                        layer.msg('删除失败', { time: 1000, icon: 0 });
+                        return;
+                    }
+                    $(obj).parent().parent().remove();
+                    layer.msg('删除成功', { time: 1000, icon: 1 });
+                })
+            })(this)
+        });
+        $('.add-note').click(function(){
+            var lplisthtml = $("#tmpl_notejs").render({ serh: { Name: '', Content: '', NoteDate: '', Id: '-1' } });
+            $('.notes').prepend(lplisthtml);
+        });
+
+
+    </script>
+
+}
+<div id="small-mune">
+    <a class="right-sidebar-toggle open-small-mune add-note">
+        <i class="fa fa-plus"></i>
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="wrapper wrapper-content animated fadeInUp">
+            <ul class="notes"> 
+            </ul>
+        </div>
+    </div>
+</div>

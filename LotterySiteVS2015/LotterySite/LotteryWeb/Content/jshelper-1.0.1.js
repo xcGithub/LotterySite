@@ -44,7 +44,8 @@ function setFromElements(fm, data) {
             return;
         }
         if (v.type == 'textarea') {
-            $(this).text( data[v.name] == undefined ? '' : data[v.name] );
+            $(this).text(data[v.name] == undefined ? '' : data[v.name]);
+            $(this).val($(this).text());
             return;
         }
     });
@@ -64,7 +65,7 @@ function clearFormElements(fId) {
             $(this).prop('checked', false);
             return;
         }
-        if (v.type == 'text' || v.type == 'hidden') {
+        if (v.type == 'text' || v.type == 'hidden' || v.type == 'password') {
             this.value = '';
             return;
         }

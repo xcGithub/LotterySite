@@ -27,3 +27,10 @@ sqlite 库
 					DapperSqlMaker.DapperExt.AnalysisExpression.GetMemberValue(System.Linq.Expressions.MemberExpression, System.String)
 
   15. Users Roles Skin 表 IsDel改为int类型
+
+ 
+ 16. 改为返回影响行数 bool isSuccess = DapperFuncs.New.Update<Skin>(s => {
+                    s._IsWriteFiled = true; s.IsDel = 1;
+                }
+ 17. 字体映射配置 .woff	application/x-font-woff	删除
+                  .woff2	application/x-font-woff

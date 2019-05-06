@@ -238,6 +238,12 @@ $(function () {
     }
 
     $('.J_menuTabs').on('click', '.J_menuTab i', closeTab);
+    // 鼠标中键关闭
+    $('.J_menuTabs').on('mousedown', '.J_menuTab', function (e) {
+        if (e.button == 1) {
+            $(this).children().click()
+        }
+    });
 
     //关闭其他选项卡
     function closeOtherTabs(){
@@ -278,13 +284,17 @@ $(function () {
     function refreshTab() {
         var target = $('.J_iframe[data-id="' + $(this).data('id') + '"]');
         var url = target.attr('src');
-//        //显示loading提示
-//        var loading = layer.load();
-//        target.attr('src', url).load(function () {
-//            //关闭loading提示
-//            layer.close(loading);
-//        });
+        target.attr('src', url);
+        //显示loading提示
+        //var loading = layer.load();
+        //target.attr('src', url).load(function () {
+        //    //关闭loading提示
+        //    layer.close(loading);
+        //});
     }
+    $('.reftab-nav').click(function () {
+        console.log('双击标签有刷新') 
+    });
 
     $('.J_menuTabs').on('dblclick', '.J_menuTab', refreshTab);
 

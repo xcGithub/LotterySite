@@ -54,16 +54,31 @@ namespace LotteryWeb.Areas.Admin.Controllers
 
         public ActionResult Skin()
         {
+            
             int UserId = 1;
             var user = LockSqlite<Users>.Selec().Column().From().Where(p => p.Id == UserId).ExecuteQuery<Users>().FirstOrDefault();
             ViewBag.img = user.img;
             return View();
         }
 
-        public ActionResult GetSkin()
+        public ActionResult GetSkin(string type)
         {
             int UserId = 1;
-            var list = LockSqlite<Skin>.Selec().Column().From().Where(p => p.IsDel != 1 && p.Type == "bg" && p.UserId == UserId).ExecuteQuery<Skin>();
+            var where = PredicateBuilder.WhereStart<Skin>();
+            where = where.And( p => p.IsDel != 1 && p.UserId == UserId);
+            if (!string.IsNullOrEmpty(type)) {
+                where = where.And( p => p.Type == type);
+            }
+            var list = LockSqlite<Skin>.Selec().Column().From().Where(where).ExecuteQuery<Skin>();
+
+            //foreach (var item in list)
+            //{
+            //    var thm = "https://mini.site-shot.com/1024×768/200/png/?" + item.Value;
+            //    bool isSuccess = DapperFuncs.New.Update<Skin>(s => {
+            //        s._IsWriteFiled = true; s.Value2 = thm;
+            //    }, w => w.Id == item.Id && w.Type == "bg");
+            //} 
+
             return Content(Newtonsoft.Json.JsonConvert.SerializeObject(list));
         }
 
@@ -72,7 +87,7 @@ namespace LotteryWeb.Areas.Admin.Controllers
         //list.Add(new skinfo() { name = name, url = url, datetime = datetime });
         //System.IO.File.WriteAllText(Request.MapPath("/Content/skininfo.js"), "var skininfoarr = " + Newtonsoft.Json.JsonConvert.SerializeObject(list));
 
-        public ActionResult AddSkin(string name, string url)
+        public ActionResult AddSkin(string name, string url,string type,string thm)
         {
             var datetime = DateTime.Now.ToString("yy/MM/dd HH:mmss");
             int UserId = 1;
@@ -87,7 +102,7 @@ namespace LotteryWeb.Areas.Admin.Controllers
             //int efrows = insert.ExecuteInsert();
 
             // 2>
-            var additem = new Skin(true) { Name = name, Value = url, InsertDate = datetime, Type = "bg", Remake = "bg背景", UserId = UserId };
+            var additem = new Skin(true) { Name = name, Value = url, InsertDate = datetime, Type = type, Remake = type, UserId = UserId, Value2 = thm};
             //
             try
             {
@@ -175,6 +190,7 @@ namespace LotteryWeb.Areas.Admin.Controllers
 
 
         #endregion
+         
 
     }
 

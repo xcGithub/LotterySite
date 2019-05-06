@@ -15,7 +15,7 @@
             @*{{:#index+1}} *@
             <tr>
                 <td class="project-status">
-                    <span class="label {{if #index == 0}} label-primary {{/if}}  ">{{:#index+1}}</span>
+                    <span class="label {{if #index == 0}} label-primary {{else}}label-default{{/if}}">{{:#index+1}}</span>
                 </td>
                 <td class="project-title">
                     <a href="#">{{:Name}}</a>
@@ -23,7 +23,7 @@
                     <small>创建于 {{:InsertDate}} - {{:Type}}</small>
                 </td>
                 <td class="project-skin">
-                    <a href="#"><img alt="image"  class="img-rounded" src="{{:Value}}"></a>
+                    <a href="#"><img alt="image"  class="img-rounded" src="{{:Value2}}"></a>
                 </td>
                 <td class="project-actions"> 
                     <input type="hidden" data-id="{{:Id}}" data-name="{{:Name}}" data-datetime="{{:InsertDate}}" data-url="{{:Value}}"/> 
@@ -37,14 +37,15 @@
 
     <script type="text/javascript">
         function getskinjs() {
-            $.getJSON("@Url.Action("getskin", "home", new { area = "admin" })", { }, function (r) {
+            $.getJSON("@Url.Action("getskin", "home", new { area = "admin" })", { type: $('#slbgtype').val() }, function (r) {
                 var lplisthtml = $("#tmpl_skinjs").render({ serh: r });
                 $('#dvbgset').empty().append(lplisthtml);
             });
-        }
+        } 
+         
 
         function addskin() {
-            
+            $('#btnaddskin').prop('disabled', true);
             var data = getJsonObjectByForm("#fmbgser");
             $.post('@Url.Action("addskin", "home", new { area="admin" })', data , function (r) {
                 if (r == "0") {
@@ -57,7 +58,8 @@
 
                 getskinjs();
                 layer.msg('添加成功', { time: 1000, icon: 1 });
-
+                $('#btnaddskin').prop('disabled', false);
+                clearFormElements('#fmbgser')// 清空表单
             },'json');
 
         }
@@ -110,7 +112,7 @@
                     }, 'json');
         }
 
-        getskinjs();
+        //getskinjs();
 
 
     </script>
@@ -121,20 +123,20 @@
  
 
 
-<div class="row gray-bg">
+<div class="row transparent-bg">
     <div class="col-sm-12">
         <div class="wrapper wrapper-content">
             <div class="row animated fadeInRight">
                 <div class="col-sm-12">
                     <div class="ibox float-e-margins">
-                        <div class="text-center float-e-margins p-md">
+                        @*<div class="text-center float-e-margins p-md">
                             <span>主题设置</span> 
-                        </div>
+                        </div>*@
                         <div class="" id="ibox-content">
 
                             <div id="vertical-timeline" class="vertical-container light-timeline">
 
-                                <div class="vertical-timeline-block">
+                                <div id="dvimguser" class="vertical-timeline-block">
                                     <div class="vertical-timeline-icon lazur-bg">
                                         <i class="fa fa-user-md"></i>
                                     </div>
@@ -171,19 +173,50 @@
                                     <div class="vertical-timeline-content ">
                                         <h2>背景 </h2>
                                         <div class="hr-line-dashed"></div>
-                                        <form id="fmbgser"> <div class="row m-b-sm m-t-sm">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <input type="text" name="name" class="input-sm form-control" placeholder="图标名称" >
+                                        <div class="row">
+
+                                            <span class="small">https://mini.site-shot.com/1024×768/200/png/?地址</span>
+                                        <a class="btn btn-info" onclick="getskinjs()">
+                                            <i class="fa fa-search"> 查询</i>
+                                        </a></div>
+                                        <form id="fmbgser"> <div class="row">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <input type="text" name="name" class="input-sm form-control" placeholder="图标名称">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-btn">
+                                                            <label for="slbgtype" class="btn btn-lable">类型</label>
+                                                        </span>
+                                                        <select id="slbgtype" name="type" class="form-control" name="bgType"> 
+                                                            <option value="bg">后台背景</option>
+                                                            <option value="fobg">主页轮播</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-8">
-                                                <div class="input-group">
-                                                    <input type="text" name="url" placeholder="图片外链" class="input-sm form-control"> <span class="input-group-btn">
-                                                        <button type="button" onclick="addskin()" class="btn btn-sm btn-primary"> 导入</button>
-                                                    </span>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="input-group">
+                                                        <span class="input-group-btn">
+                                                            <label for="txthm" class="btn btn-lable">缩略图外链</label>
+                                                        </span>
+                                                        <input id="txthm" type="text" name="thm"
+                                                               placeholder="https://mini.site-shot.com/1024×768/200/png/?地址" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="input-group">
+                                                        <input type="text" name="url" placeholder="图片外链" class="input-sm form-control"> <span class="input-group-btn">
+                                                            <button id="btnaddskin" type="button" onclick="addskin()" class="btn btn-sm btn-primary"> 导入</button> 
+                                                    </div>
                                                 </div>
                                             </div>
+
                                         </div></form>
                                        
 

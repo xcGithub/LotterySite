@@ -368,9 +368,9 @@ header{
 	text-align:center;
 	background:#5b4c5c;
 	position:absolute;
-	left:50%;
+	right:5%;
 	margin-left:-21px;
-	top:36px;
+	top:5px;
 	z-index:999;
 	-webkit-border-radius:3px;
 	-moz-border-radius:3px;
@@ -1180,6 +1180,7 @@ ul.portfolioContainer li:hover span.hoverBox .linKed{
 		width:28px;
 		height:28px;
 		top:25px;
+        right:-10px;
 	}
 	.closeMenu i {
 		line-height:25px;

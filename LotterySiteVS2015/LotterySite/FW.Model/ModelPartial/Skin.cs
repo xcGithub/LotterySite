@@ -12,7 +12,7 @@ namespace FW.Model
 	[Table("Skin")]
 	public partial class Skin
 	{  
-	   /*  Id  Name  Value  Type  IsDel  Remake  UserId  InsertDate  */ 
+	   /*  Id  Name  Value  Type  IsDel  Remake  UserId  InsertDate  Seq  Value2  */ 
 
 	    
         #region 待写入字段集合 可抽象出来
@@ -38,6 +38,8 @@ namespace FW.Model
 		public static readonly string  Field_Remake = "Remake"; 
 		public static readonly string  Field_UserId = "UserId"; 
 		public static readonly string  Field_InsertDate = "InsertDate"; 
+		public static readonly string  Field_Seq = "Seq"; 
+		public static readonly string  Field_Value2 = "Value2"; 
 		#endregion
 
         #region Field
@@ -49,6 +51,8 @@ namespace FW.Model
 		private string _Remake ; 
 		private int _UserId ; 
 		private string _InsertDate ; 
+		private int _Seq ; 
+		private string _Value2 ; 
         #endregion
 
 		[Key]
@@ -92,6 +96,16 @@ namespace FW.Model
 					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_InsertDate) ); }
 			get { return _InsertDate; }
 		}
+		public virtual int Seq { 
+			set { _Seq = value; 
+					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Seq) ); }
+			get { return _Seq; }
+		}
+		public virtual string Value2 { 
+			set { _Value2 = value; 
+					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Value2) ); }
+			get { return _Value2; }
+		}
 
 	}
 
@@ -102,7 +116,7 @@ namespace FW.Model
 	[Table("Skin")]
 	public partial class Skin_
 	{  
-	   /*  Id  Name  Value  Type  IsDel  Remake  UserId  InsertDate  */ 
+	   /*  Id  Name  Value  Type  IsDel  Remake  UserId  InsertDate  Seq  Value2  */ 
 
 	      
         #region Field
@@ -114,6 +128,8 @@ namespace FW.Model
 		private string _Remake ;
 		private int _UserId ;
 		private string _InsertDate ;
+		private int _Seq ;
+		private string _Value2 ;
         #endregion
 
 		[Key]
@@ -149,12 +165,16 @@ namespace FW.Model
 			set { _InsertDate = value; }
 			get { return _InsertDate; }
 		}
+		public virtual int Seq { 
+			set { _Seq = value; }
+			get { return _Seq; }
+		}
+		public virtual string Value2 { 
+			set { _Value2 = value; }
+			get { return _Value2; }
+		}
 
 	}
-
-
-
-
 
 
 } // namespace

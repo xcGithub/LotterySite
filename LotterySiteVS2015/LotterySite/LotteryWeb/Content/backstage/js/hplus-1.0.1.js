@@ -51,12 +51,6 @@ $(document).ready(function () {
     });
 
 
-    // 菜单切换
-    $('.navbar-minimalize').click(function () {
-        $("body").toggleClass("mini-navbar");
-        $('.navbar-minimalize i').toggleClass('fa-chevron-left fa-chevron-right')
-        SmoothlyMenu();
-    });
 
 
     // 侧边栏高度
@@ -184,6 +178,17 @@ $(function () {
                 localStorage.setItem("collapse_menu", 'off');
             }
         }
+    });
+
+    // 左侧菜单切换
+    $('.navbar-minimalize').click(function () {
+        $("body").toggleClass("mini-navbar");
+        $('.navbar-minimalize i').toggleClass('fa-chevron-left fa-chevron-right')
+        SmoothlyMenu();
+    });
+    // 隐藏左侧菜单
+    $('#hiddenmenu').click(function () {
+        $('body').toggleClass('canvas-menu');
     });
 
     // 固定宽度

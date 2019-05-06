@@ -156,6 +156,7 @@
     <Compile Include="Controllers\LockController.cs" />
     <Compile Include="Controllers\LOLController.cs" />
     <Compile Include="Controllers\MusicController.cs" />
+    <Compile Include="Controllers\NoteController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -197,6 +198,7 @@
     <Content Include="Content\backstage\css\patterns\header-profile-skin-3.png" />
     <Content Include="Content\backstage\css\patterns\header-profile.png" />
     <Content Include="Content\backstage\css\patterns\shattered.png" />
+    <Content Include="Content\backstage\css\plugins\datapicker\datepicker3.css" />
     <Content Include="Content\backstage\css\style-4.1.css" />
     <Content Include="Content\backstage\docs\img\index_4.png" />
     <Content Include="Content\backstage\docs\img\page.png" />
@@ -253,6 +255,7 @@
     <Content Include="Content\backstage\js\jquery-ui-1.10.4.min.js" />
     <Content Include="Content\backstage\js\jquery-ui.custom.min.js" />
     <Content Include="Content\backstage\js\jquery.min.js" />
+    <Content Include="Content\backstage\js\plugins\datapicker\bootstrap-datepicker.js" />
     <Content Include="Content\backstage\js\plugins\metisMenu\jquery.metisMenu.js" />
     <Content Include="Content\backstage\js\plugins\slimscroll\jquery.slimscroll.js" />
     <Content Include="Content\backstage\js\plugins\slimscroll\jquery.slimscroll.min.js" />
@@ -1080,7 +1083,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\backstage\css\plugins\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -1180,6 +1182,7 @@
     <Content Include="Views\Loc\Index.cshtml" />
     <Content Include="Views\LOL\Index.cshtml" />
     <Content Include="Views\Music\Index.cshtml" />
+    <Content Include="Views\Note\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

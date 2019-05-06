@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Lock ^_^";
+    ViewBag.Title = "Lock ^o^";
 }
 @using System.Collections.Generic
 
@@ -23,13 +23,13 @@
             url : '@Url.Action("Load", "Lock" ,new { area = ""})',
             datatype: "json",
             //data: mydata,
-            height: 450,
+            //width: 'auto',
+            height: 'auto',//450,
             autowidth: true,
             multiselect : true,
             multiboxonly: true,
             rownumbers: true,//是否显示行号。true：显示
             rownumWidth: 25,// 行号所在列的宽度
-            //width: 'auto',
             colModel: [
  				    { label: '名称', name: 'Name', width: 180, height: 300 },
  				    { label: '备注', name: 'Prompt', width: 300 },
@@ -41,7 +41,7 @@
                 $(this).data('fulldata', d.rows) // 存储从服务器端获取的原始数据 
             },
             viewrecords: true, // show the current page, data rang and total records on the toolbar
-            caption: " ",
+            caption: "Lock ^o^",
             sortable: false,
             rowNum: 10,  // 每行显示列数
             rowList: [10, 50, 100], // 行数切换
@@ -70,7 +70,7 @@
         var data = { Id: row.Id, Content: $('#txtCkContent').val() };
             $.post('@Url.Action("Check", "Lock", new { area = "" })', data, function (r) {
                 layer.msg(r == "1" ? "匹配成功" : "匹配失败", { time: 1000, icon: parseInt(r) });
-            }); 
+            });
         }
 
     // 绑定 时间框
@@ -110,13 +110,13 @@
             //修改 初始化表单数据
             var rowData = $("#jqGrid").data("fulldata")[selectedId - 1];
             $.ajaxSetup({ async: false });
-            $.post('@Url.Action("DeleteGenrmsg", "Messagemng")', { id: rowData.GmgID }, function (r) {
-                if (r.state == 0) {
-                    layer.msg('删除失败', { time: 1000, icon: 1 });
-                    return; // 保存失败
+            $.post('@Url.Action("Delete", "Lock",new { area = ""})', { Id: rowData.Id }, function (r) {
+                if (r == "1") {
+                    searchdata();
+                    layer.msg('删除成功', { time: 1000, icon: 1 });
+                    return; 
                 }
-                searchdata();
-                layer.msg('删除成功', { time: 1000, icon: 1 });
+                layer.msg('删除失败', { time: 1000, icon: 0 });
             });
             $.ajaxSetup({ async: true });
         });
@@ -126,14 +126,24 @@
     // 保存
     function savedata() {
         var data = getJsonObjectByForm("#fmdata");
+        // 验证
+
+        if (data.Name == '') { layer.msg('名称不能为空', { time: 1000, icon: 0 }); return false; }
+        if (data.Content == '') { layer.msg('秘钥不能为空', { time: 1000, icon: 0 }); return false; }
+        if (data.Prompt == '') { layer.msg('备注不能为空', { time: 1000, icon: 0 }); return false; }
+        if (data.Content != data.Content2) {
+            layer.msg('两次输入秘钥不相同', { time: 1000, icon: 0 });
+            return false;
+        }
+        console.log(data);
         var state = 0;
         $.ajaxSetup({ async: false });
-        $.post('@Url.Action("SaveGenrmsg", "Messagemng")', { data: JSON.stringify(data) }, function (r) {
-            state = r.state;
-            if (r.state == 0) {
-                layer.msg('保存失败', { time: 1000, icon: 1 });
-                return; // 保存失败
+        $.post('@Url.Action("AddUpdate", "Lock",new { area = ""})', data, function (r) {
+            if (r == "1") {
+                layer.msg('保存成功', { time: 1000, icon: 1 });
             }
+            else if (r == "0") layer.msg("保存失败", { time: 1000, icon: 0 })
+            else if (r == "-1") layer.msg("旧内容不真确", { time: 1000, icon: 0 });
 
             //cancel();
             searchdata(); // 重新查询数据
@@ -147,6 +157,7 @@
         if (type == 1) { // 添加
             clearFormElements('#fmdata')// 清空表单
             $('#hiddataid').val('-1'); // 添加赋值id为-1区分修改
+            $('#dvContentOld').addClass('hidden');
             //$('#sldat-Country').val('中国大陆').change();
         } else if (type == 2) { // 修改
             var selectedId = $("#jqGrid").jqGrid("getGridParam", "selrow");
@@ -158,12 +169,13 @@
             //修改 初始化表单数据
             var rowData = $("#jqGrid").data("fulldata")[selectedId - 1];
             console.log(rowData);
+            $('#dvContentOld').removeClass('hidden');
             setFromElements($('#dvDialog').find('[data-type=fmdata]'), rowData);
         }
 
         layer.open({
             type: 1, title: ' ',
-            area: ['900px', '450px'],
+            area: ['80%', '85%'],// '900px', '450px'
             //shadeClose: true, //点击遮罩关闭
             //content: '\<\div style="padding:20px;">自定义内容\<\/div>'
             content: $('#dvDialog'),
@@ -238,69 +250,46 @@
         <div class="ibox">
             <div class="ibox-content">
                 <div >
-                    <form id="fmcondition" class="form-inline">
-                        <div class="form-group">
-                            <input type="text" name="" class="form-control" placeholder="名称 / 备注" style="width:120px;">
-                        </div>
+                    <form id="fmcondition" >
+                        
 
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-btn">
-                                    <label for="slGmgSenderType" class="btn btn-lable">核验次数</label>
-                                </span>
-                                <select id="slGmgSenderType" class="form-control" name="GmgSenderType" style="width:100px;">
-                                    <option value="">请选择</option>
-                                    <option value="0">0</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-                            </div>
-                        </div>
+                            <div class="row">
+                                <div class="col-xs-6 col-md-3">
+                                    <input type="text" name="serh" class="form-control" placeholder="名称 / 备注">
+                                </div>
+                                <div class="col-xs-6 col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <label for="slGmgSenderType" class="btn btn-lable">核验次数</label>
+                                        </span>
+                                        <select id="slGmgSenderType" class="form-control" name="GmgSenderType">
+                                            <option value="">请选择</option>
+                                            <option value="0">0</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                </div> 
+                                <div class="col-xs-12 col-md-4 input-daterange" id="data_gctime">
+                                    <div class="input-group">
 
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-btn">
-                                    <label for="slAMEAuditStatus"  class="btn btn-lable">审核状态</label>
-                                </span>
-                                <select id="slAMEAuditStatus" class="form-control" name="AMEAuditStatus" style="width:120px;">
-                                    <option value="">请选择</option>
-                                    <option value="0">待审核</option>
-                                    <option value="1">审核通过</option>
-                                    <option value="2">审核不通过</option>
-                                </select>
-                            </div> 
-                        </div>
+                                        <input type="text" name="DateStart" class="form-control" placeholder="开始时间" readonly="readonly">
+                                        <span class="input-group-btn">
+                                            <label for="GmgCreateTimeEnd" class="btn btn-lable">至</label>
+                                        </span>
+                                        <input type="text" name="DateEnd" class="form-control" placeholder="结束时间" readonly="readonly">
 
-
-                        <div class="form-group input-daterange"  id="data_gctime">
-                            <div class="input-group">
-                                
-                                <input type="text" name="GmgCreateTimeStart" class="form-control" placeholder="开始时间" readonly="readonly" style="width:120px;">
-                                <span class="input-group-btn">
-                                    <label for="GmgCreateTimeEnd" class="btn btn-lable">至</label>
-                                </span>
-                                <input type="text" name="GmgCreateTimeEnd" class="form-control" placeholder="结束时间" readonly="readonly" style="width:120px;">
+                                    </div>
+                                </div>
 
                             </div>
-                        </div>
 
 
-                        @*<div class="form-group input-daterange " id="data_gctime">
-                            <label class="control-label">：</label>
-                            
-                            <label class="control-label"> </label>
-                            </div>*@
-                        @*<br /><br />
-                        <input class="btn btn-warning" onclick="searchclear()" type="button" value="清空" style="width:80px;">
-                        <input class="btn btn-primary" onclick="searchdata()" type="button" value="查询" style="width:80px;">
-                        <input class="btn btn-primary" onclick="editdata(1)" type="button" value="添加" style="width:80px;">
-                        <input class="btn btn-primary" onclick="editdata(2)" type="button" value="修改" style="width:80px;">
-                        <input class="btn btn-primary" onclick="deletedata()" type="button" value="删除" style="width:80px;">
-                        <input class="btn btn-primary" onclick="approveone(1)" type="button" value="审核通过" style="width:100px;">
-                        <input class="btn btn-primary" onclick="approveone(2)" type="button" value="审核不通过" style="width:100px;">*@
+
+                         
                     </form>
                     <form class="form-inline"></form>
                     <div class="clearfix"></div>
@@ -308,56 +297,46 @@
 
             </div> 
             <div class="ibox-title ibox-title-bottom">
+                
                 <div class="row ">
-                    <div class="col-md-3">
 
+                    <div class="col-xs-7 col-md-3">
                         <div class="input-group">
-                            <input id="txtCkContent" type="password" name="url" placeholder="输入想不起来的密文" class="input-sm form-control"> <span class="input-group-btn">
-                                <button type="button" onclick="checkContent()" class="btn btn-sm btn-primary"> 验证</button>
+                            <input id="txtCkContent" type="password" name="url" placeholder="输入想不起来的密文" class="input-sm form-control">
+                            <span class="input-group-btn">
+                                <button class="btn-sm btn btn-info btn-gp" onclick="checkContent()">验证 <i class="fa fa-spin fa-circle-o-notch"></i></button>
                             </span>
                         </div>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-xs-5 col-md-2">
+                        <a class="btn btn-info" onclick="searchclear()">
+                            <i class="fa fa-remove"> 清空</i>
+                        </a>
+                        <a class="btn btn-info" onclick="searchdata()">
+                            <i class="fa fa-search"> 查询</i>
+                        </a>
+                    </div>
+                    <div class="clearfix visible-xs"></div>
+                    <div class="col-xs-10 col-md-5">
                         <div class="form-group">
-                            <a class="btn btn-info" onclick="editdata(2)">
-                                <span>验证</span>
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <a class="btn btn-info" onclick="searchclear()">
-                                <span>清空</span>
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <a class="btn btn-info" onclick="searchdata()">
-                                <span>查询</span>
-                                <i class="fa fa-wrench"></i>
-                            </a>
                             <a class="btn btn-info" onclick="editdata(1)">
-                                <span>添加</span>
-                                <i class="fa fa-wrench"></i>
+                                <i class="fa fa-plus"> 添加</i>
                             </a>
                             <a class="btn btn-info" onclick="editdata(2)">
-                                <span>修改</span>
-                                <i class="fa fa-wrench"></i>
+                                <i class="fa fa-edit"> 修改</i>
                             </a>
                             <a class="btn btn-info" onclick="deletedata()">
-                                <span>删除</span>
-                                <i class="fa fa-wrench"></i>
+                                <i class="fa fa-trash"> 删除</i>
                             </a>
                             <a class="btn btn-info" onclick="approveone(1)">
-                                <span>审核通过</span>
-                                <i class="fa fa-wrench"></i>
+                                <i class="fa fa-check-square-o"> 审核通过</i>
                             </a>
-                            <a class="btn btn-info" onclick="approveone(2)">
-                                <span>审核不通过</span>
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                             
+
                         </div>
                     </div>
-                    <div class="col-md-2">
 
-                        <div class="ibox-tools">
-
+                    <div class="col-xs-2 col-md-2 ">
+                        <div class="ibox-tools ">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
                             </a>
@@ -365,9 +344,12 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-
                     </div>
+
+
                 </div>
+
+                
 
                 @*<div class="pull-left">
                     <div class="">
@@ -385,42 +367,57 @@
 </div>  <!-- 数据表 -->
 <div id="dvDialog" style="display: none;">
     <form id="fmdata" data-type="fmdata" style="padding: 0 20px; "> 
+         
         <div class="hr-line-dashed"></div>
         <div class="row">
-            <div class="col-sm-6 form-group">
-                <label for="txtName">名称</label>
-                <input type="text" class="form-control" id="txtName" name="Name">
+            <div class="col-sm-6 ">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <label class="btn btn-lable" for="txtName"> 名&nbsp;&nbsp;&nbsp;&nbsp;称 </label>
+                    </span>
+                    <input type="text" class="form-control" id="txtName" name="Name">
+                </div>
             </div>
-            <div class="col-sm-6 form-group">
-                <label for="txtPrompt">备注</label>
-                <input type="text" class="form-control" id="txtPrompt" name="Prompt">
+            <div id="dvContentOld" class="col-sm-6 hidden">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <label class="btn btn-lable" for="txt密文">&nbsp;&nbsp;旧密钥</label>
+                    </span>
+                    <input type="password" class="form-control" id="txtContentOld" name="ContentOld">
+                </div>
             </div>
         </div>
         <div class="hr-line-dashed"></div>
         <div class="row">
-            <div class="col-sm-6 form-group">
-                <label for="txt密文">密码</label>
-                <input type="text" class="form-control" id="txtContent" name="Content">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <label class="btn btn-lable" for="txtCheckCount">新密钥</label>
+                    </span>
+                    <input type="password" class="form-control" id="txtContent" name="Content">
+                </div>
             </div>
-            <div class="col-sm-6 form-group">
-                <label for="txtInsertTimestr">添加时间</label>
-                <input type="text" class="form-control" id="txtInsertTimestr" name="InsertTimestr">
+            <div class="col-sm-6">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <label class="btn btn-lable" for="txtEditCount">确认密钥</label></span>
+                <input type="password" class="form-control" name="Content2"> </div>
             </div>
         </div>
         <div class="hr-line-dashed"></div>
         <div class="row">
-            <div class="col-sm-6 form-group">
-                <label for="txtCheckCount">核验次数</label>
-                <input type="text" class="form-control" id="txtCheckCount" name="CheckCount">
-            </div>
-            <div class="col-sm-6 form-group">
-                <label for="txtEditCount">修改次数</label>
-                <input type="text" class="form-control" id="txtEditCount" name="EditCount">
+            <div class="col-sm-12">
+                <div class="input-group">
+                    <span class="input-group-btn full-height">
+                        <label class="btn btn-lable full-height" for="txtPrompt">备<br/>注</label></span>
+                    <textarea rows="5" class="form-control" id="txtPrompt" name="Prompt"></textarea>
+                </div>
             </div>
         </div> 
+        <div class="hr-line-dashed"></div>
 
 
 
-        <input type="hidden" name="GmgID" id="hiddataid" />
+        <input type="hidden" name="Id" id="hiddataid" />
     </form>
 </div>  <!-- 编辑窗 -->

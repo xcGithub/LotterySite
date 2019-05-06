@@ -138,7 +138,7 @@ namespace LotteryWeb.Controllers
 
 
         #region 19.1.5 修改为DapperSqlMaker
-        public ActionResult Load(int page, int rows ,string serh)
+        public ActionResult Load(int page, int rows ,string serh,string DateStart,string DateEnd)
         {
             serh = $"%{serh}%";
             int records;
@@ -147,6 +147,18 @@ namespace LotteryWeb.Controllers
             if (!string.IsNullOrWhiteSpace(serh)) {
                 where = where.And( m => (m.Name.Contains(serh) || m.Prompt.Contains(serh) ) );
             }
+            DateTime dtemp;
+            if (DateTime.TryParse(DateStart,out dtemp))
+            {
+                string dsql = string.Format($"{LockPers.Field_InsertTime} >= '{dtemp.ToString("yyyy-MM-dd HH:mm:ss")}'");
+                where = where.And(m => SM.SQL(dsql));
+            } 
+            if (DateTime.TryParse(DateEnd, out dtemp))
+            {
+                string dsql = string.Format($"{LockPers.Field_InsertTime} <= '{dtemp.ToString("yyyy-MM-dd HH:mm:ss")}'");
+                where = where.And(m => SM.SQL(dsql));
+            }
+
             var query = LockSqlite<LockPers>
                 .Selec().Column(p => new { t = "datetime(a.InsertTime) as InsertTimestr"
                     , p.Id, p.Name, p.Content, p.Prompt, p.EditCount, p.CheckCount})

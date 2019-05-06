@@ -108,12 +108,17 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 noPadd slides-container" style="height:100%">
                     <!--background slide show start--> 
-                    <div class="slide">
-                        <img src="~/Content/folio/images/header-image/jike_1_pic.gif" alt="image01">
-                    </div>
-                    <div class="slide">
+                    @*<div class="slide">
+                            <img src="~/Content/folio/images/header-image/jike_1_pic.gif" alt="image01">
                         <img src="~/Content/folio/images/header-image/jike_2_pic.gif" alt="">
-                    </div>
+                    </div>*@
+                    @foreach (var item in ViewBag.slides)
+                    {
+                        @item
+                        <div class="slide">
+                            <img src="@item" alt="image01">
+                        </div>
+                    }
                     <!--background slide show end-->
                 </div>
             </div>
@@ -133,7 +138,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class=" col-lg-4 col-md-4 col-sm-4 col-xs-12 pull-right media"><img src="~/Content/folio/images/jhon-img.gif" style="width:150px" alt=""></div>
+                    @*~/Content/folio/images/jhon-img.gif*@
+                    <div class=" col-lg-4 col-md-4 col-sm-4 col-xs-12 pull-right media"><img src="@ViewBag.img"  alt=""></div>
                     <div class=" col-lg-7 col-md-7 col-sm-7 col-xs-12 pull-left media">
                         <h5>Chang Lin</h5>
                         <h4>Web Developer from DaZhongGuo</h4>
@@ -170,19 +176,19 @@
                                 <div class="skill-bar-percent"></div>
                             </div> <!-- End Skill Bar -->
 
-                            <div class="skillbar clearfix " data-percent="86%">
+                            <div class="skillbar clearfix " data-percent="90%">
                                 <div class="skillbar-title"><span>SqlServer</span></div>
                                 <div class="skillbar-bar"></div>
                                 <div class="skill-bar-percent"></div>
                             </div> <!-- End Skill Bar -->
 
-                            <div class="skillbar clearfix " data-percent="41%">
+                            <div class="skillbar clearfix " data-percent="60%">
                                 <div class="skillbar-title"><span>HTML / CSS</span></div>
                                 <div class="skillbar-bar"></div>
                                 <div class="skill-bar-percent"></div>
                             </div> <!-- End Skill Bar -->
 
-                            <div class="skillbar clearfix " data-percent="52%">
+                            <div class="skillbar clearfix " data-percent="80%">
                                 <div class="skillbar-title"><span>JavaScript</span></div>
                                 <div class="skillbar-bar"></div>
                                 <div class="skill-bar-percent"></div>
