@@ -1,0 +1,536 @@
+﻿@{
+    ViewBag.Title = "菜单管理";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+@section css{
+    <link href="@Url.Content("~/Content/layer-v2.4/layer/skin/layer.css")" rel="stylesheet" />
+    @Styles.Render("~/HPlusjqGridcss", "~/datepickercss", "~/zTreevcss")
+
+}
+
+
+@section scripts{
+    @Scripts.Render("~/HPlusjqGridjs", "~/layerjs", "~/jshelper", "~/datepickerjs", "~/zTreevjs")
+
+<script type="text/javascript">
+
+    $.jgrid.defaults.width = "100%";
+    $.jgrid.defaults.responsive = true;
+    $.jgrid.defaults.styleUI = 'Bootstrap';
+     
+
+
+    $.extend($.jgrid.defaults, {
+        loadFilter: function (d) {
+
+            function compare(name, minor) {
+                return function (o, p) {
+                    var a, b;
+                    if (o && p && typeof o === 'object' && typeof p === 'object') {
+                        a = o[name];
+                        b = p[name];
+                        if (a === b) {
+                            return typeof minor === 'function' ? minor(o, p) : 0;
+                        }
+                        if (typeof a === typeof b) {
+                            return a < b ? -1 : 1;
+                        }
+                        return typeof a < typeof b ? -1 : 1;
+                    } else {
+                        thro("error");
+                    }
+                }
+            }
+            function rawdata(r, parentField) {
+                if (!(r instanceof Array)) {
+                    r[parentField] = r[parentField].toString(); //转string初始化才会闭合
+                    r['isLeaf'] = true;
+                    return r;
+                }
+                var datatmp = [];
+                for (var i = 0; i < r.length; i++) {
+                    var children = r[i]['children'];
+                    r[i]['children'] = null; 
+                    r[i][parentField] = r[i][parentField].toString(); //转string初始化才会闭合
+                    r[i]['isLeaf'] = !children;
+                    r[i]['expanded'] = true; // 默认全部展开
+
+                    datatmp.push(r[i]);
+                    if (children) datatmp = datatmp.concat(rawdata(children, parentField));
+                }
+                return datatmp;
+            }
+
+            var data = d.rows;
+            var idField, treeField, parentField, seqField, level_field;
+            idField     = this.p.treeReader.id_field || 'id';
+            parentField = this.p.treeReader.parent_id_field || 'pid';
+            levelField  = this.p.treeReader.level_field || idField//'level'
+            seqField    = this.p.treeReader.seq_field || idField//'seq' // 注意：绑定上是显示字段用 treeField 
+
+            if(seqField != idField)  data.sort(compare(levelField, compare(seqField)));
+            else data.sort(compare(seqField) );
+
+            var i, l, treeData = [], tmpMap = [];
+            for (i = 0, l = data.length; i < l; i++) {
+                tmpMap[data[i][idField]] = data[i];
+            }
+            for (i = 0, l = data.length; i < l; i++) {
+                if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
+                    if (!tmpMap[data[i][parentField]]['children'])
+                        tmpMap[data[i][parentField]]['children'] = []; 
+                    tmpMap[data[i][parentField]]['children'].push(data[i]);
+                } else { 
+                    // data数据已更根据level seq排序
+                    treeData.push(data[i]);
+                }
+            }
+            d.rows = rawdata(treeData, parentField);
+            return d;
+        }
+    });
+
+    jQuery(document).ready(function($) {
+        jQuery('#jqGrid').jqGrid({
+            "url": '@Url.Action("GetMenu", "Setup")',
+            "datatype": "json", //json", //data: jsondata,
+            "colModel": [
+				{ name: 'Id', "key": true, "width": 50 }, // "hidden": true,
+ 				{ label: '层级', name: 'Level', width: 50 },
+ 				{ label: '名称', name: 'Title', width: 180,  },
+ 				{ label: '图标', name: 'img', width: 180 },
+ 				{ label: '地址', name: 'href', width: 300 },
+ 				{ label: '名称标记', name: 'TitleTag', width: 80 },
+ 				{ label: '打开方式', name: 'Target', width: 80 },
+				{ lable: 'PId', name: 'ParentId', width: 70 },
+ 				{ label: '排序', name: 'seq', width: 50 },
+ 				{ label: '删除', name: 'IsDel', width: 50 }
+			],
+            width: 'auto',
+			height: 'auto',//450,
+			"hoverrows":false,
+			"viewrecords":false,
+			"gridview":true,
+			"height":"auto",
+			"rowNum":100,
+			"scrollrows": true,
+
+			//"loadonce": true,
+			"treeGrid": true,
+			"ExpandColumn": "Title",
+			"treedatatype": "json",
+			"treeGridModel": "adjacency",  //选adjacency模式 (nested模式真zz,怎么会有这种数据格式) 
+			"treeReader": {
+				"id_field": "Id",              //Id       非空
+				"parent_id_field": "ParentId", //父节点Id 非空  
+				"level_field": "Level",        //层级     非空
+				"seq_field": "seq",            //层级排序 可选字段 默认Id排序
+				//"leaf_field": "isLeaf",      //叶节点过滤内已处理
+			},
+			"pager": "#jqGridPager"
+		});
+	});
+
+</script> <!-- jqgrid -->
+
+<script type="text/javascript">
+    var setting = {
+        view: { dblClickExpand: false }, //selectedMulti: false },
+        data: { key: { name: 'Title' }
+            , simpleData: { enable: true, idKey: "Id", pIdKey: "ParentId", rootPId: 0, } },
+        callback: { onClick: onClick } // beforeClick: beforeClick,
+    };
+
+    function onClick(e, treeId, treeNode) {
+        var zTree = $.fn.zTree.getZTreeObj(treeId),
+        nodes = zTree.getSelectedNodes(),
+        v = '',k = '',lv='';
+        nodes.sort(function compare(a, b) { return a.id - b.id; });
+        v = nodes[0].Title; k += nodes[0].Id, lv += nodes[0].Level; //+ ','
+        if (v.length > 0) v = v.substring(0, v.length - 1);
+        $("#tx" + treeId).val(v);
+        $("#hd" + treeId).val(k);
+        $("#hdlv" + treeId).val(lv + 1);
+    }
+    function showMenu(treeId) {
+        $("#dv" + treeId).slideDown("fast");
+        $("body").bind("mousedown", function onBodyDown(event) {
+            if (!(event.target.id == "menuBtn" || event.target.id == "dv" + treeId || $(event.target).parents("#dv" + treeId).length > 0)) {
+                $("#dv" + treeId).fadeOut("fast");
+                $("body").unbind("mousedown", onBodyDown);
+            }
+        });
+    }
+
+    //function beforeClick(treeId, treeNode) { // 选择前过滤 return false 不触发click事件
+    //    var check = (treeNode && !treeNode.isParent);
+    //    if (!check) console.log('选择了非叶节点');
+    //    return true;//check;
+    //} 
+     
+     
+    $(function () { //绑定查询ztrre
+        $.getJSON('@Url.Action("GetComboMenu", "Setup",new { arae =""})', {  }, function (zNodes) {
+            $.fn.zTree.init($("#ztCombos"), setting, zNodes);
+            $.fn.zTree.init($("#ztCombo"), setting, zNodes);
+        });
+    });
+</script> <!-- ztree -->
+
+
+<script type="text/javascript">
+
+
+    // 绑定 时间框
+    $("#data_gctime.input-daterange").datepicker({
+        keyboardNavigation: !1,
+        forceParse: !1,
+        autoclose: !0
+    });
+
+    function searchdata() {
+        var data = getJsonObjectByForm("#fmcondition", true);
+        $("#jqGrid").setGridParam({}).trigger("reloadGrid");
+    }
+
+    // 删除
+    function deletedata() {
+
+        var selectedId = $("#jqGrid").jqGrid("getGridParam", "selrow");
+        if (selectedId == null) { // 未选中
+            layer.msg('请选择一行数据！', { time: 1000, icon: 0 });
+            return false;
+        }
+
+        layer.confirm('确定删除', { icon: 0, title: '警告' }, function (index) {
+            layer.close(index);
+            //修改 初始化表单数据
+            var rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
+            $.ajaxSetup({ async: false });
+            $.post('@Url.Action("DelMenu", "Setup",new { area = ""})', { Id: rowData.Id }, function (r) {
+                if (r == "1") {
+                    searchdata();
+                    layer.msg('删除成功', { time: 1000, icon: 1 });
+                    return;
+                }
+                layer.msg('删除失败', { time: 1000, icon: 0 });
+            });
+            $.ajaxSetup({ async: true });
+        });
+
+    }
+
+    // 保存
+    function savedata() {
+        var data = getJsonObjectByForm("#fmdata");
+        // 验证
+
+        if (data.Title == '') { layer.msg('名称不能为空', { time: 1000, icon: 0 }); return false; }
+        if (data.ParentId == '') { layer.msg('父节点不能为空', { time: 1000, icon: 0 }); return false; }
+        console.log(data);
+        $.post('@Url.Action("SaveMenu", "Setup",new { area = ""})', data, function (r) {
+            if (r == "1") {
+                layer.msg('保存成功', { time: 1000, icon: 1 });
+            }
+            else if (r == "0") layer.msg("保存失败", { time: 1000, icon: 0 })
+
+            searchdata(); // 重新查询数据
+        });
+    }
+    //弹出一个页面层
+    function editdata(type) {
+        var selectedId = $("#jqGrid").jqGrid("getGridParam", "selrow");
+        if (type == 1) { // 添加
+            clearFormElements('#fmdata')// 清空表单
+            $('#hiddataid').val('-1'); // 添加赋值id为-1区分修改
+            if (selectedId != null) {  // 选中父节点
+                var rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
+                var treeObj = $.fn.zTree.getZTreeObj("ztCombo");
+                var nodes = treeObj.getNodesByFilter(function filter(node) {
+                    return node.Id == rowData.Id;
+                });
+                if (nodes.length > 0) {
+                    treeObj.selectNode(nodes[0]);
+                    $("#txztCombo").val(nodes[0].Title);
+                    $("#hdztCombo").val(nodes[0].Id);
+                    $("#hdlvztCombo").val(nodes[0].Level + 1); // Level为当前实体的 不是父节点的
+                }
+            }
+
+        } else if (type == 2) { // 修改
+            if (selectedId == null) { // 未选中
+                layer.msg('请选择一行数据！', { time: 1000, icon: 0 });
+                return false;
+            }
+            //修改 初始化表单数据
+            var rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
+            setFromElements($('#dvDialog').find('[data-type=fmdata]'), rowData);
+            // 选中父节点
+            var treeObj = $.fn.zTree.getZTreeObj("ztCombo");
+            var nodes = treeObj.getNodesByFilter(function filter(node) {
+                return node.Id == rowData.ParentId;
+            });
+            if (nodes.length > 0) {
+                treeObj.selectNode(nodes[0]);
+                $("#txztCombo").val(nodes[0].Title);
+                $("#hdztCombo").val(nodes[0].Id);
+                $("#hdlvztCombo").val(nodes[0].Level + 1); // Level为当前实体的 不是父节点的
+            }
+        }
+
+        layer.open({
+            type: 1, title: ' ',
+            area: ['80%', '85%'],// '900px', '450px'
+            //shadeClose: true, //点击遮罩关闭 //content: '\<\div style="padding:20px;">自定义内容\<\/div>'
+            content: $('#dvDialog'),
+            success: function (layero, index) {
+            },
+            btn: ['确定', '取消']
+            , yes: function (index, layero) {
+                //确定 的回调
+
+                if (savedata() != 0) {
+                    layer.close(index); //需进行手工关闭
+                }
+            }
+            , cancel: function (index) {
+                clearFormElements('#fmdata')// 清空表单
+            }
+            , btn2: function (index, layero) {
+                clearFormElements('#fmdata')// 清空表单
+            }
+
+        });
+        //$('#dvDialog').attr('class', 'show');
+
+    }
+
+    // 获取单行数据
+    function getSelRow() {
+        var selectedId = $("#jqGrid").jqGrid("getGridParam", "selrow");
+        // $("#jqGrid").jqGrid("getGridParam", "selarrrow") // 多行选中数据
+        if (selectedId == null) { // 未选中
+            layer.msg('请选择一行数据！', { time: 1000, icon: 0 });
+            return null;
+        }
+        //修改 初始化表单数据
+        var rowData = $("#jqGrid").data("fulldata")[selectedId - 1];
+        return rowData;
+    }
+
+
+</script>
+
+    
+
+    }
+
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox">
+            <div class="ibox-content">
+                <div>
+                    <form id="fmcondition">
+
+
+                        <div class="row">
+                            <div class="col-xs-6 col-md-3">
+                                <input type="text" name="serh" class="form-control" placeholder="名称 / 备注">
+                            </div>
+                            <div class="col-xs-6 col-md-3">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <label for="txztCombos" class="btn btn-lable">父节点</label>
+                                    </span>
+                                    <input id="txztCombos"   type="text"onclick="showMenu('ztCombos'); return false;" class="form-control" placeholder="请选择" readonly />
+                                    <input id="hdztCombos" type="hidden" name="Id" value="-1" />
+                                    <input id="hdlvztCombos" type="hidden" name="Level" value="-1" />
+                                    <div  id="dvztCombos" class="menuContent" style="display:none; position: absolute;z-index:999;">
+                                        <ul id="ztCombos" class="ztree" style="margin-top:34px; "></ul>
+                                    </div> 
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 input-daterange" id="data_gctime">
+                                <div class="input-group">
+
+                                    <input type="text" name="DateStart" class="form-control" placeholder="开始时间" readonly="readonly">
+                                    <span class="input-group-btn">
+                                        <label for="GmgCreateTimeEnd" class="btn btn-lable">至</label>
+                                    </span>
+                                    <input type="text" name="DateEnd" class="form-control" placeholder="结束时间" readonly="readonly">
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+
+                    </form>
+                    <form class="form-inline"></form>
+                    <div class="clearfix"></div>
+                </div>  <!-- 搜索条件 -->
+
+            </div>
+            <div class="ibox-title ibox-title-bottom">
+
+                <div class="row ">
+
+                    <div class="col-xs-7 col-md-3">
+                        <div class="input-group">
+                            <input id="txtCkContent" type="password" name="url" placeholder="输入想不起来的密文" class="input-sm form-control">
+                            <span class="input-group-btn">
+                                <button class="btn-sm btn btn-info btn-gp" onclick="checkContent()">验证 <i class="fa fa-spin fa-circle-o-notch"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-xs-5 col-md-2">
+                        <a class="btn btn-info" onclick="searchclear()">
+                            <i class="fa fa-remove"> 清空</i>
+                        </a>
+                        <a class="btn btn-info" onclick="searchdata()">
+                            <i class="fa fa-search"> 查询</i>
+                        </a>
+                    </div>
+                    <div class="clearfix visible-xs"></div>
+                    <div class="col-xs-10 col-md-5">
+                        <div class="form-group">
+                            <a class="btn btn-info" onclick="editdata(1)">
+                                <i class="fa fa-plus"> 添加</i>
+                            </a>
+                            <a class="btn btn-info" onclick="editdata(2)">
+                                <i class="fa fa-edit"> 修改</i>
+                            </a>
+                            <a class="btn btn-info" onclick="deletedata()">
+                                <i class="fa fa-trash"> 删除</i>
+                            </a>
+                            <a class="btn btn-info" onclick="approveone(1)">
+                                <i class="fa fa-check-square-o"> 审核通过</i>
+                            </a>
+
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2 col-md-2 ">
+                        <div class="ibox-tools ">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+                @*<div class="pull-left">
+                        <div class="">
+                        </div>
+                    </div>*@
+
+            </div>
+        </div>
+    </div>
+</div> <!-- 搜索条件 -->
+
+<div style="padding:10px;background-color:white">
+    <table id="jqGrid"></table>
+    <div id="jqGridPager"></div>
+</div>  <!-- 数据表 -->
+
+
+<div id="dvDialog" style="display: none;">
+    <form id="fmdata" data-type="fmdata" style="padding: 0 20px; ">
+
+        <div class="hr-line-dashed"></div>
+        <div class="row">
+            <div class="col-sm-6 ">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <label class="btn btn-lable" for="txtName"> 名&nbsp;&nbsp;&nbsp;&nbsp;称 </label>
+                    </span>
+                    <input type="text" class="form-control" id="txtTitle" name="Title">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <label for="txztCombo" class="btn btn-lable">父节点</label>
+                    </span>
+                    <input id="txztCombo" type="text" onclick="showMenu('ztCombo'); return false;" class="form-control" placeholder="请选择" readonly />
+                    <input id="hdztCombo" type="hidden" name="ParentId" value="-1" />
+                    <input id="hdlvztCombo" type="hidden" name="Level" value="-1" />
+                    <div id="dvztCombo" class="menuContent" style="display:none; position: absolute;z-index:999;">
+                        <ul id="ztCombo" class="ztree" style="margin-top:34px; "></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <label class="btn btn-lable" for="txtimg">图标</label>
+                    </span>
+                    <input type="text" class="form-control" id="txtimg" name="img">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <label class="btn btn-lable" for="txthref">地址</label>
+                    </span>
+                    <input type="text" class="form-control" id="txthref" name="href" placeholder="不填默认值为#">
+                </div>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>  
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <label class="btn btn-lable" for="slTarget">打开方式</label>
+                    </span>
+                    <select id="slTarget" class="form-control" name="Target">
+                        <option value="1">菜单无链接</option>
+                        <option value="0">_parent当前页打开</option>
+                        @*<option value="2">_blank新标签打开</option>*@
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <label class="btn btn-lable" for="txtseq">排序(1开始)</label>
+                    </span>
+                    <input type="text" class="form-control" id="txtseq" name="seq" placeholder="不填自动计算">
+                </div>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>   
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="input-group">
+                    <span class="input-group-btn full-height">
+                        <label class="btn btn-lable full-height" for="txTitleTag">名称<br/>标记</label></span>
+                    <textarea rows="2" class="form-control" id="txTitleTag" name="TitleTag"></textarea>
+                </div>
+            </div>
+        </div> 
+        <div class="hr-line-dashed"></div>  
+
+
+
+        <input type="hidden" name="Id" id="hiddataid" />
+    </form>
+</div>  <!-- 编辑窗 -->

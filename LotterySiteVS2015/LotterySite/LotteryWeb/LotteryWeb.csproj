@@ -151,6 +151,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SetupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocController.cs" />
     <Compile Include="Controllers\LockController.cs" />
@@ -1172,6 +1173,7 @@
     <Content Include="Areas\Admin\Views\Home\Lock.cshtml" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Skin.cshtml" />
+    <Content Include="Areas\Admin\Views\Setup\Menu.cshtml" />
     <None Include="db\cater.db" />
     <None Include="Properties\PublishProfiles\test.pubxml" />
     <Content Include="Views\Home\Hua.cshtml" />

@@ -17,27 +17,41 @@ namespace LotteryWeb.Areas.Admin.Controllers
 
         public ActionResult Index()
         {
-            //string skininfoarr = System.IO.File.ReadAllText(Request.MapPath("/Content/skininfo.js")).Replace("var skininfoarr = ", "");
-            //List<skinfo> list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<skinfo>>(skininfoarr);
+            // 查询菜单 待绑定角色用户查询
+            var data = LockSqlite<Menu>.Selec().Column().From().Where(p => p.IsDel != 1 && p.Level != -1).Order(p => new { p.Level, p.seq }).ExecuteQuery<Menu>().ToList<Menu>();
 
+            //var idField = "Id";
+            int i, l;
+            var treeData = new List<Menu>();
+            var tmpMap = new Dictionary<int, Menu>();
+            for (i = 0, l = data.Count(); i < l; i++)
+            {
+                tmpMap[data[i].Id] = data[i];
+            }
+            for (i = 0, l = data.Count(); i < l; i++)
+            {
+                if (tmpMap.ContainsKey(data[i].ParentId) && data[i].Id != data[i].ParentId)
+                {
+                    if (tmpMap[data[i].ParentId].Children == null)
+                        tmpMap[data[i].ParentId].Children = new List<Menu>();
+                    tmpMap[data[i].ParentId].Children.Add(data[i]);
+                }
+                else
+                {
+                    treeData.Add(data[i]);
+                }
+            }
 
-            //var first = LockSqlite<Users, Skin>.Selec().Column((a, b) => new { Value = b.Value,img = a.img }).FromJoin(JoinType.Inner, (a, b) => a.SkinId == b.Id).Where( (a,b) => a.Id ==1 && a.UserName == "cc").ExecuteQuery<Users>().FirstOrDefault();
-
-            //ViewData.Model = first;
-
-            //var first = LockSqlite<Skin>.Selec().Column().From().Where(p => p.IsDel != 1 && p.IsEnabled == 1 && p.Type == "bg").ExecuteQuery<Skin>().FirstOrDefault();
-
-            //if (first == null)
-            //    ViewBag.url = "/Content/folio/images/header-image/jike_1_pic.gif";
-            //else 
-            //    ViewBag.url = first.Value;
-
-            var query = LockSqlite<Users,Roles,Skin>.Selec()
-                .Column((a,b,c) => new { x = SM.Sql("a.*"), rolename =  b.Name, bgurl = c.Value})
-                .FromJoin(JoinType.Inner, (a,b,c) => a.RolesId == b.Id, JoinType.Inner, (a,b,c)=> a.SkinId == c.Id)
-                .Where((p, b, c) => p.UserName == "cc" && p.Id == 1);
-            Tuple<StringBuilder, DynamicParameters>  rawsql = query.RawSqlParams();
+            // 查询用户
+            var query = LockSqlite<Users, Roles, Skin>.Selec()
+                        .Column((a, b, c) => new { x = SM.Sql("a.*"), rolename = b.Name, bgurl = c.Value })
+                        .FromJoin(JoinType.Inner, (a, b, c) => a.RolesId == b.Id, JoinType.Inner, (a, b, c) => a.SkinId == c.Id)
+                        .Where((p, b, c) => p.UserName == "cc" && p.Id == 1);
+            Tuple<StringBuilder, DynamicParameters> rawsql = query.RawSqlParams();
             var user = query.ExecuteQuery<Users>().FirstOrDefault();
+
+            user.Menus = treeData;
+
             ViewData.Model = user;
             return View();
         }
@@ -54,7 +68,7 @@ namespace LotteryWeb.Areas.Admin.Controllers
 
         public ActionResult Skin()
         {
-            
+
             int UserId = 1;
             var user = LockSqlite<Users>.Selec().Column().From().Where(p => p.Id == UserId).ExecuteQuery<Users>().FirstOrDefault();
             ViewBag.img = user.img;
@@ -65,9 +79,10 @@ namespace LotteryWeb.Areas.Admin.Controllers
         {
             int UserId = 1;
             var where = PredicateBuilder.WhereStart<Skin>();
-            where = where.And( p => p.IsDel != 1 && p.UserId == UserId);
-            if (!string.IsNullOrEmpty(type)) {
-                where = where.And( p => p.Type == type);
+            where = where.And(p => p.IsDel != 1 && p.UserId == UserId);
+            if (!string.IsNullOrEmpty(type))
+            {
+                where = where.And(p => p.Type == type);
             }
             var list = LockSqlite<Skin>.Selec().Column().From().Where(where).ExecuteQuery<Skin>();
 
@@ -87,7 +102,7 @@ namespace LotteryWeb.Areas.Admin.Controllers
         //list.Add(new skinfo() { name = name, url = url, datetime = datetime });
         //System.IO.File.WriteAllText(Request.MapPath("/Content/skininfo.js"), "var skininfoarr = " + Newtonsoft.Json.JsonConvert.SerializeObject(list));
 
-        public ActionResult AddSkin(string name, string url,string type,string thm)
+        public ActionResult AddSkin(string name, string url, string type, string thm)
         {
             var datetime = DateTime.Now.ToString("yy/MM/dd HH:mmss");
             int UserId = 1;
@@ -102,7 +117,7 @@ namespace LotteryWeb.Areas.Admin.Controllers
             //int efrows = insert.ExecuteInsert();
 
             // 2>
-            var additem = new Skin(true) { Name = name, Value = url, InsertDate = datetime, Type = type, Remake = type, UserId = UserId, Value2 = thm};
+            var additem = new Skin(true) { Name = name, Value = url, InsertDate = datetime, Type = type, Remake = type, UserId = UserId, Value2 = thm };
             //
             try
             {
@@ -133,8 +148,9 @@ namespace LotteryWeb.Areas.Admin.Controllers
                 int UserIds = 1;
                 //int Id = int.Parse( Request.Form["Id"]);
                 int Id_ = Id;
-                bool isSuccess = DapperFuncs.New.Update<Skin>(s => {
-                    s._IsWriteFiled = true; s.IsDel = 1;
+                bool isSuccess = DapperFuncs.New.Update<Skin>(s =>
+                {
+                    s.SetWriteFiled(); s.IsDel = 1;
                 }, w => w.Id == Id_ && w.UserId == UserIds);
 
                 return Content(isSuccess ? "1" : "0");
@@ -161,8 +177,9 @@ namespace LotteryWeb.Areas.Admin.Controllers
             //
             try
             {
-                bool isSuccess = DapperFuncs.New.Update<Users>(s => {
-                    s._IsWriteFiled = true; s.SkinId = Id;
+                bool isSuccess = DapperFuncs.New.Update<Users>(s =>
+                {
+                    s.SetWriteFiled(); s.SkinId = Id;
                 }, w => w.Id == 1 && w.UserName == "cc");
 
                 return Content(isSuccess ? "1" : "0");
@@ -177,8 +194,9 @@ namespace LotteryWeb.Areas.Admin.Controllers
         {
             try
             {
-                bool isSuccess = DapperFuncs.New.Update<Users>(s => {
-                    s._IsWriteFiled = true; s.img = img;
+                bool isSuccess = DapperFuncs.New.Update<Users>(s =>
+                {
+                    s.SetWriteFiled(); s.img = img;
                 }, w => w.Id == 1 && w.UserName == "cc");
                 return Content(isSuccess ? "1" : "0");
             }
@@ -190,7 +208,7 @@ namespace LotteryWeb.Areas.Admin.Controllers
 
 
         #endregion
-         
+
 
     }
 

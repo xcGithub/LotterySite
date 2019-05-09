@@ -18,5 +18,10 @@ namespace FW.Model
         public virtual string RoleName { get; set; }
         [Write(false)]
         public virtual string bgurl { get; set; }
+
+
+        [Write(false)]
+        public virtual List<Menu> Menus { get; set; }
+
     }
 }

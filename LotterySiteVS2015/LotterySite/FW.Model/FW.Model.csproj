@@ -62,6 +62,7 @@
     <Compile Include="LockPers.cs" />
     <Compile Include="LOLkengbi.cs" />
     <Compile Include="LuckDraw.cs" />
+    <Compile Include="Menu.cs" />
     <Compile Include="ModelPartial\LockPers.cs">
       <DependentUpon>SQLiteModel.tt</DependentUpon>
     </Compile>

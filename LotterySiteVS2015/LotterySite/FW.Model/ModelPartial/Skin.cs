@@ -16,10 +16,12 @@ namespace FW.Model
 
 	    
         #region 待写入字段集合 可抽象出来
-		public bool _IsWriteFiled = true; // 默认记录赋值过的字段
+		private bool _IsWriteFiled = true; // 默认记录赋值过的字段
         [WriteFiled]
-        public System.Collections.Generic.List<System.Reflection.PropertyInfo> _WriteFiled 
+        public System.Collections.Generic.List<System.Reflection.PropertyInfo> _wf 
 						= new System.Collections.Generic.List<System.Reflection.PropertyInfo>();
+						
+        public void SetWriteFiled(bool ib = true) => this._IsWriteFiled = ib;
 		#endregion
 		 
         public Skin() {
@@ -58,52 +60,52 @@ namespace FW.Model
 		[Key]
 		public virtual int Id { 
 			set { _Id = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Id) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Id) ); }
 			get { return _Id; }
 		}
 		public virtual string Name { 
 			set { _Name = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Name) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Name) ); }
 			get { return _Name; }
 		}
 		public virtual string Value { 
 			set { _Value = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Value) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Value) ); }
 			get { return _Value; }
 		}
 		public virtual string Type { 
 			set { _Type = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Type) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Type) ); }
 			get { return _Type; }
 		}
 		public virtual int IsDel { 
 			set { _IsDel = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_IsDel) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_IsDel) ); }
 			get { return _IsDel; }
 		}
 		public virtual string Remake { 
 			set { _Remake = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Remake) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Remake) ); }
 			get { return _Remake; }
 		}
 		public virtual int UserId { 
 			set { _UserId = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_UserId) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_UserId) ); }
 			get { return _UserId; }
 		}
 		public virtual string InsertDate { 
 			set { _InsertDate = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_InsertDate) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_InsertDate) ); }
 			get { return _InsertDate; }
 		}
 		public virtual int Seq { 
 			set { _Seq = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Seq) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Seq) ); }
 			get { return _Seq; }
 		}
 		public virtual string Value2 { 
 			set { _Value2 = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Value2) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Value2) ); }
 			get { return _Value2; }
 		}
 

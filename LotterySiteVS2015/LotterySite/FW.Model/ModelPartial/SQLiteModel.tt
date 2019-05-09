@@ -65,10 +65,12 @@ foreach(Table tbl in from t in tables where !t.Ignore select t){
 
 	    
         #region 待写入字段集合 可抽象出来
-		public bool _IsWriteFiled = true; // 默认记录赋值过的字段
+		private bool _IsWriteFiled = true; // 默认记录赋值过的字段
         [WriteFiled]
-        public System.Collections.Generic.List<System.Reflection.PropertyInfo> _WriteFiled 
+        public System.Collections.Generic.List<System.Reflection.PropertyInfo> _wf 
 						= new System.Collections.Generic.List<System.Reflection.PropertyInfo>();
+						
+        public void SetWriteFiled(bool ib = true) => this._IsWriteFiled = ib;
 		#endregion
 		 
         public <#=tbl.ClassName#>() {
@@ -98,7 +100,7 @@ foreach(Table tbl in from t in tables where !t.Ignore select t){
 <#}#>
 		public virtual <#=col.PropertyType #><#=CheckNullable(col)#> <#=col.PropertyName #> { 
 			set { _<#=col.PropertyName #> = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_<#=col.PropertyName #>) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_<#=col.PropertyName #>) ); }
 			get { return _<#=col.PropertyName #>; }
 		}
 <#}#>

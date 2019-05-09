@@ -16,10 +16,12 @@ namespace FW.Model
 
 	    
         #region 待写入字段集合 可抽象出来
-		public bool _IsWriteFiled = true; // 默认记录赋值过的字段
+		private bool _IsWriteFiled = true; // 默认记录赋值过的字段
         [WriteFiled]
-        public System.Collections.Generic.List<System.Reflection.PropertyInfo> _WriteFiled 
+        public System.Collections.Generic.List<System.Reflection.PropertyInfo> _wf 
 						= new System.Collections.Generic.List<System.Reflection.PropertyInfo>();
+						
+        public void SetWriteFiled(bool ib = true) => this._IsWriteFiled = ib;
 		#endregion
 		 
         public LockPers() {
@@ -59,57 +61,57 @@ namespace FW.Model
 
 		public virtual string Name { 
 			set { _Name = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Name) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Name) ); }
 			get { return _Name; }
 		}
 		public virtual string Content { 
 			set { _Content = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Content) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Content) ); }
 			get { return _Content; }
 		}
 		public virtual string Prompt { 
 			set { _Prompt = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Prompt) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Prompt) ); }
 			get { return _Prompt; }
 		}
 		public virtual string Id { 
 			set { _Id = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Id) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Id) ); }
 			get { return _Id; }
 		}
 		public virtual DateTime? InsertTime { 
 			set { _InsertTime = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_InsertTime) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_InsertTime) ); }
 			get { return _InsertTime; }
 		}
 		public virtual bool IsDel { 
 			set { _IsDel = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_IsDel) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_IsDel) ); }
 			get { return _IsDel; }
 		}
 		public virtual DateTime? DelTime { 
 			set { _DelTime = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_DelTime) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_DelTime) ); }
 			get { return _DelTime; }
 		}
 		public virtual DateTime? UpdateTime { 
 			set { _UpdateTime = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_UpdateTime) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_UpdateTime) ); }
 			get { return _UpdateTime; }
 		}
 		public virtual int EditCount { 
 			set { _EditCount = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_EditCount) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_EditCount) ); }
 			get { return _EditCount; }
 		}
 		public virtual int CheckCount { 
 			set { _CheckCount = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_CheckCount) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_CheckCount) ); }
 			get { return _CheckCount; }
 		}
 		public virtual int UserId { 
 			set { _UserId = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_UserId) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_UserId) ); }
 			get { return _UserId; }
 		}
 

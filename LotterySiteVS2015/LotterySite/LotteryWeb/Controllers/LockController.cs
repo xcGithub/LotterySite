@@ -50,7 +50,7 @@ namespace LotteryWeb.Controllers
             //var content = LockSQLitehelper.ExecuteScalar(sql, new SQLiteParameter("@Id", DbType.String) { Value = p.Id }) + "";
 
             // 更新 核验次数
-            oldlp._IsWriteFiled = true;
+            oldlp.SetWriteFiled();
             oldlp.CheckCount = oldlp.CheckCount + 1;
             var content = oldlp.Content;
             var encstr = LockEncrypt.StringToMD5(p.Content);
@@ -100,7 +100,7 @@ namespace LotteryWeb.Controllers
                 var edit = query.ExecuteQuery<LockPers>().FirstOrDefault();
                 if (edit.Content != LockEncrypt.StringToMD5(p.ContentOld))  return Content("-1");  // 旧内容不一致
 
-                edit._IsWriteFiled = true; // 标记开始记录赋值字段 注意上面查询LockPers 要再默认构造函数里把 标识改为false 查出的数据不要记录赋值字段 
+                edit.SetWriteFiled(); // 标记开始记录赋值字段 注意上面查询LockPers 要再默认构造函数里把 标识改为false 查出的数据不要记录赋值字段 
                 edit.Name = p.Name;
                 edit.Content = LockEncrypt.StringToMD5(p.Content);
                 edit.Prompt = p.Prompt;
@@ -123,7 +123,7 @@ namespace LotteryWeb.Controllers
 
             var t = DapperFuncs.New .Update<LockPers>(
                 del => {
-                    del._IsWriteFiled = true; // 开启标记字段
+                    del.SetWriteFiled(); // 开启标记字段
                     del.IsDel = true;
                     del.DelTime = DateTime.Now;
                 }, w => w.Id == Id ); //LockDapperUtil<LockPers>.New.Update(old);

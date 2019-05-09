@@ -1177,7 +1177,8 @@ $.fn.jqGrid = function( pin ) {
 			pin.data = [];
 		}
 
-		var p = $.extend(true,{
+		var p = $.extend(true, {
+		    loadFilter: null, // ajax加载数据后二次过滤
 			url: "",
 			height: 150,
 			page: 1,
@@ -2566,7 +2567,10 @@ $.fn.jqGrid = function( pin ) {
 						type:ts.p.mtype,
 						dataType: dt ,
 						data: $.isFunction(ts.p.serializeGridData)? ts.p.serializeGridData.call(ts,ts.p.postData) : ts.p.postData,
-						success:function(data,st, xhr) {
+						success: function (data, st, xhr) {
+						    if ($.isFunction(ts.p.loadFilter)) { // ajax加载数据后二次过滤
+						        data = ts.p.loadFilter.call(ts,data);
+						    }
 							if ($.isFunction(ts.p.beforeProcessing)) {
 								if (ts.p.beforeProcessing.call(ts, data, st, xhr) === false) {
 									endReq();

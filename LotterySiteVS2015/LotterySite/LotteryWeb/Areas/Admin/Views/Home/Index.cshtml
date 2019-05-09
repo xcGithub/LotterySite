@@ -71,7 +71,48 @@
                         </div>
                     </li>
 
-                    <li class="">
+                    @foreach (var menulv1 in Model.Menus)
+                    { //一级菜单
+                        <li class="">
+                            <a class='@menulv1.TargetMenuClass' href="@menulv1.href">
+
+                                <i class="@menulv1.img"></i>
+                                <span class="nav-label ">@menulv1.Title</span>
+                                @Html.Raw(menulv1.TitleTag)
+                            </a>
+                            @if (menulv1.Children != null)
+                            { // 二级菜单验证
+                                <ul class="nav nav-second-level">
+                                    @foreach (var menulv2 in menulv1.Children)
+                                    { //二级级菜单
+                                        <li>
+                                            <a class="@menulv2.TargetMenuClass" href="@menulv2.href"><i class="@menulv2.img"></i>@menulv2.Title
+                                                @Html.Raw(menulv2.TitleTag)</a>
+                                            
+
+                                            @if (menulv2.Children != null)
+                                            { // 验证三级菜单
+
+                                            <ul class="nav nav-second-level">
+                                                @foreach (var menulv3 in menulv2.Children)
+                                                {
+                                                    <li>
+                                                        <a class="J_menuItem" href="@menulv3.href"><i class="@menulv3.img"></i>@menulv3.Title</a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                            }
+
+                                        </li>
+                                    }
+                                </ul>
+                            }
+
+                        </li>
+                    }
+
+                    
+                    @*<li class="">
                         <a href="#">
 
                             <i class="fa fa-home"></i>
@@ -95,6 +136,17 @@
                         <ul class="nav nav-second-level">
                             <li>
                                 <a class="J_menuItem" href="https://www.qhftdx.cn/origin/template/hplus/mailbox.html?v=4.0">收件箱</a>
+
+                                <ul class="nav nav-second-level">
+
+                                    <li>
+                                        <a class="J_menuItem" href="https://www.qhftdx.cn/origin/template/hplus/mail_detail.html">查看邮件</a>
+                                    </li>
+                                    <li>
+                                        <a class="J_menuItem" href="https://www.qhftdx.cn/origin/template/hplus/mail_compose.html">写信</a>
+                                    </li>
+                                </ul>
+
                             </li>
                             <li>
                                 <a class="J_menuItem" href="https://www.qhftdx.cn/origin/template/hplus/mail_detail.html">查看邮件</a>
@@ -114,8 +166,8 @@
                         <a class="J_menuItem" href="https://www.qhftdx.cn/origin/template/hplus/fontawesome.html"><i class="fa fa-columns"></i><span class="nav-label">工具</span></a>
                     </li>
                     <li>
-                        <a class="J_menuItem" href="/Content/folio/images/header-image/jike_1_pic.gif"><i class="fa fa-columns"></i><span class="nav-label">日志</span></a>
-                    </li>
+                        <a class="J_menuItem" href="@Url.Action("Menu", "Setup", new { area = "admin"})"><i class="fa fa-columns"></i><span class="nav-label">设置</span></a>
+                    </li>*@
 
                 </ul>
             </div>
@@ -124,7 +176,7 @@
         <!--右侧部分开始-->
         <div id="page-wrapper" class="transparent-bg dashbard-1">
             <div id="small-mune">
-                <span class="badge badge-warning pull-right">5</span>
+                @*<span class="badge badge-warning pull-right">5</span>*@
                 <a class="right-sidebar-toggle open-small-mune">
                     <i class="fa fa-bars"></i>
                 </a>

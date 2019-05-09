@@ -15,22 +15,29 @@ sqlite 库
       同一个字段多次赋值会添加多次到 _WriteFiled = Count = 12
 > 11. 删除点否 收回当前行 
 
-> 12. ExecuteScalar(sql,entity) 有bug 不需要传入sql,entity参数的
+> 12.x ExecuteScalar(sql,entity) 有bug 不需要传入sql,entity参数的
     var first = LockSqlite<Users, Skin>.Selec().Column((a, b) => new { Value = b.Value }).FromJoin(JoinType.Inner, (a, b) => a.SkinId == b.Id).Where( (a,b) => a.Id ==1 && a.UserName == "cc").ExecuteScalar(sql,entity)
-  13. LockSqlite<Skin>.Cud.Inser(additem,true);   bug  
+  13.x LockSqlite<Skin>.Cud.Inser(additem,true);   bug  
       未实现该方法=操作  SQLiteAdapter.Insert
 
-  14. 未将对象引用到新实列
+  14.x 未将对象引用到新实列
        int UserIds = 1;
                 bool isSuccess = LockSqlite<Skin>.Cud.Update(s => {
                     s._IsWriteFiled = true; s.IsDel = 1;  },  w => w.Id == Id && w.UserId == UserIds);
 					DapperSqlMaker.DapperExt.AnalysisExpression.GetMemberValue(System.Linq.Expressions.MemberExpression, System.String)
 
-  15. Users Roles Skin 表 IsDel改为int类型
 
- 
- 16. 改为返回影响行数 bool isSuccess = DapperFuncs.New.Update<Skin>(s => {
+ 15.  Users Roles Skin 表 IsDel改为int类型
+ 16.  改为返回影响行数 bool isSuccess = DapperFuncs.New.Update<Skin>(s => {
                     s._IsWriteFiled = true; s.IsDel = 1;
                 }
  17. 字体映射配置 .woff	application/x-font-woff	删除
                   .woff2	application/x-font-woff
+
+ 18. _WriteFiled改为私有字段 插入时读取不到
+ 
+       efrows = DapperFuncs.New.Insert<SynNote>(additem);
+		private bool _IsWriteFiled = true; // 默认记录赋值过的字段
+        [WriteFiled]
+        private System.Collections.Generic.List<System.Reflection.PropertyInfo> _WriteFiled 
+						= new System.Collections.Generic.List<System.Reflection.PropertyInfo>();

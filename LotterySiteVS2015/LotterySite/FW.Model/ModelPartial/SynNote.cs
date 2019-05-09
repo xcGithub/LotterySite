@@ -16,10 +16,12 @@ namespace FW.Model
 
 	    
         #region 待写入字段集合 可抽象出来
-		public bool _IsWriteFiled = true; // 默认记录赋值过的字段
+		private bool _IsWriteFiled = true; // 默认记录赋值过的字段
         [WriteFiled]
-        public System.Collections.Generic.List<System.Reflection.PropertyInfo> _WriteFiled 
+        public System.Collections.Generic.List<System.Reflection.PropertyInfo> _wf 
 						= new System.Collections.Generic.List<System.Reflection.PropertyInfo>();
+						
+        public void SetWriteFiled(bool ib = true) => this._IsWriteFiled = ib;
 		#endregion
 		 
         public SynNote() {
@@ -50,32 +52,32 @@ namespace FW.Model
 		[Key]
 		public virtual int Id { 
 			set { _Id = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Id) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Id) ); }
 			get { return _Id; }
 		}
 		public virtual string Content { 
 			set { _Content = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Content) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Content) ); }
 			get { return _Content; }
 		}
 		public virtual string NoteDate { 
 			set { _NoteDate = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_NoteDate) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_NoteDate) ); }
 			get { return _NoteDate; }
 		}
 		public virtual string Name { 
 			set { _Name = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Name) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Name) ); }
 			get { return _Name; }
 		}
 		public virtual int UserId { 
 			set { _UserId = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_UserId) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_UserId) ); }
 			get { return _UserId; }
 		}
 		public virtual int IsDel { 
 			set { _IsDel = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_IsDel) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_IsDel) ); }
 			get { return _IsDel; }
 		}
 
@@ -127,10 +129,6 @@ namespace FW.Model
 		}
 
 	}
-
-
-
-
 
 
 } // namespace

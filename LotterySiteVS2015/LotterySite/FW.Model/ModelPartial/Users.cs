@@ -16,10 +16,12 @@ namespace FW.Model
 
 	    
         #region 待写入字段集合 可抽象出来
-		public bool _IsWriteFiled = true; // 默认记录赋值过的字段
+		private bool _IsWriteFiled = true; // 默认记录赋值过的字段
         [WriteFiled]
-        public System.Collections.Generic.List<System.Reflection.PropertyInfo> _WriteFiled 
+        public System.Collections.Generic.List<System.Reflection.PropertyInfo> _wf 
 						= new System.Collections.Generic.List<System.Reflection.PropertyInfo>();
+						
+        public void SetWriteFiled(bool ib = true) => this._IsWriteFiled = ib;
 		#endregion
 		 
         public Users() {
@@ -56,47 +58,47 @@ namespace FW.Model
 		[Key]
 		public virtual int Id { 
 			set { _Id = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Id) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Id) ); }
 			get { return _Id; }
 		}
 		public virtual string UserName { 
 			set { _UserName = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_UserName) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_UserName) ); }
 			get { return _UserName; }
 		}
 		public virtual string Password { 
 			set { _Password = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Password) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Password) ); }
 			get { return _Password; }
 		}
 		public virtual DateTime CreateTime { 
 			set { _CreateTime = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_CreateTime) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_CreateTime) ); }
 			get { return _CreateTime; }
 		}
 		public virtual string Remark { 
 			set { _Remark = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_Remark) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_Remark) ); }
 			get { return _Remark; }
 		}
 		public virtual bool IsDel { 
 			set { _IsDel = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_IsDel) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_IsDel) ); }
 			get { return _IsDel; }
 		}
 		public virtual string img { 
 			set { _img = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_img) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_img) ); }
 			get { return _img; }
 		}
 		public virtual int RolesId { 
 			set { _RolesId = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_RolesId) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_RolesId) ); }
 			get { return _RolesId; }
 		}
 		public virtual int SkinId { 
 			set { _SkinId = value; 
-					if(_IsWriteFiled) _WriteFiled.Add(this.GetType().GetProperty(Field_SkinId) ); }
+					if(_IsWriteFiled) _wf.Add(this.GetType().GetProperty(Field_SkinId) ); }
 			get { return _SkinId; }
 		}
 

@@ -27,6 +27,7 @@ namespace LotteryWeb.Controllers
             var list = LockSqlite<SynNote>.Selec().Column(p => new { p.Id,p.Name,p.Content, x = SM.Sql("substr(notedate,0,17) as NoteDate") }).From().Where(where).Order(p=> new {p.NoteDate },true).ExecuteQuery<SynNote>();
             return Content(Newtonsoft.Json.JsonConvert.SerializeObject(list));
         }
+        [ValidateInput(false)]
         public ActionResult AddNote(string name,string content,int id) {
             var datetime = DateTime.Now.ToString("yy-MM-dd HH:mm");
             int UserId = 1;
@@ -58,7 +59,7 @@ namespace LotteryWeb.Controllers
                 //int Id = int.Parse( Request.Form["Id"]);
                 int Id_ = id;
                 bool isSuccess = DapperFuncs.New.Update<SynNote>(s => {
-                    s._IsWriteFiled = true; s.IsDel = 1;
+                    s.SetWriteFiled(); s.IsDel = 1;
                 }, w => w.Id == Id_ && w.UserId == UserIds);
 
                 return Content(isSuccess ? "1" : "0");
