@@ -1066,7 +1066,6 @@
     <Content Include="Content\zTree_v3-master\js\jquery.ztree.exedit.min.js" />
     <Content Include="Content\zTree_v3-master\js\jquery.ztree.exhide.js" />
     <Content Include="Content\zTree_v3-master\js\jquery.ztree.exhide.min.js" />
-    <Content Include="Content\zTree_v3-master\log v3.x.txt" />
     <Content Include="Global.asax" />
     <Content Include="Models\empty.txt" />
     <Content Include="PrizeQuota.xml" />
@@ -1163,11 +1162,8 @@
     <Content Include="Content\backstage\__MACOSX\js\plugins\suggest\._data.json" />
     <Content Include="Content\backstage\__MACOSX\js\plugins\webuploader\._.DS_Store" />
     <Content Include="Content\backstage\__MACOSX\js\plugins\webuploader\._README.md" />
-    <Content Include="Content\zTree_v3-master\.gitattributes" />
-    <Content Include="Content\zTree_v3-master\.gitignore" />
     <Content Include="Content\zTree_v3-master\css\awesomeStyle\awesome.less" />
     <Content Include="Content\zTree_v3-master\css\awesomeStyle\fa.less" />
-    <Content Include="Content\zTree_v3-master\README.md" />
     <Content Include="Content\zTree_v3-master\zTree.v3.jquery.json" />
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Lock.cshtml" />

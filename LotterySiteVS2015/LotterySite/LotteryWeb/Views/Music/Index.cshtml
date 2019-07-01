@@ -87,6 +87,17 @@
             </label>
         </div>
 
+        <div id="p-type" class="am-form-group am-text-center music-type">
+            <label class="am-radio-inline">
+                <input type="radio" name="page_type" value="hbgm" checked>
+                主页
+            </label>
+            <label class="am-radio-inline">
+                <input type="radio" name="page_type" value="pbgm">
+                相册
+            </label>
+        </div>
+
         <div class='mui-content-padded mui-table-view-cell mui-table' style="margin: 5px;">
             <div class="mui-input-row">
                 <textarea id="txtserh" class="mui-h6" rows="3" placeholder=""></textarea>
@@ -104,7 +115,9 @@
             <div class="mui-table-cell mui-col-xs-4 mui-text-right">
                 <button type="button" onclick="subsongjs()" data-songarr="" id="btnSub" class="mui-btn mui-btn-block mui-btn-danger">提交</button>
             </div>
+
         </div>
+
 
         <div class="mui-content-padded" style="margin: 5px;">
             <audio id="auto" src="http://fdfs.xmcdn.com/group43/M00/9C/09/wKgKjVsvLhizbsJeABlc7rqvwsU325.mp3" preload="auto"></audio>
@@ -154,11 +167,12 @@
             <a class="" href="#">
                 <div class="mui-table mui-slider-handle">
                     <div class="mui-table-cell mui-col-xs-9 selinfo" onclickx="selectinfo(this)">
-                        <h4 class="mui-ellipsis">{{:#index+1}}. {{:name}} </h4>
-
+                        <h4 class="mui-ellipsis">{{:Seq}}. {{:Name}} </h4>
+                        {{:Value2}}-{{:InsertDate}}
                     </div>
                     <div class="mui-table-cell mui-col-xs-3 mui-text-right">
-                        {{:type}}-{{:datetime}} <span class="mui-h4" onclick="deletebacksong(this)" data-name="{{:name}}" data-type="{{:type}}" data-url="{{:url}}" data-link=""> 💣 </span>
+                         <span class="mui-h4" onclick="deletebacksong(this)" data-name="{{:Name}}" data-id="{{:Id}}" data-type="{{:Value2}}" data-url="{{:Value}}" data-link=""> 💣 </span>
+                        <input type="text" value="{{:Seq}}" style="width:30px;margin:0;padding:0;border:0 solid red;" /><span class="mui-h4" data-id="{{:Id}}" data-seq="{{:Seq}}" onclick="editseqsong(this)">💨</span>
                     </div>
                 </div>
             </a>
@@ -200,7 +214,8 @@
             var txtimptvar = $('#txtserv').val();
             if (txtimptvar.length < 1) return;
             var mtype = $('input[name=music_type]:checked').val();
-            $.post('@Url.Action("search", "Music")', { name: txtimptvar, type: mtype }, function (r) {
+            var ptype = $('input[name=page_type]:checked').val();
+            $.post('@Url.Action("search", "Music")', { name: txtimptvar, type: mtype, page: ptype }, function (r) {
                 var lplisthtml = $("#tmpl_lkpers").render({ serh: r.data });
                 $('#tabbar-sco-ul').empty().append(lplisthtml);
 
@@ -209,7 +224,8 @@
         }
 
         function addbacksong(e) {
-            $.post('@Url.Action("set", "Music")', { name: $(e).data('name'), url: $(e).data('url'), type: $(e).data('type') }, function (r) {
+            var ptype = $('input[name=page_type]:checked').val();
+            $.post('@Url.Action("set", "Music")', { name: $(e).data('name'), url: $(e).data('url'), type: $(e).data('type'), page : ptype }, function (r) {
                 $('#txtserh').val(r.msg);
                 if (r == "1") mui.toast("设置成功")
             }, 'json');
@@ -225,21 +241,33 @@
 
         //}
 
+
         function setsongjs() {
-            $.getScript("/Content/songinfo.js?" + Math.random().toString().substr(10), function () {
-                var lplisthtml = $("#tmpl_songjs").render({ serh: songinfoarr });
+            var ptype = $('input[name=page_type]:checked').val();
+            //$.getScript("/Content/songinfo.js?" + Math.random().toString().substr(10), function () {
+
+            $.post('@Url.Action("Get", "Music")', { page: ptype }, function (r) {
+                var lplisthtml = $("#tmpl_songjs").render({ serh: r});  //songinfoarr
                 $('#tabbar-sco-ul').empty().append(lplisthtml);
                 $('#btnSub').data('songarr', '');
-            });
+            },'json');
         }
 
         function deletebacksong(e) {
-            $('#btnSub').data('songarr', $('#btnSub').data('songarr') + $(e).data('name') + $(e).data('type') + ",");
+            $('#btnSub').data('songarr', $('#btnSub').data('songarr') + $(e).data('id') + ",");
+            //$('#btnSub').data('songarr', $('#btnSub').data('songarr') + $(e).data('name') + $(e).data('type') + ",");
             $(e).parent().parent().parent().remove();
         }
-
+        function editseqsong(e) {
+            if ($(e).data('seq') == $(e).prev().val()) return false; 
+            var ptype = $('input[name=page_type]:checked').val();
+            $.post('@Url.Action("editseq", "Music")', { Id: $(e).data('id'), Seq: $(e).data('seq'), Seqn: $(e).prev().val(), page: ptype }, function (r) {
+                if (r == "1") { mui.toast("成功更新排序"); setsongjs(); }
+            }, 'json');
+        }
         function subsongjs() {
-            $.post('@Url.Action("sub", "Music")', { songarr: $('#btnSub').data('songarr') }, function (r) {
+            var ptype = $('input[name=page_type]:checked').val();
+            $.post('@Url.Action("sub", "Music")', { songarr: $('#btnSub').data('songarr'), page: ptype }, function (r) {
                 if (r == "1") mui.toast("成功移除")
             }, 'json');
 
