@@ -84,7 +84,8 @@ namespace LotteryWeb.Areas.Admin.Controllers
             {
                 where = where.And(p => p.Type == type);
             }
-            var list = LockSqlite<Skin>.Selec().Column().From().Where(where).ExecuteQuery<Skin>();
+            //var sql = LockSqlite<Skin>.Selec().Column().From().Where(where).Order(p => new { p.Seq }).RawSqlParams().Item1.ToString();
+            var list = LockSqlite<Skin>.Selec().Column().From().Where(where).Order(p => new { p.Seq }).ExecuteQuery<Skin>();
 
             //foreach (var item in list)
             //{
@@ -115,9 +116,11 @@ namespace LotteryWeb.Areas.Admin.Controllers
             //});
             //var sqlparms = insert.RawSqlParams();
             //int efrows = insert.ExecuteInsert();
+            //var sql = LockSqlite<Skin>.Selec().Column(p => new { x = " count(1) counts" }).From().Where(p => p.Type == type && p.IsDel == 0).RawSqlParams().Item1 + "";
+            var seq = LockSqlite<Skin>.Selec().Column(p => new { x = " count(1) counts" }).From().Where(p => p.Type == type && p.IsDel == 0).ExecuteScalar<int>();
 
             // 2>
-            var additem = new Skin(true) { Name = name, Value = url, InsertDate = datetime, Type = type, Remake = type, UserId = UserId, Value2 = thm };
+            var additem = new Skin(true) { Name = name, Value = url, InsertDate = datetime, Type = type, Remake = type, UserId = UserId, Value2 = thm, Seq = seq };
             //
             try
             {

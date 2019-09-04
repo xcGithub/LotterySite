@@ -29,6 +29,7 @@
                     <input type="hidden" data-id="{{:Id}}" data-name="{{:Name}}" data-datetime="{{:InsertDate}}" data-url="{{:Value}}"/> 
                     <button onclick="removeskin(this)" class="btn btn-white btn-sm"><i class="fa fa-remove"></i> 移除 </button>
                     <button onclick="setskin(this)" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> 设置 </button>
+                    <input type="text" value="{{:Seq}}" style="width:30px;margin:0;padding:0;border:0 solid red;" /><span class="" data-id="{{:Id}}" data-seq="{{:Seq}}" onclick="editseqsong(this)">💨</span>
                 </td>
             </tr>
 
@@ -37,12 +38,15 @@
 
     <script type="text/javascript">
         function getskinjs() {
-            $.getJSON("@Url.Action("getskin", "home", new { area = "admin" })", { type: $('#slbgtype').val() }, function (r) {
+            var data = getJsonObjectByForm("#fmbgser");
+            var ptype = data.type;  //$('#slbgtype').val()
+
+            $.getJSON("@Url.Action("getskin", "home", new { area = "admin" })", { type: ptype }, function (r) {
                 var lplisthtml = $("#tmpl_skinjs").render({ serh: r });
                 $('#dvbgset').empty().append(lplisthtml);
             });
-        } 
-         
+        }
+
 
         function addskin() {
             $('#btnaddskin').prop('disabled', true);
@@ -60,6 +64,7 @@
                 layer.msg('添加成功', { time: 1000, icon: 1 });
                 $('#btnaddskin').prop('disabled', false);
                 clearFormElements('#fmbgser')// 清空表单
+                $('#slbgtype').val(data.type); // 选中类别
             },'json');
 
         }
@@ -100,12 +105,23 @@
 
             })($hid)
         }
+        function editseqsong(e) {
+            if ($(e).data('seq') == $(e).prev().val()) return false;
+            var pdata = getJsonObjectByForm("#fmbgser");
+            var data =  { Id: $(e).data('id'), Seq: $(e).data('seq'), Seqn: $(e).prev().val(), page: pdata.type };
 
+
+            $.post('@Url.Action("editseq", "Music", new { area="" })', data, function (r) {
+                if (r == "1") {
+                    layer.msg('成功更新排序', { time: 1000, icon: 1 }); getskinjs();
+                }
+            }, 'json');
+        }
         function setuserimg() {
             $.post('@Url.Action("setuserimg", "home", new { area="admin" })'
                     , { img: $('#txtuserimg').val() }, function (r) {
                         if (r != "1") { layer.msg('设置失败', { time: 1000, icon: 0 }); return; }
-                         
+
                         window.parent.document.getElementById('imguser').src = $('#txtuserimg').val();
                         $('#imguser').prop('src', $('#txtuserimg').val())
                         layer.msg('设置成功', { time: 1000, icon: 1 });
@@ -173,9 +189,8 @@
                                     <div class="vertical-timeline-content ">
                                         <h2>背景 </h2>
                                         <div class="hr-line-dashed"></div>
-                                        <div class="row">
-
-                                            <span class="small">https://mini.site-shot.com/1024×768/200/png/?地址</span>
+                                        <div class="row"> 
+                                            <span class="small">http://mini.s-shot.ru/?地址 | https://mini.s-shot.ru/640x480/JPEG/640/Z100/?地址</span>
                                         <a class="btn btn-info" onclick="getskinjs()">
                                             <i class="fa fa-search"> 查询</i>
                                         </a></div>
@@ -191,8 +206,8 @@
                                                         <span class="input-group-btn">
                                                             <label for="slbgtype" class="btn btn-lable">类型</label>
                                                         </span>
-                                                        <select id="slbgtype" name="type" class="form-control" name="bgType"> 
-                                                            <option value="bg">后台背景</option>
+                                                        <select id="slbgtype" name="type" class="form-control" > 
+                                                            <option checked value="bg">后台背景</option>
                                                             <option value="fobg">主页轮播</option>
                                                         </select>
                                                     </div>
@@ -206,7 +221,7 @@
                                                             <label for="txthm" class="btn btn-lable">缩略图外链</label>
                                                         </span>
                                                         <input id="txthm" type="text" name="thm"
-                                                               placeholder="https://mini.site-shot.com/1024×768/200/png/?地址" class="form-control">
+                                                               placeholder="https://mini.s-shot.ru/640x480/JPEG/640/Z100/?地址" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">

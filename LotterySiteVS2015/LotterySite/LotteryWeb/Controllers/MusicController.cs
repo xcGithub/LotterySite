@@ -135,6 +135,9 @@ namespace LotteryWeb.Controllers
 
         }
 
+        /// <summary>
+        /// 更新 音乐 背景图片 后台图片 排序号
+        /// </summary>  
         public ActionResult editseq(int id, string page, int seq, int seqn) {
 
             var where = PredicateBuilder.WhereStart<Skin>();

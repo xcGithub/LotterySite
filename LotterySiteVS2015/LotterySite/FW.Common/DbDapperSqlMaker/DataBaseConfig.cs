@@ -32,8 +32,9 @@ namespace DapperSqlMaker
         #region SqlLite链接配置
 
         public static readonly string LockSqlLiteConnectionString =
-            "Data Source=" + System.AppDomain.CurrentDomain.BaseDirectory.Replace("\\", "/") + "db/Lock.db";
+           // "Data Source=" + System.AppDomain.CurrentDomain.BaseDirectory.Replace("\\", "/") + "db/Lock.db";
 
+        System.Configuration.ConfigurationManager.ConnectionStrings["LockSqlite"].ConnectionString;
         public static IDbConnection GetSqliteConnection(string sqliteConnectionString = null)
         {
             if (string.IsNullOrWhiteSpace(sqliteConnectionString))
