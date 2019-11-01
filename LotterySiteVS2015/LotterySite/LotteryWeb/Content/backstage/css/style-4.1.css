@@ -457,11 +457,11 @@ body.canvas-menu.mini-navbar #page-wrapper,
 body.canvas-menu.mini-navbar .footer {
     margin: 0 0 0 0;
 }
-
+/* #### 左侧 菜单 宽度 */
 body.fixed-sidebar .navbar-static-side,
 body.canvas-menu .navbar-static-side {
     position: fixed;
-    width: 220px;
+    width: 180px;
     z-index: 2001;
     height: 100%;
 }
