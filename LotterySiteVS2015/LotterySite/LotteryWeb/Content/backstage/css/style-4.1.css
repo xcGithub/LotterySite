@@ -3572,7 +3572,7 @@ video {
 #page-wrapper {
     padding: 0 15px;
     position: inherit;
-    margin: 0 0 0 220px;
+    margin: 0 0 0 180px;
 }
 
 .title-action {
@@ -5437,7 +5437,8 @@ dd.project-people {
 }
 
 .project-skin img {
-    height: 150px;
+    /*height: 150px;*/
+    width:225px;
 }
 
 .project-title a {
@@ -6997,7 +6998,7 @@ body.rtls {
 }
 
 body.rtls #page-wrapper {
-    margin: 0 220px 0 0;
+    margin: 0 180px 0 0;
 }
 
 body.rtls .nav-second-level li a {
@@ -7167,11 +7168,11 @@ body.rtls.mini-navbar.fixed-sidebar #page-wrapper {
 }
 
 body.rtls.body-small.fixed-sidebar.mini-navbar #page-wrapper {
-    margin: 0 220px 0 0;
+    margin: 0 180px 0 0;
 }
 
 body.rtls.body-small.fixed-sidebar.mini-navbar .navbar-static-side {
-    width: 220px;
+    width: 180px;
 }
 
 .body-small.rtls .navbar-fixed-top {

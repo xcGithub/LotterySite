@@ -10,23 +10,19 @@ namespace DapperSqlMaker.DapperExt
     /// <summary>
     /// Sqlite库1
     /// </summary>
-    public partial class LockDapperUtilmssql : DapperSqlMaker
-    {
-        public string a { get; set; }
+    public partial class LockDapperUtilmssql : IDapperSqlMakerBase
+    { 
+        public string GetSqlParamSymbol() => SM.ParamSymbolMSSql;
+         
         private LockDapperUtilmssql() { }
 
-        public readonly static LockDapperUtilmssql _New2 = new LockDapperUtilmssql() { a = "123" };
 
-        private readonly static LockDapperUtilmssql _New = new LockDapperUtilmssql() { a = "New" };
+        private readonly static LockDapperUtilmssql _New = new LockDapperUtilmssql();
         public static LockDapperUtilmssql New()
         {
             return _New;
-        }
-        public IDbConnection GetConnSign(bool isfirst)
-        {
-            return this.GetConn();
-        }
-        public override IDbConnection GetConn()
+        } 
+        public IDbConnection GetConn()
         {
             //DataBaseConfig.GetSqlConnection();
             //if (isfirst) return null;
@@ -41,6 +37,7 @@ namespace DapperSqlMaker.DapperExt
     public partial class LockDapperUtilmssql<T> : DapperSqlMaker<T>
                                          where T : class, new()
     {
+        public override string GetSqlParamSymbol() => LockDapperUtilmssql.New().GetSqlParamSymbol();
         public override IDbConnection GetConn()
         {
             return LockDapperUtilmssql.New().GetConn();
@@ -52,14 +49,16 @@ namespace DapperSqlMaker.DapperExt
         }
 
 
-        /// <summary>
-        /// 增删改 查
-        /// </summary>
-        public readonly static DapperSqlMaker<T> Cud = new LockDapperUtilmssql<T>();
+
+        ///// <summary>
+        ///// 增删改 查
+        ///// </summary>
+        //public readonly static DapperSqlMaker<T> Cud = new LockDapperUtilmssql<T>();
 
     }
     public partial class LockDapperUtilmssql<T, Y> : DapperSqlMaker<T, Y>
     {
+        public override string GetSqlParamSymbol() => LockDapperUtilmssql.New().GetSqlParamSymbol();
         public override IDbConnection GetConn()
         {
             return LockDapperUtilmssql.New().GetConn();
@@ -74,6 +73,7 @@ namespace DapperSqlMaker.DapperExt
 
     public partial class LockDapperUtilmssql<T, Y, Z> : DapperSqlMaker<T, Y, Z>
     {
+        public override string GetSqlParamSymbol() => LockDapperUtilmssql.New().GetSqlParamSymbol();
         public override IDbConnection GetConn()
         {
             return LockDapperUtilmssql.New().GetConn();
@@ -87,6 +87,7 @@ namespace DapperSqlMaker.DapperExt
     }
     public partial class LockDapperUtilmssql<T, Y, Z, O> : DapperSqlMaker<T, Y, Z, O>
     {
+        public override string GetSqlParamSymbol() => LockDapperUtilmssql.New().GetSqlParamSymbol();
         public override IDbConnection GetConn()
         {
             return LockDapperUtilmssql.New().GetConn();
@@ -100,6 +101,7 @@ namespace DapperSqlMaker.DapperExt
     }
     public partial class LockDapperUtilmssql<T, Y, Z, O, P> : DapperSqlMaker<T, Y, Z, O, P>
     {
+        public override string GetSqlParamSymbol() => LockDapperUtilmssql.New().GetSqlParamSymbol();
         public override IDbConnection GetConn()
         {
             return LockDapperUtilmssql.New().GetConn();
@@ -113,6 +115,7 @@ namespace DapperSqlMaker.DapperExt
     }
     public partial class LockDapperUtilmssql<T, Y, Z, O, P, Q> : DapperSqlMaker<T, Y, Z, O, P, Q>
     {
+        public override string GetSqlParamSymbol() => LockDapperUtilmssql.New().GetSqlParamSymbol();
         public override IDbConnection GetConn()
         {
             return LockDapperUtilmssql.New().GetConn();

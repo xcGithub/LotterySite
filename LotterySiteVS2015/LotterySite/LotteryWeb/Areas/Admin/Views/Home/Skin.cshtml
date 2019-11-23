@@ -28,8 +28,8 @@
                 <td class="project-actions"> 
                     <input type="hidden" data-id="{{:Id}}" data-name="{{:Name}}" data-datetime="{{:InsertDate}}" data-url="{{:Value}}"/> 
                     <button onclick="removeskin(this)" class="btn btn-white btn-sm"><i class="fa fa-remove"></i> 移除 </button>
-                    <button onclick="setskin(this)" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> 设置 </button>
-                    <input type="text" value="{{:Seq}}" style="width:30px;margin:0;padding:0;border:0 solid red;" /><span class="" data-id="{{:Id}}" data-seq="{{:Seq}}" onclick="editseqsong(this)">💨</span>
+                    <button onclick="setskin(this)" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> 背景 </button>
+                    <input type="text" value="{{:Seq}}" style="width:30px;height:30px;margin:0;padding:0;border:0 solid red;" /><button class="btn btn-white btn-sm" data-id="{{:Id}}" data-seq="{{:Seq}}" onclick="editseqsong(this)">💨</button>
                 </td>
             </tr>
 
@@ -190,7 +190,7 @@
                                         <h2>背景 </h2>
                                         <div class="hr-line-dashed"></div>
                                         <div class="row"> 
-                                            <span class="small">http://mini.s-shot.ru/?地址 | https://mini.s-shot.ru/640x480/JPEG/640/Z100/?地址</span>
+                                            <span class="small">http://mini.s-shot.ru/?地址 | https://mini.s-shot.ru/640x480/JPEG/640/Z100/?地址 | https://i.loli.net/2019/11/02/lij4RfdAGxNuM7p.jpg?https://i.loli.net/2019/11/02/lUABoyiQXjKw35p.jpg </span>
                                         <a class="btn btn-info" onclick="getskinjs()">
                                             <i class="fa fa-search"> 查询</i>
                                         </a></div>

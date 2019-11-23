@@ -13,7 +13,7 @@ namespace LotteryWeb.Areas.Admin.Controllers
     {
         //
         // GET: /Admin/Setup/
-
+        #region 菜单管理
         public ActionResult Menu()
         {
             return View();
@@ -104,6 +104,32 @@ namespace LotteryWeb.Areas.Admin.Controllers
 
         }
 
+        #endregion
+
+
+        #region 字典管理
+
+        public ActionResult Dic() {
+            return View();
+        }
+
+        public ActionResult GetComboDic() {
+            var list = LockSqlite<LKDataItem_>.Selec().Column(p => new { p.F_ItemId, p.F_ParentId, p.F_ItemName, p.F_Level })
+                .From().Order(p => new { p.F_SortCode }).ExecuteQuery<LKDataItem_>();
+
+            return Content(Newtonsoft.Json.JsonConvert.SerializeObject(list));
+        }
+
+        public ActionResult GetDicDetail(string id) {
+
+            var list = LockSqlite<LKDataItemDetail_>.Selec()
+                .Column( p=> new { p.F_ItemDetailId, p.F_ItemId,p.F_ItemName,p.F_ItemValue, p.F_ItemCode, p.F_SortCode,p.F_Description })
+                .From().Where(p => p.F_ItemId == id).Order(p=> new { p.F_SortCode }).ExecuteQuery<LKDataItemDetail_>();
+
+            return Content(Newtonsoft.Json.JsonConvert.SerializeObject(list));
+        }
+
+        #endregion
     }
      
 

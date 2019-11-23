@@ -209,6 +209,11 @@ namespace LotteryWeb.Areas.Admin.Controllers
             }
         }
 
+        public ActionResult thumb(string img)
+        {
+            ViewBag.img = img;
+            return View();
+        }
 
         #endregion
 

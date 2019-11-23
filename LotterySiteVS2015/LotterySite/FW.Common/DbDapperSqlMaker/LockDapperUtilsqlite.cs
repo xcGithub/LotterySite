@@ -20,21 +20,18 @@ namespace DapperSqlMaker.DapperExt
     /// <summary>
     /// Sqlite库1
     /// </summary>
-    public partial class LockSqlite : DapperSqlMaker
+    public partial class LockSqlite : IDapperSqlMakerBase
     {
-
+        public string GetSqlParamSymbol() => SM.ParamSymbolMSSql;
         private LockSqlite() { }
 
         private readonly static LockSqlite _New = new LockSqlite();
         public static LockSqlite New()
         {
             return _New;
-        }
-        //public IDbConnection GetConnSign(bool isfirst) {
-        //    return this.GetConn();
-        //}
+        } 
 
-        public override IDbConnection GetConn()
+        public IDbConnection GetConn()
         {
             SQLiteConnection conn = new SQLiteConnection(DataBaseConfig.LockSqlLiteConnectionString);
             conn.Open();
@@ -46,6 +43,7 @@ namespace DapperSqlMaker.DapperExt
     public partial class LockSqlite<T> : DapperSqlMaker<T>
                                          where T : class, new()
     {
+        public override string GetSqlParamSymbol() => LockDapperUtilmssql.New().GetSqlParamSymbol();
         public override IDbConnection GetConn()
         {
             return LockSqlite.New().GetConn();
@@ -68,14 +66,15 @@ namespace DapperSqlMaker.DapperExt
             return new LockSqlite<T>().Delete();
         }
 
-        /// <summary>
-        /// 增删改
-        /// </summary>
-        public readonly static DapperSqlMaker<T> Cud = new LockSqlite<T>();
+        ///// <summary>
+        ///// 增删改
+        ///// </summary>
+        //public readonly static DapperSqlMaker<T> Cud = new LockSqlite<T>();
 
     }
     public partial class LockSqlite<T, Y> : DapperSqlMaker<T, Y>
     {
+        public override string GetSqlParamSymbol() => LockDapperUtilmssql.New().GetSqlParamSymbol();
         public override IDbConnection GetConn()
         {
             return LockSqlite.New().GetConn();
@@ -90,6 +89,7 @@ namespace DapperSqlMaker.DapperExt
 
     public partial class LockSqlite<T, Y, Z> : DapperSqlMaker<T, Y, Z>
     {
+        public override string GetSqlParamSymbol() => LockDapperUtilmssql.New().GetSqlParamSymbol();
         public override IDbConnection GetConn()
         {
             return LockSqlite.New().GetConn();
@@ -104,6 +104,7 @@ namespace DapperSqlMaker.DapperExt
     }
     public partial class LockSqlite<T, Y, Z, O> : DapperSqlMaker<T, Y, Z, O>
     {
+        public override string GetSqlParamSymbol() => LockDapperUtilmssql.New().GetSqlParamSymbol();
         public override IDbConnection GetConn()
         {
             return LockSqlite.New().GetConn();
@@ -117,6 +118,7 @@ namespace DapperSqlMaker.DapperExt
     }
     public partial class LockSqlite<T, Y, Z, O, P> : DapperSqlMaker<T, Y, Z, O, P>
     {
+        public override string GetSqlParamSymbol() => LockDapperUtilmssql.New().GetSqlParamSymbol();
         public override IDbConnection GetConn()
         {
             return LockSqlite.New().GetConn();
@@ -130,6 +132,7 @@ namespace DapperSqlMaker.DapperExt
     }
     public partial class LockSqlite<T, Y, Z, O, P, Q> : DapperSqlMaker<T, Y, Z, O, P, Q>
     {
+        public override string GetSqlParamSymbol() => LockDapperUtilmssql.New().GetSqlParamSymbol();
         public override IDbConnection GetConn()
         {
             return LockSqlite.New().GetConn();

@@ -57,8 +57,8 @@
       <HintPath>..\packages\Dapper.Contrib.1.50.0\lib\net40\Dapper.Contrib.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DapperSqlMaker, Version=0.1.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DapperSqlMaker.0.1.8\lib\net40\DapperSqlMaker.dll</HintPath>
+    <Reference Include="DapperSqlMaker, Version=0.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DapperSqlMaker.0.2.2\lib\net40\DapperSqlMaker.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -150,6 +150,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\CodeController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\SetupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -200,6 +201,10 @@
     <Content Include="Content\backstage\css\patterns\header-profile.png" />
     <Content Include="Content\backstage\css\patterns\shattered.png" />
     <Content Include="Content\backstage\css\plugins\datapicker\datepicker3.css" />
+    <Content Include="Content\backstage\css\plugins\iCheck\custom.css" />
+    <Content Include="Content\backstage\css\plugins\iCheck\green%402x.png" />
+    <Content Include="Content\backstage\css\plugins\iCheck\green.png" />
+    <Content Include="Content\backstage\css\plugins\steps\jquery.steps.css" />
     <Content Include="Content\backstage\css\style-4.1.css" />
     <Content Include="Content\backstage\docs\img\index_4.png" />
     <Content Include="Content\backstage\docs\img\page.png" />
@@ -260,6 +265,8 @@
     <Content Include="Content\backstage\js\plugins\metisMenu\jquery.metisMenu.js" />
     <Content Include="Content\backstage\js\plugins\slimscroll\jquery.slimscroll.js" />
     <Content Include="Content\backstage\js\plugins\slimscroll\jquery.slimscroll.min.js" />
+    <Content Include="Content\backstage\js\plugins\staps\jquery.steps.min.js" />
+    <Content Include="Content\backstage\js\plugins\validate\jquery.validate.min.js" />
     <Content Include="Content\backstage\js\welcome.js" />
     <Content Include="Content\backstage\login_v2.html" />
     <Content Include="Content\backstage\__MACOSX\img\._pay.png" />
@@ -1172,6 +1179,9 @@
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Skin.cshtml" />
     <Content Include="Areas\Admin\Views\Setup\Menu.cshtml" />
+    <Content Include="Areas\Admin\Views\Code\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\thumb.cshtml" />
+    <Content Include="Areas\Admin\Views\Setup\Dic.cshtml" />
     <None Include="db\cater.db" />
     <None Include="Properties\PublishProfiles\test.pubxml" />
     <Content Include="Views\Home\Hua.cshtml" />

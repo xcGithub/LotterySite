@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "字典管理";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section css{
+    <link href="@Url.Content("~/Content/layer-v2.4/layer/skin/layer.css")" rel="stylesheet" />
+    @Styles.Render("~/HPlusjqGridcss", "~/datepickercss", "~/zTreevcss")
+
+}
+
+
+@section scripts{
+    @Scripts.Render("~/HPlusjqGridjs", "~/layerjs", "~/jshelper", "~/datepickerjs", "~/zTreevjs")
+
+    <script type="text/javascript">
+
+        (function (dx) {
+
+            var dictreeset = {
+                view: { dblClickExpand: false }, //selectedMulti: false },
+                data: {
+                    key: { name: 'F_ItemName' }
+                    , simpleData: { enable: true, idKey: "F_ItemId", pIdKey: "F_ParentId", rootPId: 0, }
+                },
+                callback: {
+                    onClick: function (e, treeId, treeNode) {
+                        var zTree = $.fn.zTree.getZTreeObj(treeId),
+                        nodes = zTree.getSelectedNodes();
+                        console.log(nodes);
+
+                        var data = {
+                            url: '@Url.Action("GetDicDetail", "Setup", new { arae =""})'
+                            , postData: { id: nodes[0].F_ItemId }
+                        };
+                        $("#jqGrid").setGridParam(data).trigger("reloadGrid");
+                    }
+                } // beforeClick: beforeClick,
+            };
+
+
+
+            var page = {
+
+
+                init : function(){
+                    page.bind();
+                    page.initData();
+                },
+                bind: function () {
+
+                    $.getJSON('@Url.Action("GetComboDic", "Setup",new { arae =""})', {}, function (zNodes) {
+                        $.fn.zTree.init($("#dicTree"), dictreeset, zNodes);
+                        $('#dicTree').css('height', window.innerHeight * 80 / 100 + 'px');
+                    });
+
+                },
+                initData: function () {
+                    $("#jqGrid").jqGrid({
+                        url: '@Url.Action("GetDicDetail", "Setup", new { arae =""})',
+                        datatype: "json",
+                        //data: mydata,
+                        //width: 'auto',
+                        height: 550,//450,'auto'
+                        autowidth: true,
+                        multiselect: true,
+                        multiboxonly: true,
+                        rownumbers: true,//是否显示行号。true：显示
+                        rownumWidth: 25,// 行号所在列的宽度
+                        colModel: [
+                            //F_ItemDetailId, p.F_ItemId,p.F_ItemName,p.F_ItemValue, p.F_ItemCode, p.F_SortCode,p.F_Description
+                                { label: '名称', name: 'F_ItemName', width: 100, height: 30 },
+                                { label: '值', name: 'F_ItemValue', width: 100 },
+                                { label: '编号', name: 'F_ItemCode', width: 80 },
+                                { label: '排序号', name: 'F_SortCode', width: 80 },
+                                { label: '备注', name: 'F_Description', width: 80 },
+                        ],
+                        loadComplete: function (d) {
+                            $(this).data('fulldata', d.rows) // 存储从服务器端获取的原始数据
+                        },
+                        viewrecords: true, // show the current page, data rang and total records on the toolbar
+                        caption: "Lock ^o^",
+                        sortable: false,
+                        rowNum: 10,  // 每行显示列数
+                        rowList: [10, 50, 100], // 行数切换
+                        pager: "#jqGridPager"
+                    });
+                },
+
+            }
+
+
+            page.init();
+
+
+        })(1);
+
+
+    </script>
+
+ }
+<div class="wrapper wrapper-content">
+    <div class="row animated fadeInRight">
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+
+                <ul id="dicTree" class="ztree"></ul>
+            </div>
+        </div>
+
+        <div class="col-sm-9">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>字典项</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="profile.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li>
+                                <a href="profile.html#">选项1</a>
+                            </li>
+                            <li>
+                                <a href="profile.html#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                    <div style="padding:10px;background-color:white">
+                        <table id="jqGrid"></table>
+                        <div id="jqGridPager"></div>
+                    </div>  <!-- 数据表 -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

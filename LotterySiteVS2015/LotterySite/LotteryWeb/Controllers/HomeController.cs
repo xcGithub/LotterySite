@@ -38,7 +38,7 @@ namespace LotteryWeb.Controllers
             // slides
             var where = PredicateBuilder.WhereStart<Skin>();
             where = where.And(p => p.IsDel != 1 && p.UserId == UserId && p.Type == "fobg");
-            var list = LockSqlite<Skin>.Selec().Column().From().Where(where).ExecuteQuery<Skin>();
+            var list = LockSqlite<Skin>.Selec().Column().From().Where(where).Order(p => new { p.Seq }).ExecuteQuery<Skin>();
             if (list.Count() == 0)
             {
                 ViewBag.slides = new string[] { "/Content/folio/images/header-image/jike_1_pic.gif", "/Content/folio/images/header-image/jike_2_pic.gif" };
