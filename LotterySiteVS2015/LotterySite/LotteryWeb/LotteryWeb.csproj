@@ -1182,7 +1182,6 @@
     <Content Include="Areas\Admin\Views\Code\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Home\thumb.cshtml" />
     <Content Include="Areas\Admin\Views\Setup\Dic.cshtml" />
-    <None Include="db\cater.db" />
     <None Include="Properties\PublishProfiles\test.pubxml" />
     <Content Include="Views\Home\Hua.cshtml" />
     <Content Include="Views\Home\zhuye.cshtml" />
