@@ -1,4 +1,5 @@
-﻿抽奖程序 Demo
+21-10-10已迁移到 https://gitee.com/mumumutoub/LotterySite
+抽奖程序 Demo
 sqlite 库
 
 ##### LockSite待处理 
